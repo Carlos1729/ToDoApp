@@ -18,12 +18,20 @@ class ListTaskFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.fragment_list_task, container, false)
-        var addT = view.findViewById<FloatingActionButton>(R.id.floatingActionButton)//adding task view
+        val addT = view.findViewById<FloatingActionButton>(R.id.floatingActionButton)//adding task view
 
 
         addT.setOnClickListener {
             findNavController().navigate(R.id.action_listTaskFragment_to_addTaskFragment)
         }
+
+        val updT = view.findViewById<FloatingActionButton>(R.id.floatingActionButtonupdate)//adding task view
+
+
+        updT.setOnClickListener {
+            findNavController().navigate(R.id.action_listTaskFragment_to_updateTaskFragment)
+        }
+
 
 
 
