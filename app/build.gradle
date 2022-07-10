@@ -1,6 +1,11 @@
 plugins {
+//    // Other plugins
+//    apply plugin: 'kotlin' // or 'kotlin-multiplatform' for multiplatform projects
+//    apply plugin: "kotlinx-serialization"
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.android.extensions'
+    id "androidx.navigation.safeargs.kotlin"
 }
 
 android {
@@ -29,6 +34,11 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+}
+
+androidExtensions {
+    experimental = true
+    features = ["parcelize"]
 }
 
 dependencies {

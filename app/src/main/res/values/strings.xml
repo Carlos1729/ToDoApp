@@ -7,4 +7,23 @@
     <string name="add">add</string>
     <string name="update">update</string>
     <string name="update_delete">update_delete</string>
+    <string name="title1">Run</string>
+    <string name="title2">Play Badmintion</string>
+    <string name="title3">Report</string>
+    <string name="title4">long long title</string>
+    <string name="title5">Buy Vegetables</string>
+    <string name="title6">Help Friends</string>
+    <string name="title7">Read about android</string>
+    <string name="title8">Income Tax</string>
+    <string name="title9">Attend Party</string>
+
+    <string name="description1">Should Run 5km</string>
+    <string name="description2">Play with friends at 9PM</string>
+    <string name="description3">Should Report to manager by tonight</string>
+    <string name="description4">this title is too long</string>
+    <string name="description5">Buy Vegetables while returning home</string>
+    <string name="description6">Help Friends in Solving there doubts</string>
+    <string name="description7">Android AndroidAndroidAndroidAndroidAndroidAndroidAndroidAndroidAndroidAndroidAndroidAndroidAndroidAndroidAndroid</string>
+    <string name="description8">calculate the income tax deduction from salary</string>
+    <string name="description9">Attend Rahul Party at 9pm Today</string>
 </resources>

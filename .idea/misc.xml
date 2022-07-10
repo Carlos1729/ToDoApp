@@ -8,12 +8,12 @@
         <entry key="app/src/main/res/drawable/ic_check.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/list_background.xml" value="0.11" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/fragment_add_task.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_add_task.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_list_task.xml" value="0.2028985507246377" />
         <entry key="app/src/main/res/layout/fragment_lists.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_update.xml" value="0.125" />
         <entry key="app/src/main/res/layout/fragment_update_task.xml" value="0.2028985507246377" />
-        <entry key="app/src/main/res/layout/layout_row.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/layout_row.xml" value="0.2151394422310757" />
         <entry key="app/src/main/res/menu/add_task_fragment_menu.xml" value="0.25" />
         <entry key="app/src/main/res/menu/update_task_fragment_menu.xml" value="0.25" />
       </map>
