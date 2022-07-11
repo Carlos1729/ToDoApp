@@ -26,4 +26,5 @@
     <string name="description7">Android AndroidAndroidAndroidAndroidAndroidAndroidAndroidAndroidAndroidAndroidAndroidAndroidAndroidAndroidAndroid</string>
     <string name="description8">calculate the income tax deduction from salary</string>
     <string name="description9">Attend Rahul Party at 9pm Today</string>
+    <string name="description_goes_here">Description Goes Here</string>
 </resources>

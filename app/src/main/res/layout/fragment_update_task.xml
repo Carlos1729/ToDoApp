@@ -7,6 +7,19 @@
     android:padding="24dp"
     tools:context=".presentation.updatetask.UpdateTaskFragment">
 
+
+    <TextView
+        android:id="@+id/update_title_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title Goes Here"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@id/update_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/update_title"
         android:layout_width="match_parent"
@@ -19,8 +32,8 @@
         android:background="@drawable/custom_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="@id/update_title_heading"
+        app:layout_constraintTop_toBottomOf="@id/update_title_heading" />
 
     <EditText
         android:id="@+id/update_description"

@@ -35,6 +35,9 @@
             app:destination="@id/listTaskFragment"
             app:enterAnim="@anim/from_left"
             app:exitAnim="@anim/to_right" />
+        <argument
+            android:name="currentItem"
+            app:argType="com.example.todotestapp.model.TaskData" />
     </fragment>
     <fragment
         android:id="@+id/updateTaskFragment"
