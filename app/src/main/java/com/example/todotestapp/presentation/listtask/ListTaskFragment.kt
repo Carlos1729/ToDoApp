@@ -1,6 +1,7 @@
 package com.example.todotestapp.presentation.listtask
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import com.example.todotestapp.data.DataSource
 import com.example.todotestapp.data.network.repository.Repository
 import com.example.todotestapp.model.ListViewModel
 import com.example.todotestapp.model.ListViewModelFactory
+import com.example.todotestapp.model.ToDo
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ListTaskFragment : Fragment() {
@@ -40,10 +42,22 @@ class ListTaskFragment : Fragment() {
                        response.body()?.let { myAdapter.setData(it) }
                    }
         })
+
+//        val myTask = ToDo(1,11,"Play PUBG","Winner Winner Chicken Dinner")
+//        viewModel.pushTask(myTask)
+//        viewModel.myresponse.observe(viewLifecycleOwner, Observer{  response->
+//            if(response.isSuccessful)
+//            {
+//                Log.d("Hey Hii",response.body().toString())
+//            }
+//        })
 //        val myDataset = DataSource().loadTasks()
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewId)
         recyclerView.adapter = myAdapter
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
+
+
+
 
         val addT = view.findViewById<FloatingActionButton>(R.id.floatingActionButton)//adding task view
 

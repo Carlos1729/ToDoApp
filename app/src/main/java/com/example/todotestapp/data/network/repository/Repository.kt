@@ -10,4 +10,8 @@ class Repository {
         return RetrofitInstance.api.getTask(id)
     }
 
+    suspend fun pushTask(post: ToDo) : Response<ToDo>{
+        return RetrofitInstance.api.pushTask(post)
+    }
+
 }

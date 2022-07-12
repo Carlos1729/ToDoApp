@@ -7,6 +7,7 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import com.example.todotestapp.R
+import com.example.todotestapp.model.ToDo
 
 
 class AddTaskFragment : Fragment() {
@@ -18,6 +19,7 @@ class AddTaskFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view  =  inflater.inflate(R.layout.fragment_add_task, container, false)
+
 
         return view
     }

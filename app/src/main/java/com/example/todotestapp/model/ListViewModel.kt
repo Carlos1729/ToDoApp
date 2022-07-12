@@ -10,6 +10,14 @@ import retrofit2.Response
 class ListViewModel(private val repository: Repository) : ViewModel(){
 
     val mytasks : MutableLiveData<Response<List<ToDo>>> = MutableLiveData()
+    val myresponse : MutableLiveData<Response<ToDo>> = MutableLiveData()
+
+    fun pushTask(post: ToDo){
+        viewModelScope.launch {
+            val response : Response<ToDo> = repository.pushTask(post)
+            myresponse.value = response
+        }
+    }
     fun getTask(id: Int){
         viewModelScope.launch {
             val response : Response<List<ToDo>> = repository.getTask(id)
