@@ -1,20 +1,15 @@
-package com.example.todotestapp.presentation.listtask
+package com.example.todotestapp.presentation.listToDo
 
-import android.content.Context
-import android.icu.text.Transliterator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.ListFragment
 import androidx.navigation.findNavController
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todotestapp.R
-import com.example.todotestapp.model.TaskData
 import com.example.todotestapp.model.ToDo
 
-class ListTaskAdapter : RecyclerView.Adapter<ListTaskAdapter.MyListHolder>() {
+class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
 
      private var myList = emptyList<ToDo>()
 
@@ -32,10 +27,10 @@ class ListTaskAdapter : RecyclerView.Adapter<ListTaskAdapter.MyListHolder>() {
 
 //        holder.itemView.findViewById<TextView>(R.id.title_txt).text = context.resources.getString(dataset[position].stringTitleId)
 //            holder.itemView.findViewById<TextView>(R.id.description_txt).text = context.resources.getString(dataset[position].stringDescriptionId)
-//            holder.itemView.findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.row_background).setOnClickListener {
-//                val action = ListTaskFragmentDirections.actionListTaskFragmentToUpdateTaskFragment(dataset[position])
-//                holder.itemView.findNavController().navigate(action)
-//            }
+            holder.itemView.findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.row_background).setOnClickListener {
+                val action = ListToDoFragmentDirections.actionListTaskFragmentToUpdateTaskFragment(myList[position])
+                holder.itemView.findNavController().navigate(action)
+            }
     }
 
     override fun getItemCount(): Int {

@@ -7,16 +7,9 @@
 
     <fragment
         android:id="@+id/listTaskFragment"
-        android:name="com.example.todotestapp.presentation.listtask.ListTaskFragment"
-        android:label="To-Do List"
-        tools:layout="@layout/fragment_list_task" >
-        <action
-            android:id="@+id/action_listTaskFragment_to_addTaskFragment"
-            app:destination="@id/addTaskFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right" />
+        android:name="com.example.todotestapp.presentation.listToDo.ListToDoFragment"
+        android:label="ToDo App"
+        tools:layout="@layout/fragment_list_todo" >
         <action
             android:id="@+id/action_listTaskFragment_to_updateTaskFragment"
             app:destination="@id/updateTaskFragment"
@@ -26,24 +19,10 @@
             app:popExitAnim="@anim/to_left" />
     </fragment>
     <fragment
-        android:id="@+id/addTaskFragment"
-        android:name="com.example.todotestapp.presentation.addtask.AddTaskFragment"
-        android:label="Add Task"
-        tools:layout="@layout/fragment_add_task" >
-        <action
-            android:id="@+id/action_addTaskFragment_to_listTaskFragment"
-            app:destination="@id/listTaskFragment"
-            app:enterAnim="@anim/from_left"
-            app:exitAnim="@anim/to_right" />
-        <argument
-            android:name="currentItem"
-            app:argType="com.example.todotestapp.model.TaskData" />
-    </fragment>
-    <fragment
         android:id="@+id/updateTaskFragment"
-        android:name="com.example.todotestapp.presentation.updatetask.UpdateTaskFragment"
-        android:label="Update Task"
-        tools:layout="@layout/fragment_update_task" >
+        android:name="com.example.todotestapp.presentation.updateToDo.UpdateToDoFragment"
+        android:label="Update ToDo"
+        tools:layout="@layout/fragment_update_todo">
         <action
             android:id="@+id/action_updateTaskFragment_to_listTaskFragment"
             app:destination="@id/listTaskFragment"
@@ -51,6 +30,9 @@
             app:exitAnim="@anim/to_left" />
         <argument
             android:name="presentitem"
-            app:argType="com.example.todotestapp.model.TaskData" />
+            android:defaultValue="@null"
+            app:argType="com.example.todotestapp.model.ToDo"
+            app:nullable="true" />
+
     </fragment>
 </navigation>

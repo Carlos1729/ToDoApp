@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
-    tools:context=".presentation.updatetask.UpdateTaskFragment">
+    tools:context=".presentation.updateToDo.UpdateToDoFragment">
 
 
     <TextView
         android:id="@+id/update_title_heading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Title Goes Here"
+        android:text="Title"
         android:textStyle="bold"
         android:textSize="20dp"
         android:textColor="@color/black"
@@ -24,40 +24,58 @@
         android:id="@+id/update_title"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:hint="@string/title"
+        android:layout_marginTop="8dp"
         android:background="@drawable/custom_input"
+        android:ems="10"
+        app:helperText = "Required"
+        app:helperTextTextColor = "@color/Red"
+        android:inputType="textPersonName"
+        android:maxLength="25"
+        android:paddingStart="8dp"
+        android:paddingEnd="24dp"
+        android:hint="Title Goes Here"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@id/update_title_heading"
         app:layout_constraintTop_toBottomOf="@id/update_title_heading" />
 
+
+    <TextView
+        android:id="@+id/update_description_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Description"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@id/update_description"
+        app:layout_constraintStart_toStartOf="@id/update_title_heading"
+        app:layout_constraintTop_toBottomOf="@id/update_title" />
+
     <EditText
         android:id="@+id/update_description"
         android:layout_width="0dp"
-        android:layout_height="300dp"
-        android:layout_marginTop="24dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/custom_input"
         android:ems="10"
+        android:maxLength="125"
         android:gravity="start|top"
-        android:hint="@string/description"
+        android:hint="@string/description_goes_here"
         android:inputType="textMultiLine"
-        android:paddingStart="24dp"
+        android:paddingStart="8dp"
         android:paddingTop="16dp"
         android:paddingEnd="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/update_title" />
+        app:layout_constraintTop_toBottomOf="@id/update_description_heading" />
 
     <Button
-        android:id="@+id/updayeTaskbutton"
+        android:id="@+id/updateTaskbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="UPDATE"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

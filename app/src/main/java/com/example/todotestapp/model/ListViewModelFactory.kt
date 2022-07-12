@@ -9,3 +9,4 @@ class ListViewModelFactory(private val repository: Repository) : ViewModelProvid
         return ListViewModel(repository) as T
     }
 }
+
