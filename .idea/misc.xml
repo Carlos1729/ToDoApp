@@ -12,6 +12,7 @@
         <entry key="app/src/main/res/layout/fragment_add_todo.xml" value="0.13072916666666667" />
         <entry key="app/src/main/res/layout/fragment_list_task.xml" value="0.2028985507246377" />
         <entry key="app/src/main/res/layout/fragment_lists.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_update.xml" value="0.125" />
         <entry key="app/src/main/res/layout/fragment_update_task.xml" value="0.2028985507246377" />
         <entry key="app/src/main/res/layout/fragment_update_todo.xml" value="0.23197492163009403" />
@@ -26,5 +27,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.14336372847011145" />
+      </ProjectState>
+    </option>
   </component>
 </project>

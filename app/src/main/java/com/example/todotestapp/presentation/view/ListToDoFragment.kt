@@ -1,4 +1,4 @@
-package com.example.todotestapp.presentation.listToDo
+package com.example.todotestapp.presentation.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,9 +11,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todotestapp.R
-import com.example.todotestapp.data.network.repository.Repository
-import com.example.todotestapp.model.ListViewModel
-import com.example.todotestapp.model.ListViewModelFactory
+import com.example.todotestapp.data.repository.ToDoRepository
+import com.example.todotestapp.data.repository.ToDoRepositoryImpl
+import com.example.todotestapp.presentation.view.ListToDoAdapter
+import com.example.todotestapp.presentation.view.ListViewModel
+import com.example.todotestapp.presentation.view.ListViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ListToDoFragment : Fragment() {
@@ -29,7 +31,7 @@ class ListToDoFragment : Fragment() {
 
         val view =  inflater.inflate(R.layout.fragment_list_todo, container, false)
 
-        val repository = Repository()
+        val repository : ToDoRepository = ToDoRepositoryImpl()
         val viewModelFactory  = ListViewModelFactory(repository)
         viewModel = ViewModelProvider(this,viewModelFactory).get(ListViewModel::class.java)
         viewModel.getTask(1 )

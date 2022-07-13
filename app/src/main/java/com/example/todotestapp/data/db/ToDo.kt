@@ -1,4 +1,4 @@
-package com.example.todotestapp.model
+package com.example.todotestapp.data.db
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

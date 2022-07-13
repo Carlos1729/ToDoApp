@@ -32,6 +32,7 @@
     <string name="label_of_fragment">{letter}</string>
     <string name="title_cant_be_empty">Title Can\'t be Empty</string>
     <string name="description_cant_be_empty">Description Cant be Empty</string>
+    <string name="login">LOGIN</string>
 
 
 </resources>

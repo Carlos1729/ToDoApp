@@ -1,4 +1,4 @@
-package com.example.todotestapp.presentation.listToDo
+package com.example.todotestapp.presentation.view
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todotestapp.R
-import com.example.todotestapp.model.ToDo
+import com.example.todotestapp.data.db.ToDo
 
 class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
 

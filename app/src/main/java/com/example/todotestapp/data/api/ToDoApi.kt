@@ -1,6 +1,6 @@
-package com.example.todotestapp.data.network
+package com.example.todotestapp.data.api
 
-import com.example.todotestapp.model.ToDo
+import com.example.todotestapp.data.db.ToDo
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -13,10 +13,5 @@ interface ToDoApi {
     suspend fun getTask(
         @Query("id") id:Int
     ): Response<List<ToDo>>
-
-    @POST("tasks")
-    suspend fun pushTask(
-        @Body post: ToDo
-    ):Response<ToDo>
 
 }

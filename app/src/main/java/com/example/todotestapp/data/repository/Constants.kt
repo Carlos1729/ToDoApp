@@ -1,4 +1,4 @@
-package com.example.todotestapp.data.network
+package com.example.todotestapp.data.repository
 
 class Constants {
     companion object{
