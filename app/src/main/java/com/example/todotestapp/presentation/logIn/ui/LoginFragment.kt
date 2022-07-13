@@ -1,4 +1,4 @@
-package com.example.todotestapp.presentation.view.listToDo.logIn
+package com.example.todotestapp.presentation.logIn.ui
 
 import android.os.Bundle
 import android.util.Patterns

@@ -1,4 +1,4 @@
-package com.example.todotestapp.data.repository
+package com.example.todotestapp.domain.repositoryinterface
 
 import com.example.todotestapp.data.db.ToDo
 import retrofit2.Response

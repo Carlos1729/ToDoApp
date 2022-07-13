@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
-    tools:context=".presentation.view.listToDo.updateToDo.UpdateToDoFragment">
+    tools:context=".presentation.updateToDo.ui.UpdateToDoFragment">
 
 
     <TextView

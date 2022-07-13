@@ -1,4 +1,4 @@
-package com.example.todotestapp.presentation.view.listToDo.updateToDo
+package com.example.todotestapp.presentation.updateToDo.ui
 
 import android.os.Bundle
 import android.view.*

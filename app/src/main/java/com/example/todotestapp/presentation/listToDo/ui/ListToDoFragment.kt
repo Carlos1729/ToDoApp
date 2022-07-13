@@ -1,4 +1,4 @@
-package com.example.todotestapp.presentation.view
+package com.example.todotestapp.presentation.listToDo.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,11 +11,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todotestapp.R
-import com.example.todotestapp.data.repository.ToDoRepository
+import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.example.todotestapp.data.repository.ToDoRepositoryImpl
-import com.example.todotestapp.presentation.view.ListToDoAdapter
-import com.example.todotestapp.presentation.view.ListViewModel
-import com.example.todotestapp.presentation.view.ListViewModelFactory
+import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModel
+import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ListToDoFragment : Fragment() {

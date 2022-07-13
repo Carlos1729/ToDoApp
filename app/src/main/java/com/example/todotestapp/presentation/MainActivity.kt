@@ -6,7 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.example.todotestapp.presentation.view.listToDo.logIn.LoginFragment
+import com.example.todotestapp.presentation.logIn.ui.LoginFragment
 
 class MainActivity : AppCompatActivity() {
 

@@ -1,9 +1,8 @@
-package com.example.todotestapp.presentation.view
+package com.example.todotestapp.presentation.listToDo.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.todotestapp.data.repository.ToDoRepository
-import com.example.todotestapp.data.repository.ToDoRepositoryImpl
+import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 
 class ListViewModelFactory(private val repository: ToDoRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
