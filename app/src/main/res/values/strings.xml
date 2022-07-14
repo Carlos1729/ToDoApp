@@ -37,5 +37,10 @@
     <string name="register">Register</string>
     <string name="sign_up">SIGN UP</string>
 
+    <string-array name="statusoftask">
+        <item>Pending</item>
+        <item>Completed</item>
+    </string-array>
+
 
 </resources>

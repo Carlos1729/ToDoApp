@@ -3,6 +3,7 @@ package com.example.todotestapp.presentation.updateToDo.ui
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -25,7 +26,8 @@ class UpdateToDoFragment : Fragment() {
     private var addToDoFlag:  Boolean = false
     private  var binding: FragmentUpdateTodoBinding ?= null
     private var descriptionTV: TextView? = null
-    private var titleRecieved: String? = null
+    private var statusspin: Spinner? = null
+    private var todostatus: String? = null
     private var button: Button? = null
 
 
@@ -40,6 +42,8 @@ class UpdateToDoFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentUpdateTodoBinding.inflate(inflater)
+        binding?.statusSpinner?.visibility = View.GONE
+
         val view = binding?.root
 
         if (view != null) {
@@ -59,8 +63,10 @@ class UpdateToDoFragment : Fragment() {
             if(!addToDoFlag) {
                 var updatedTitle: String = titleTV?.text.toString()
                 var updatedDescription: String = descriptionTV?.text.toString()
+
                 //Call the API for updation
                 //if the response is success
+
                 Toast.makeText(context, "ToDo Updated Successfully", Toast.LENGTH_SHORT)
                     .show()
             }
@@ -94,6 +100,15 @@ class UpdateToDoFragment : Fragment() {
 
     }
 
+    private fun parseStatus(status: String?): Int{
+        return when(status)
+        {
+            "completed" -> 1
+            "pending"->0
+            else -> {-1}
+        }
+    }
+
 
     private fun setUpUI() {
 
@@ -105,6 +120,8 @@ class UpdateToDoFragment : Fragment() {
         }
         if (title != null || description != null) {
             button?.text = getString(R.string.update_button)
+            binding?.statusSpinner?.visibility = View.VISIBLE
+            statusspin?.setSelection(parseStatus(todostatus))
             (activity as MainActivity).supportActionBar?.title = "Update ToDo"
 
         } else {
@@ -123,6 +140,7 @@ class UpdateToDoFragment : Fragment() {
         todoItem?.let {
             title = it.title
             description = it.description
+            todostatus = it.status
         }
     }
 
@@ -131,5 +149,6 @@ class UpdateToDoFragment : Fragment() {
         titleTV = binding?.updateTitle
         descriptionTV = binding?.updateDescription
         button = binding?.updateTaskbutton
+        statusspin = binding?.statusSpinner
     }
 }

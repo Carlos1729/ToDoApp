@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todotestapp.R
@@ -28,6 +29,12 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
     override fun onBindViewHolder(holder: MyListHolder, position: Int) {
             holder.itemView.findViewById<TextView>(R.id.title_txt).text = myList[position].title
             holder.itemView.findViewById<TextView>(R.id.description_txt).text = myList[position].description
+
+             when(myList[position].status)
+             {
+                 "completed"-> holder.itemView.findViewById<androidx.cardview.widget.CardView>(R.id.priority_indicator).setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.green))
+                 "pending"-> holder.itemView.findViewById<androidx.cardview.widget.CardView>(R.id.priority_indicator).setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.Red))
+             }
 
 //        holder.itemView.findViewById<TextView>(R.id.title_txt).text = context.resources.getString(dataset[position].stringTitleId)
 //            holder.itemView.findViewById<TextView>(R.id.description_txt).text = context.resources.getString(dataset[position].stringDescriptionId)

@@ -9,6 +9,7 @@ data class ToDo(
     val taskId: Int,
     val title: String,
     val description: String,
+    val status: String
 ): Parcelable
 
 
