@@ -1,5 +1,6 @@
 package com.example.todotestapp.presentation.listToDo.ui
 
+import android.inputmethodservice.Keyboard
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,12 +9,15 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todotestapp.R
 import com.example.todotestapp.data.db.ToDo
+import com.example.todotestapp.databinding.FragmentListTodoBinding
 
 class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
 
      private var myList = emptyList<ToDo>()
 
-//    var listData = emptyList<ToDoData>()
+
+
+    //    var listData = emptyList<ToDoData>()
     class MyListHolder(itemView: View) : RecyclerView.ViewHolder(itemView){}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyListHolder {

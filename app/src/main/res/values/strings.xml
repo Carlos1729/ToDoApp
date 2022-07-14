@@ -28,11 +28,14 @@
     <string name="description9">Attend Rahul Party at 9pm Today</string>
     <string name="description_goes_here">Description Goes Here</string>
     <string name="update_button">UPDATE</string>
-    <string name="add_button">ADD ITEM</string>
+    <string name="add_button">ADD ToDo</string>
     <string name="label_of_fragment">{letter}</string>
     <string name="title_cant_be_empty">Title Can\'t be Empty</string>
     <string name="description_cant_be_empty">Description Cant be Empty</string>
     <string name="login">LOGIN</string>
+    <string name="don_t_have_an_account_register">Don\'t have an account register</string>
+    <string name="register">Register</string>
+    <string name="sign_up">SIGN UP</string>
 
 
 </resources>

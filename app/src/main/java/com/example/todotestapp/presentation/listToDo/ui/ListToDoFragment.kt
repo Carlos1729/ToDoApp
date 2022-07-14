@@ -1,6 +1,8 @@
 package com.example.todotestapp.presentation.listToDo.ui
 
+import android.icu.lang.UCharacter.GraphemeClusterBreak.V
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todotestapp.R
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.example.todotestapp.data.repository.ToDoRepositoryImpl
+import com.example.todotestapp.databinding.FragmentListTodoBinding
+import com.example.todotestapp.databinding.FragmentLoginBinding
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModel
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -20,6 +24,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 class ListToDoFragment : Fragment() {
 
     private lateinit var viewModel: ListViewModel
+    private  var binding: FragmentListTodoBinding ?= null
     private val myAdapter by lazy { ListToDoAdapter() }
 
     override fun onCreateView(
@@ -28,7 +33,9 @@ class ListToDoFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
 
-        val view =  inflater.inflate(R.layout.fragment_list_todo, container, false)
+        binding = FragmentListTodoBinding.inflate(inflater)
+        val view = binding?.root
+
 
         val repository : ToDoRepository = ToDoRepositoryImpl()
         val viewModelFactory  = ListViewModelFactory(repository)
@@ -36,11 +43,12 @@ class ListToDoFragment : Fragment() {
         viewModel.getTask(1 )
         viewModel.mytasks.observe(viewLifecycleOwner, Observer{ response ->
                    if(response.isSuccessful){
+                       Log.d("Main",response.body().toString())
                        response.body()?.let { myAdapter.setData(it) }
                    }
         })
 
-//        val myTask = ToDo(1,11,"Play PUBG","Winner Winner Chicken Dinner")
+//        val myTask = (1,11,"Play PUBG","Winner Winner Chicken Dinner")
 //        viewModel.pushTask(myTask)
 //        viewModel.myresponse.observe(viewLifecycleOwner, Observer{  response->
 //            if(response.isSuccessful)
@@ -49,31 +57,30 @@ class ListToDoFragment : Fragment() {
 //            }
 //        })
 //        val myDataset = DataSource().loadTasks()
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewId)
-        recyclerView.adapter = myAdapter
-        recyclerView.layoutManager = LinearLayoutManager(requireActivity())
+        val recyclerView = binding?.recyclerViewId
+        recyclerView?.adapter = myAdapter
+        recyclerView?.layoutManager = LinearLayoutManager(requireActivity())
 
 
 
 
-        val addT = view.findViewById<FloatingActionButton>(R.id.floatingActionButton)//adding task view
+        val addtodo = binding?.floatingActionButton
 
-
-        addT.setOnClickListener {
+        addtodo?.setOnClickListener {
             findNavController().navigate(R.id.action_listTaskFragment_to_updateTaskFragment,null)
         }
 
-//        val updT = view.findViewById<FloatingActionButton>(R.id.floatingActionButtonupdate)//adding task view
-//
-//
-//        updT.setOnClickListener {
-//            findNavController().navigate(R.id.action_listTaskFragment_to_updateTaskFragment)
-//        }
 
 
 
 
         return view
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 
 

@@ -1,7 +1,7 @@
 package com.example.todotestapp.data.db
 
 data class LoginResponse(
-    val message: String,
-    val statusCode: Int,
-    val user: User
-)
+    val id: Int,
+    val email: String,
+    val username:String
+    )
