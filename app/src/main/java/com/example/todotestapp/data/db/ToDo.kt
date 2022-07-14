@@ -1,8 +1,7 @@
 package com.example.todotestapp.data.db
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
-
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ToDo(
@@ -11,3 +10,6 @@ data class ToDo(
     val title: String,
     val description: String,
 ): Parcelable
+
+
+
