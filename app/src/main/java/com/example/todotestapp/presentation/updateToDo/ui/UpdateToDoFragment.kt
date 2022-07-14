@@ -10,6 +10,8 @@ import androidx.navigation.fragment.navArgs
 import com.example.todotestapp.MainActivity
 import com.example.todotestapp.R
 import com.example.todotestapp.data.db.ToDo
+import com.example.todotestapp.databinding.FragmentLoginBinding
+import com.example.todotestapp.databinding.FragmentUpdateTodoBinding
 
 
 class UpdateToDoFragment : Fragment() {
@@ -20,6 +22,7 @@ class UpdateToDoFragment : Fragment() {
     private var title: String? = null
     private var description: String? = null
     private var titleTV: TextView? = null
+    private lateinit var binding: FragmentUpdateTodoBinding
     private var descriptionTV: TextView? = null
     private var titleRecieved: String? = null
     private var button: Button? = null
@@ -35,8 +38,9 @@ class UpdateToDoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        binding = FragmentUpdateTodoBinding.inflate(inflater)
+        val view = binding.root
 
-        val view = inflater.inflate(R.layout.fragment_update_todo, container, false)
         initWidgets(view)
         fetchArguments()
         setUpUI()
@@ -101,9 +105,10 @@ class UpdateToDoFragment : Fragment() {
 
     private fun initWidgets(view: View) {
 
-        titleTV = view.findViewById<TextView>(R.id.update_title)
-        descriptionTV = view.findViewById<TextView>(R.id.update_description)
-        button = view.findViewById<Button>(R.id.updateTaskbutton)
-
+        titleTV = binding.updateTitle
+//        view.findViewById<TextView>(R.id.update_title)
+        descriptionTV = binding.updateDescription
+//        view.findViewById<TextView>(R.id.update_description)
+        button = binding.updateTaskbutton
     }
 }
