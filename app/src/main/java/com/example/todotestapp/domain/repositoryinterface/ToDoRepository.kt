@@ -10,6 +10,6 @@ interface ToDoRepository {
 
 //    suspend fun getTask(id: Int) : Response<List<ToDo>>
 //    suspend fun loginUser(email: String) : Response<LoginResponse>
-    suspend fun loginUser(email: String) : Response<BaseResponse<LoginResponse>>
+    suspend fun loginUser(email: String) : Response<LoginResponse>
 //    suspend fun signUpUser(requestBody: SignUpUserModel): Response<BaseResponse<SignUpUserModel>>
 }

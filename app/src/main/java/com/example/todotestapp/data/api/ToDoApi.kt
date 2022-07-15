@@ -22,7 +22,7 @@ interface ToDoApi {
     @GET("author")
     suspend fun loginUser(
         @Query("email") email:String
-    ): Response<BaseResponse<LoginResponse>>
+    ): Response<LoginResponse>
 //
 //    @POST("authors")//api end point goes here
 //    suspend fun signUpUser(

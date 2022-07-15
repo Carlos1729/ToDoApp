@@ -7,7 +7,7 @@ import retrofit2.Response
 
 class LoginUserUseCase(private val todoRepo: ToDoRepository) {
     //by default all classes are final so inorder to enable it to override it again we use open
-    suspend fun loginUserByEmail(email: String): Response<BaseResponse<LoginResponse>> {
+    suspend fun loginUserByEmail(email: String): Response<LoginResponse>{
         return todoRepo.loginUser(email)
     }
 //    suspend fun loginUserByEmail(email: String): Response<LoginResponse> {

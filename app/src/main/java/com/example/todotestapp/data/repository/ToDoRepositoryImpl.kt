@@ -18,7 +18,7 @@ class ToDoRepositoryImpl : ToDoRepository {
 //        return RetrofitInstance.api.loginUser(email)
 //    }
 
-    override suspend fun loginUser(email: String): Response<BaseResponse<LoginResponse>> {
+    override suspend fun loginUser(email: String): Response<LoginResponse> {
         return RetrofitInstance.api.loginUser(email)
     }
 

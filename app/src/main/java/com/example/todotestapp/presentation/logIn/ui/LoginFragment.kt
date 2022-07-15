@@ -18,6 +18,7 @@ import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModel
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModelFactory
 import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModel
 import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModelFactory
+import com.facebook.stetho.inspector.protocol.module.Network
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class LoginFragment : BottomSheetDialogFragment() {
@@ -45,7 +46,7 @@ class LoginFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         val repository : ToDoRepository = ToDoRepositoryImpl()
-        var loginResponseData: BaseResponse<LoginResponse>
+     //   var loginResponseData: Response<LoginResponse>
 
         binding?.loginButton?.setOnClickListener {
 
@@ -60,42 +61,34 @@ class LoginFragment : BottomSheetDialogFragment() {
             val viewModelFactory  = LoginViewModelFactory(repository)
             viewModel = ViewModelProvider(this,viewModelFactory).get(LoginViewModel::class.java)
             viewModel.loginUser(email)
-            viewModel.myLoginResponse.observe(viewLifecycleOwner){ response ->
-                    if(true){
 
-                        Log.d("StatusCode",response?.statusCode.toString())
-                        if(response?.statusCode != 404) {
-//                                val loginResponseData = response?.userdata
-                                Toast.makeText(
-                                    context,
-                                    getString(R.string.user_login_successful),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-//                            Log.d("Main",loginResponseData.toString())
-//                            Log.d("Main",response.code().toString())
-                            }
-                            else
-                            {
-                                Toast.makeText(
-                                    context,
-                                    getString(R.string.please_sign_up),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                    }
-                    else if(response?.statusCode == 404)
-                    {
-                        Log.e("RETROFIT_ERROR", response.toString())
-                        setUpUI()
-                    }
-//                    else if(response.code()){
-//                        setUpUI()
-//                    }
-            }
+            observeViewModel()
 
         }
 
-       }
+    }
+
+    private fun observeViewModel() {
+        viewModel.myLoginResponse.observe(viewLifecycleOwner) { response ->
+            if (response.statusCode == 200) {
+                Toast.makeText(
+                    context,
+                    getString(R.string.user_login_successful),
+                    Toast.LENGTH_SHORT
+                ).show()
+                //dismiss sheet and load todolist fragment
+            } else if (response?.statusCode == 404) {
+                Toast.makeText(
+                    context,
+                    getString(R.string.please_sign_up),
+                    Toast.LENGTH_SHORT
+                ).show()
+                //  showSignupUI()
+            } else {
+                //show Toast something went wrong.
+            }
+        }
+    }
 
     private fun setUpUI() {
         binding?.loginButton?.text = getString(R.string.sign_up)

@@ -18,12 +18,12 @@ class LoginViewModel(private val repository: ToDoRepository) : ViewModel() {
     private val userlogin = LoginUserUseCase(repository)
     private val userSignUp = SignUpUserUseCase(repository)
 
-        val myLoginResponse : MutableLiveData<BaseResponse<LoginResponse>> = MutableLiveData()
+        val myLoginResponse : MutableLiveData<LoginResponse> = MutableLiveData()
 
     fun loginUser(email : String) {
         viewModelScope.launch {
-            val response : BaseResponse<LoginResponse>? = userlogin.loginUserByEmail(email).body()
-            myLoginResponse.value = response
+            val response : Response<LoginResponse>? = userlogin.loginUserByEmail(email)
+            myLoginResponse.value = response?.body()
         }
     }
 
