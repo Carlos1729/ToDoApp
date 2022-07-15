@@ -69,22 +69,24 @@ class LoginFragment : BottomSheetDialogFragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.myLoginResponse.observe(viewLifecycleOwner) { response ->
-            if (response.statusCode == 200) {
+        viewModel.myLoginResponse.observe(viewLifecycleOwner) {
+            if (it.body() != null) {
                 Toast.makeText(
                     context,
                     getString(R.string.user_login_successful),
                     Toast.LENGTH_SHORT
                 ).show()
                 //dismiss sheet and load todolist fragment
-            } else if (response?.statusCode == 404) {
+            }
+            else if(it.code()==404){
                 Toast.makeText(
                     context,
                     getString(R.string.please_sign_up),
                     Toast.LENGTH_SHORT
                 ).show()
                 //  showSignupUI()
-            } else {
+            }
+            else{
                 //show Toast something went wrong.
             }
         }
