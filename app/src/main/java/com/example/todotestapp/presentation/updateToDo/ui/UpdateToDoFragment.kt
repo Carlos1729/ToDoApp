@@ -1,18 +1,30 @@
 package com.example.todotestapp.presentation.updateToDo.ui
 
+import android.app.ProgressDialog.show
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.example.todotestapp.MainActivity
 import com.example.todotestapp.R
+import com.example.todotestapp.data.db.AddToDoRequest
 import com.example.todotestapp.data.db.ToDo
+import com.example.todotestapp.data.repository.ToDoRepositoryImpl
 import com.example.todotestapp.databinding.FragmentLoginBinding
 import com.example.todotestapp.databinding.FragmentUpdateTodoBinding
+import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
+import com.example.todotestapp.presentation.SharedViewModel
+import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModel
+import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModelFactory
+import com.example.todotestapp.presentation.updateToDo.viewmodel.UpdateToDoViewModel
+import com.example.todotestapp.presentation.updateToDo.viewmodel.UpdateToDoViewModelFactory
 
 
 class UpdateToDoFragment : Fragment() {
@@ -29,6 +41,10 @@ class UpdateToDoFragment : Fragment() {
     private var statusspin: Spinner? = null
     private var todostatus: String? = null
     private var button: Button? = null
+    private lateinit var viewModel: UpdateToDoViewModel
+
+
+    private val sharedViewModel:SharedViewModel by activityViewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,8 +74,13 @@ class UpdateToDoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        val repository : ToDoRepository = ToDoRepositoryImpl()
+
         button?.setOnClickListener {
             checkInput(view)
+
+            val viewModelFactory  = UpdateToDoViewModelFactory(repository)
+            viewModel = ViewModelProvider(this, viewModelFactory)[UpdateToDoViewModel::class.java]
             if(!addToDoFlag) {
                 var updatedTitle: String = titleTV?.text.toString()
                 var updatedDescription: String = descriptionTV?.text.toString()
@@ -74,13 +95,37 @@ class UpdateToDoFragment : Fragment() {
             {
                 var addTitle: String = titleTV?.text.toString()
                 var addDescription: String = descriptionTV?.text.toString()
+                var addStatus : String = "pending"
+                var addUserEmail: String = "Hii"
+                sharedViewModel.emailIDOfUser.observe(viewLifecycleOwner) {
+                    addUserEmail = it.toString()
+                }
+                var presentAddToDoRequest = AddToDoRequest(addUserEmail,addTitle,addDescription,addStatus)
+                viewModel.addToDo(presentAddToDoRequest)
+                observeAddToDoViewModel()
+                Log.v("signDownFlagTest",addUserEmail)
                 //Call the API for updation
                 //if the response is success
-                Toast.makeText(context, "ToDo Added Successfully", Toast.LENGTH_SHORT)
-                    .show()
             }
         }
 
+    }
+
+    private fun observeAddToDoViewModel() {
+
+            viewModel.myAddToDoResponse.observe(viewLifecycleOwner) {
+                if (it.body() != null) {
+                    Toast.makeText(context, "ToDo Added Successfully", Toast.LENGTH_SHORT)
+                        .show()             //dismiss sheet and load todolist fragment
+                }
+                else if(it.code()==404){
+                    Toast.makeText(
+                        context,
+                        "Something Went Wrong Please Try Again",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
     }
 
 

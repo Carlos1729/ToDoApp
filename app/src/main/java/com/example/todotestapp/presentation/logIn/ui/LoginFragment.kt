@@ -7,12 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.todotestapp.R
 import com.example.todotestapp.data.db.SignUpUserRequest
 import com.example.todotestapp.data.repository.ToDoRepositoryImpl
 import com.example.todotestapp.databinding.FragmentLoginBinding
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
+import com.example.todotestapp.presentation.SharedViewModel
 import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModel
 import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -25,6 +27,9 @@ class LoginFragment : BottomSheetDialogFragment() {
     private var binding: FragmentLoginBinding ?= null
     private var signUpFlag = false
     private val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
+
+    private val sharedViewModel: SharedViewModel by activityViewModels()
+
 
 
     override fun onCreateView(
@@ -93,6 +98,7 @@ class LoginFragment : BottomSheetDialogFragment() {
                     context,"User Signed Up Successfully",
                     Toast.LENGTH_SHORT
                 ).show()
+                sharedViewModel.saveEmailIDOfUser(it.body()?.author?.email.toString())
                 dismiss()
                 //dismiss sheet and load todolist fragment
             }
@@ -115,6 +121,7 @@ class LoginFragment : BottomSheetDialogFragment() {
                     getString(R.string.user_login_successful),
                     Toast.LENGTH_SHORT
                 ).show()
+                sharedViewModel.saveEmailIDOfUser(it.body()?.author?.email.toString())
                 dismiss()
                 //dismiss sheet and load todolist fragment
             }
