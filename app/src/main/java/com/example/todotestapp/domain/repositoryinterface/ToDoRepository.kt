@@ -1,9 +1,6 @@
 package com.example.todotestapp.domain.repositoryinterface
 
-import com.example.todotestapp.data.db.BaseResponse
-import com.example.todotestapp.data.db.LoginResponse
-import com.example.todotestapp.data.db.SignUpUserRequest
-import com.example.todotestapp.data.db.SignUpUserResponse
+import com.example.todotestapp.data.db.*
 import okhttp3.RequestBody
 import retrofit2.Response
 
@@ -13,4 +10,5 @@ interface ToDoRepository {
 //    suspend fun loginUser(email: String) : Response<LoginResponse>
     suspend fun loginUser(email: String) : Response<LoginResponse>
     suspend fun signUpUser(requestBody: SignUpUserRequest): Response<SignUpUserResponse>
+    suspend fun addToDo(requestBody: AddToDoRequest): Response<AddToDoResponse>
 }

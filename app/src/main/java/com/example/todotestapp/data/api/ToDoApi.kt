@@ -28,6 +28,11 @@ interface ToDoApi {
         @Body requestBody: SignUpUserRequest
     ): Response<SignUpUserResponse>
 
+    @POST("tasks")//api end point goes here
+    suspend fun addToDo(
+        @Body requestBody: AddToDoRequest
+    ): Response<AddToDoResponse>
+
 
 //    @POST("authors")//api end point goes here
 //    suspend fun signUpUser(
