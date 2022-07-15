@@ -37,16 +37,16 @@ class ListToDoFragment : Fragment() {
         val view = binding?.root
 
 
-        val repository : ToDoRepository = ToDoRepositoryImpl()
-        val viewModelFactory  = ListViewModelFactory(repository)
-        viewModel = ViewModelProvider(this,viewModelFactory).get(ListViewModel::class.java)
-        viewModel.getTask(1 )
-        viewModel.mytasks.observe(viewLifecycleOwner, Observer{ response ->
-                   if(response.isSuccessful){
-                       Log.d("Main",response.body().toString())
-                       response.body()?.let { myAdapter.setData(it) }
-                   }
-        })
+//        val repository : ToDoRepository = ToDoRepositoryImpl()
+//        val viewModelFactory  = ListViewModelFactory(repository)
+//        viewModel = ViewModelProvider(this,viewModelFactory).get(ListViewModel::class.java)
+//        viewModel.getTask(1 )
+//        viewModel.mytasks.observe(viewLifecycleOwner, Observer{ response ->
+//                   if(response.isSuccessful){
+//                       Log.d("Main",response.body().toString())
+//                       response.body()?.let { myAdapter.setData(it) }
+//                   }
+//        })
 
 //        val myTask = (1,11,"Play PUBG","Winner Winner Chicken Dinner")
 //        viewModel.pushTask(myTask)

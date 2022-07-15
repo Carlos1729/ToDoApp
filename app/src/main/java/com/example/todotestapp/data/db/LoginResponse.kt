@@ -1,7 +1,10 @@
 package com.example.todotestapp.data.db
 
+import com.google.gson.annotations.SerializedName
+
 data class LoginResponse(
-    val id: Int,
-    val email: String,
-    val username:String
+
+    @SerializedName("author")
+    var author : UserDetails,
+
     )

@@ -36,6 +36,9 @@
     <string name="don_t_have_an_account_register">Don\'t have an account register</string>
     <string name="register">Register</string>
     <string name="sign_up">SIGN UP</string>
+    <string name="user_login_successful">User Logged In Successfully</string>
+    <string name="please_sign_up">Please Sign Up</string>
+
 
     <string-array name="statusoftask">
         <item>Pending</item>

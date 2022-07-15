@@ -11,14 +11,14 @@ import retrofit2.Response
 
 class ListViewModel(private val repository: ToDoRepository) : ViewModel(){
 
-    private val fetch = ToDoUseCase(repository)
-
-        val mytasks : MutableLiveData<Response<List<ToDo>>> = MutableLiveData()
-
-        fun getTask(id: Int){
-            viewModelScope.launch {
-                val response : Response<List<ToDo>> = fetch.fetchTaskByUserID(id)
-                mytasks.value = response
-            }
-        }
+//    private val fetch = ToDoUseCase(repository)
+//
+//        val mytasks : MutableLiveData<Response<List<ToDo>>> = MutableLiveData()
+//
+//        fun getTask(id: Int){
+//            viewModelScope.launch {
+//                val response : Response<List<ToDo>> = fetch.fetchTaskByUserID(id)
+//                mytasks.value = response
+//            }
+//        }
 }

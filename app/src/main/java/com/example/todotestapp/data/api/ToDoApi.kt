@@ -1,5 +1,6 @@
 package com.example.todotestapp.data.api
 
+import com.example.todotestapp.data.db.BaseResponse
 import com.example.todotestapp.data.db.LoginResponse
 import com.example.todotestapp.data.db.SignUpUserModel
 import com.example.todotestapp.data.db.ToDo
@@ -13,15 +14,20 @@ interface ToDoApi {
         @Query("id") id:Int
     ): Response<List<ToDo>>
 
-    @GET("login")
+//    @GET("author")
+//    suspend fun loginUser(
+//        @Query("email") email:String
+//    ): Response<BaseResponse<LoginResponse>>
+
+    @GET("author")
     suspend fun loginUser(
         @Query("email") email:String
-    ): Response<LoginResponse>
-
-    @POST("authors")//api end point goes here
-    suspend fun signUpUser(
-        @Body requestBody: SignUpUserModel
-    ): Response<SignUpUserModel>
+    ): Response<BaseResponse<LoginResponse>>
+//
+//    @POST("authors")//api end point goes here
+//    suspend fun signUpUser(
+//        @Body requestBody: SignUpUserModel
+//    ): Response<BaseResponse<SignUpUserModel>>
 
 
 //    @POST("authors")//api end point goes here

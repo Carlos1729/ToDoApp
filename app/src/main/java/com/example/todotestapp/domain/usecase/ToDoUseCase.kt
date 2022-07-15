@@ -6,7 +6,7 @@ import retrofit2.Response
 
 class ToDoUseCase(private val todoRepo: ToDoRepository) {
       //by default all classes are final so inorder to enable it to override it again we use open
-    suspend fun fetchTaskByUserID(id: Int): Response<List<ToDo>>{
-        return todoRepo.getTask(id)
-    }
+//    suspend fun fetchTaskByUserID(id: Int): Response<List<ToDo>>{
+//        return todoRepo.getTask(id)
+//    }
 }
