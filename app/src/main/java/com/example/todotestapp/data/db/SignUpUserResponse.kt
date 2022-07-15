@@ -2,9 +2,9 @@ package com.example.todotestapp.data.db
 
 import com.google.gson.annotations.SerializedName
 
-data class SignUpUserModel(
+data class SignUpUserResponse(
 
     @SerializedName("author")
-    val userResponse:LoginResponse
+    val author:UserDetails?
 
-)
+): BaseResponse()

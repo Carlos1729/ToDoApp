@@ -2,30 +2,28 @@ package com.example.todotestapp.presentation.logIn.ui
 
 import android.os.Bundle
 import android.util.Log
-import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.todotestapp.R
-import com.example.todotestapp.data.db.BaseResponse
-import com.example.todotestapp.data.db.LoginResponse
+import com.example.todotestapp.data.db.SignUpUserRequest
 import com.example.todotestapp.data.repository.ToDoRepositoryImpl
 import com.example.todotestapp.databinding.FragmentLoginBinding
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
-import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModel
-import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModelFactory
 import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModel
 import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModelFactory
-import com.facebook.stetho.inspector.protocol.module.Network
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import org.json.JSONObject
 
 class LoginFragment : BottomSheetDialogFragment() {
 
 
     private lateinit var viewModel: LoginViewModel
     private var binding: FragmentLoginBinding ?= null
+    private var signUpFlag = false
     private val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
 
 
@@ -39,6 +37,7 @@ class LoginFragment : BottomSheetDialogFragment() {
         binding = FragmentLoginBinding.inflate(inflater)
         binding?.userInputLayout?.visibility = View.GONE
         val view = binding?.root
+        getDialog()?.getWindow()?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         return view
 
     }
@@ -48,34 +47,75 @@ class LoginFragment : BottomSheetDialogFragment() {
         val repository : ToDoRepository = ToDoRepositoryImpl()
      //   var loginResponseData: Response<LoginResponse>
 
+        signUpFlag = false
+
         binding?.loginButton?.setOnClickListener {
 
 
-            val email = binding?.emailInputEditText?.text.toString()
-            if (!email.matches(emailPattern.toRegex())) {
-                Toast.makeText(context, "Invalid email address", Toast.LENGTH_SHORT).show()
-            }
-//            else {
-//                setUpUI()
-//            }
             val viewModelFactory  = LoginViewModelFactory(repository)
-            viewModel = ViewModelProvider(this,viewModelFactory).get(LoginViewModel::class.java)
-            viewModel.loginUser(email)
-
-            observeViewModel()
-
+            viewModel = ViewModelProvider(this, viewModelFactory)[LoginViewModel::class.java]
+            val useremail = binding?.emailInputEditText?.text.toString()
+            if(!signUpFlag) {
+                if (isValidEmail(useremail)) {
+                    viewModel.loginUser(useremail)
+                    observeLoginViewModel()
+                } else {
+                    Toast.makeText(
+                        context,
+                        getString(R.string.invalid_email_address),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            else{
+                val username = binding?.usernameInputEditText?.text.toString()
+                var presentUser  = SignUpUserRequest(useremail,username)
+                viewModel.signUpUser(presentUser)
+                observeSignUpViewModel()
+            }
         }
 
     }
 
-    private fun observeViewModel() {
+    private fun isValidEmail(email: String): Boolean {
+        if (!email.matches(emailPattern.toRegex())) {
+            Toast.makeText(context, "Invalid email address", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        return true
+    }
+
+    private fun observeSignUpViewModel() {
+
+        viewModel.mySignupResponse.observe(viewLifecycleOwner) {
+            if (it.body() != null) {
+                Toast.makeText(
+                    context,"User Signed Up Successfully",
+                    Toast.LENGTH_SHORT
+                ).show()
+                dismiss()
+                //dismiss sheet and load todolist fragment
+            }
+            else if(it.code()==404){
+                Toast.makeText(
+                    context,
+                    "Something Went Wrong Please Try Again",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun observeLoginViewModel() {
         viewModel.myLoginResponse.observe(viewLifecycleOwner) {
+            Log.v("signUpFlagTest",it.code().toString())
             if (it.body() != null) {
                 Toast.makeText(
                     context,
                     getString(R.string.user_login_successful),
                     Toast.LENGTH_SHORT
                 ).show()
+                dismiss()
                 //dismiss sheet and load todolist fragment
             }
             else if(it.code()==404){
@@ -84,7 +124,8 @@ class LoginFragment : BottomSheetDialogFragment() {
                     getString(R.string.please_sign_up),
                     Toast.LENGTH_SHORT
                 ).show()
-                //  showSignupUI()
+                showSignUpUI()
+                signUpFlag = true
             }
             else{
                 //show Toast something went wrong.
@@ -92,7 +133,7 @@ class LoginFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun setUpUI() {
+    private fun showSignUpUI() {
         binding?.loginButton?.text = getString(R.string.sign_up)
         binding?.userInputLayout?.visibility = View.VISIBLE
     }

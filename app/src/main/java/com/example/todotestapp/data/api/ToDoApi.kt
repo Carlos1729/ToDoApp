@@ -1,9 +1,7 @@
 package com.example.todotestapp.data.api
 
-import com.example.todotestapp.data.db.BaseResponse
-import com.example.todotestapp.data.db.LoginResponse
-import com.example.todotestapp.data.db.SignUpUserModel
-import com.example.todotestapp.data.db.ToDo
+import com.example.todotestapp.data.db.*
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -23,17 +21,18 @@ interface ToDoApi {
     suspend fun loginUser(
         @Query("email") email:String
     ): Response<LoginResponse>
-//
-//    @POST("authors")//api end point goes here
-//    suspend fun signUpUser(
-//        @Body requestBody: SignUpUserModel
-//    ): Response<BaseResponse<SignUpUserModel>>
+
+
+    @POST("authors")//api end point goes here
+    suspend fun signUpUser(
+        @Body requestBody: SignUpUserRequest
+    ): Response<SignUpUserResponse>
 
 
 //    @POST("authors")//api end point goes here
 //    suspend fun signUpUser(
-//        @Body requestBody: SignUpUserModel
-//    ): Response<SignUpUserModel>
+//        @Body requestBody: SignUpUserResponse
+//    ): Response<SignUpUserResponse>
 //
 
 
