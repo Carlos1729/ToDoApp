@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todotestapp.R
 import com.example.todotestapp.data.db.BaseListToDoResponse
@@ -55,7 +56,9 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
 
     fun setData(newList: ListToDoResponse)
     {
+        val toDoDiffUtil = ToDoDiffUtil(myList,newList.tasks!!)
+        val toDoDiffResult = DiffUtil.calculateDiff(toDoDiffUtil)
         myList = newList.tasks!!
-        notifyDataSetChanged()
+        toDoDiffResult.dispatchUpdatesTo(this)
     }
 }
