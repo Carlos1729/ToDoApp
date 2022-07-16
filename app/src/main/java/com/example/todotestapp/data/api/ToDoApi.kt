@@ -33,6 +33,16 @@ interface ToDoApi {
         @Body requestBody: AddToDoRequest
     ): Response<AddToDoResponse>
 
+    @GET("tasks")
+    suspend fun listToDo(
+        @Query("email") email:String
+    ): Response<ListToDoResponse>
+
+    @PUT("tasks/{id}")
+    suspend fun updateToDo(
+        @Path("id") id:Int?,
+        @Body requestBody: UpdateToDoRequest
+    ):Response<UpdateToDoResponse>
 
 //    @POST("authors")//api end point goes here
 //    suspend fun signUpUser(

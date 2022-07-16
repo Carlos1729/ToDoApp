@@ -1,5 +1,6 @@
 package com.example.todotestapp.presentation.logIn.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.todotestapp.R
 import com.example.todotestapp.data.db.SignUpUserRequest
 import com.example.todotestapp.data.repository.ToDoRepositoryImpl
@@ -23,12 +25,15 @@ import org.json.JSONObject
 class LoginFragment : BottomSheetDialogFragment() {
 
 
+
+
     private lateinit var viewModel: LoginViewModel
     private var binding: FragmentLoginBinding ?= null
     private var signUpFlag = false
     private val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
 
     private val sharedViewModel: SharedViewModel by activityViewModels()
+
 
 
 
@@ -100,6 +105,7 @@ class LoginFragment : BottomSheetDialogFragment() {
                 ).show()
                 sharedViewModel.saveEmailIDOfUser(it.body()?.author?.email.toString())
                 dismiss()
+                findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
                 //dismiss sheet and load todolist fragment
             }
             else if(it.code()==404){
@@ -121,8 +127,9 @@ class LoginFragment : BottomSheetDialogFragment() {
                     getString(R.string.user_login_successful),
                     Toast.LENGTH_SHORT
                 ).show()
-                sharedViewModel.saveEmailIDOfUser(it.body()?.author?.email.toString())
+                savedata(it.body()?.author?.email.toString(),it.body()?.author?.name.toString(),it.body()?.author?.id!!.toInt())
                 dismiss()
+                findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
                 //dismiss sheet and load todolist fragment
             }
             else if(it.code()==404){
@@ -138,6 +145,20 @@ class LoginFragment : BottomSheetDialogFragment() {
                 //show Toast something went wrong.
             }
         }
+    }
+
+    private fun savedata(email:String, username:String, Id:Int) {
+        val sharedPreferences = activity!!.getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.apply{
+            putString("EMAILID",email)
+            putString("USERNAME",username)
+            putInt("ID",Id)
+            putBoolean("SHAREDFLAG", false)
+        }.apply()
+
+        Log.v("signUpFlagTest",email)
+        Toast.makeText(context,"Data Saved",Toast.LENGTH_SHORT).show()
     }
 
     private fun showSignUpUI() {

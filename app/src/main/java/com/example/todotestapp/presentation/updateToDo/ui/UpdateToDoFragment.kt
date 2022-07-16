@@ -1,6 +1,7 @@
 package com.example.todotestapp.presentation.updateToDo.ui
 
 import android.app.ProgressDialog.show
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -15,7 +16,9 @@ import androidx.navigation.fragment.navArgs
 import com.example.todotestapp.MainActivity
 import com.example.todotestapp.R
 import com.example.todotestapp.data.db.AddToDoRequest
+import com.example.todotestapp.data.db.BaseListToDoResponse
 import com.example.todotestapp.data.db.ToDo
+import com.example.todotestapp.data.db.UpdateToDoRequest
 import com.example.todotestapp.data.repository.ToDoRepositoryImpl
 import com.example.todotestapp.databinding.FragmentLoginBinding
 import com.example.todotestapp.databinding.FragmentUpdateTodoBinding
@@ -31,7 +34,7 @@ class UpdateToDoFragment : Fragment() {
 
 
     private val args by navArgs<UpdateToDoFragmentArgs>()
-    private var todoItem: ToDo? = null
+    private var todoItem: BaseListToDoResponse? = null
     private var title: String? = null
     private var description: String? = null
     private var titleTV: TextView? = null
@@ -40,7 +43,9 @@ class UpdateToDoFragment : Fragment() {
     private var descriptionTV: TextView? = null
     private var statusspin: Spinner? = null
     private var todostatus: String? = null
+    private var idOfTask: Int? = null
     private var button: Button? = null
+    private lateinit var addToDoUserEmail :String
     private lateinit var viewModel: UpdateToDoViewModel
 
 
@@ -84,7 +89,12 @@ class UpdateToDoFragment : Fragment() {
             if(!addToDoFlag) {
                 var updatedTitle: String = titleTV?.text.toString()
                 var updatedDescription: String = descriptionTV?.text.toString()
+                var updatedStatus: String = statusspin?.selectedItem.toString()
+                var presentUpdateToDoRequest = UpdateToDoRequest(updatedTitle,updatedDescription,updatedStatus)
+                viewModel.updateToDo(idOfTask,presentUpdateToDoRequest)
+                observeUpdateToDoViewModel()
 
+//                var addStatus : String =
                 //Call the API for updation
                 //if the response is success
 
@@ -96,10 +106,8 @@ class UpdateToDoFragment : Fragment() {
                 var addTitle: String = titleTV?.text.toString()
                 var addDescription: String = descriptionTV?.text.toString()
                 var addStatus : String = "pending"
-                var addUserEmail: String = "Hii"
-                sharedViewModel.emailIDOfUser.observe(viewLifecycleOwner) {
-                    addUserEmail = it.toString()
-                }
+                loadData()
+                var addUserEmail: String = addToDoUserEmail
                 var presentAddToDoRequest = AddToDoRequest(addUserEmail,addTitle,addDescription,addStatus)
                 viewModel.addToDo(presentAddToDoRequest)
                 observeAddToDoViewModel()
@@ -109,6 +117,32 @@ class UpdateToDoFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun observeUpdateToDoViewModel() {
+        viewModel.myUpdateToDoResponse.observe(viewLifecycleOwner) {
+            if (it.body() != null) {
+                Toast.makeText(context, "ToDo Updated Successfully", Toast.LENGTH_SHORT)
+                    .show()             //dismiss sheet and load todolist fragment
+            }
+            else if(it.code()==404){
+                Toast.makeText(
+                    context,
+                    "Something Went Wrong Please Try Again",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun loadData() {
+            val sharedPreferences = activity!!.getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
+            val savedEmail = sharedPreferences.getString("EMAILID",null)
+            val savedUsername = sharedPreferences.getString("USERNAME",null)
+            val savedId = sharedPreferences.getInt("ID",-1)
+            if (savedEmail != null) {
+                addToDoUserEmail = savedEmail
+            }
     }
 
     private fun observeAddToDoViewModel() {
@@ -181,11 +215,12 @@ class UpdateToDoFragment : Fragment() {
         if (arguments != null  && args.presentitem != null) {
 
         }
-        todoItem = arguments?.getParcelable<ToDo>("presentitem")
+        todoItem = arguments?.getParcelable<BaseListToDoResponse>("presentitem")
         todoItem?.let {
             title = it.title
             description = it.description
             todostatus = it.status
+            idOfTask = it.taskId
         }
     }
 

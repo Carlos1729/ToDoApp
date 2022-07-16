@@ -1,5 +1,6 @@
 package com.example.todotestapp
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.NavController
@@ -18,8 +19,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         Stetho.initializeWithDefaults(this)
 
-        var loginFragment = LoginFragment()
-        loginFragment.show(supportFragmentManager, "TAG")
+//        var loginFragment = LoginFragment()
+//        loginFragment.show(supportFragmentManager, "TAG")
+//        val sharedPreferences = getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
+//        if(sharedPreferences.contains("EMAILID"))
+//        {
+//
+//        }
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.naviHostFragment) as NavHostFragment
         navController = navHostFragment.navController

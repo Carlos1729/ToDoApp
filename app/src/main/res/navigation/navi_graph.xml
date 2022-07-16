@@ -3,8 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navi_graph"
-    app:startDestination="@id/listTaskFragment">
-
+    app:startDestination="@id/loginFragment">
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.todotestapp.presentation.logIn.ui.LoginFragment"
+        android:label="ToDo App"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_listTaskFragment"
+            app:destination="@id/listTaskFragment" />
+    </fragment>
     <fragment
         android:id="@+id/listTaskFragment"
         android:name="com.example.todotestapp.presentation.listToDo.ui.ListToDoFragment"
@@ -31,7 +39,7 @@
         <argument
             android:name="presentitem"
             android:defaultValue="@null"
-            app:argType="com.example.todotestapp.data.db.ToDo"
+            app:argType="com.example.todotestapp.data.db.BaseListToDoResponse"
             app:nullable="true" />
 
     </fragment>

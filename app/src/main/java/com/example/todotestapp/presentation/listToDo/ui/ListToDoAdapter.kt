@@ -1,6 +1,7 @@
 package com.example.todotestapp.presentation.listToDo.ui
 
 import android.inputmethodservice.Keyboard
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +10,14 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todotestapp.R
+import com.example.todotestapp.data.db.BaseListToDoResponse
+import com.example.todotestapp.data.db.ListToDoResponse
 import com.example.todotestapp.data.db.ToDo
 import com.example.todotestapp.databinding.FragmentListTodoBinding
 
 class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
 
-     private var myList = emptyList<ToDo>()
+     private var myList = emptyList<BaseListToDoResponse>()
 
 
 
@@ -30,14 +33,15 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
             holder.itemView.findViewById<TextView>(R.id.title_txt).text = myList[position].title
             holder.itemView.findViewById<TextView>(R.id.description_txt).text = myList[position].description
 
-             when(myList[position].status)
+
+        when(myList[position].status)
              {
                  "completed"-> holder.itemView.findViewById<androidx.cardview.widget.CardView>(R.id.priority_indicator).setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.green))
                  "pending"-> holder.itemView.findViewById<androidx.cardview.widget.CardView>(R.id.priority_indicator).setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.Red))
              }
 
-//        holder.itemView.findViewById<TextView>(R.id.title_txt).text = context.resources.getString(dataset[position].stringTitleId)
-//            holder.itemView.findViewById<TextView>(R.id.description_txt).text = context.resources.getString(dataset[position].stringDescriptionId)
+////        holder.itemView.findViewById<TextView>(R.id.title_txt).text = context.resources.getString(dataset[position].stringTitleId)
+////            holder.itemView.findViewById<TextView>(R.id.description_txt).text = context.resources.getString(dataset[position].stringDescriptionId)
             holder.itemView.findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.row_background).setOnClickListener {
                 val action = ListToDoFragmentDirections.actionListTaskFragmentToUpdateTaskFragment(myList[position])
                 holder.itemView.findNavController().navigate(action)
@@ -49,9 +53,9 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
 //        return dataset.size
     }
 
-    fun setData(newList: List<ToDo>)
+    fun setData(newList: ListToDoResponse)
     {
-        myList = newList
+        myList = newList.tasks!!
         notifyDataSetChanged()
     }
 }
