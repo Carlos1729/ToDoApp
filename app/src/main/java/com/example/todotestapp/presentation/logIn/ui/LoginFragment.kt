@@ -103,7 +103,7 @@ class LoginFragment : BottomSheetDialogFragment() {
                     context,"User Signed Up Successfully",
                     Toast.LENGTH_SHORT
                 ).show()
-                sharedViewModel.saveEmailIDOfUser(it.body()?.author?.email.toString())
+                savedata(it.body()?.author?.email.toString(),it.body()?.author?.name.toString(),it.body()?.author?.id!!.toInt())
                 dismiss()
                 findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
                 //dismiss sheet and load todolist fragment

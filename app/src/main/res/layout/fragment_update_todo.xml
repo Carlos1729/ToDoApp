@@ -13,9 +13,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Title"
-        android:textStyle="bold"
-        android:textSize="20dp"
         android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/update_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,13 +27,13 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/custom_input"
         android:ems="10"
-        app:helperText = "Required"
-        app:helperTextTextColor = "@color/Red"
+        android:hint="Title Goes Here"
         android:inputType="textPersonName"
         android:maxLength="25"
         android:paddingStart="8dp"
         android:paddingEnd="24dp"
-        android:hint="Title Goes Here"
+        app:helperText="Required"
+        app:helperTextTextColor="@color/Red"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@id/update_title_heading"
@@ -46,9 +46,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Description"
-        android:textStyle="bold"
-        android:textSize="20dp"
         android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/update_description"
         app:layout_constraintStart_toStartOf="@id/update_title_heading"
         app:layout_constraintTop_toBottomOf="@id/update_title" />
@@ -60,10 +60,10 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/custom_input"
         android:ems="10"
-        android:maxLength="125"
         android:gravity="start|top"
         android:hint="@string/description_goes_here"
         android:inputType="textMultiLine"
+        android:maxLength="125"
         android:paddingStart="8dp"
         android:paddingTop="16dp"
         android:paddingEnd="24dp"
@@ -72,17 +72,17 @@
         app:layout_constraintTop_toBottomOf="@id/update_description_heading" />
 
     <Spinner
+        android:id="@+id/statusSpinner"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:entries="@array/statusoftask"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        android:id = "@+id/statusSpinner"
-        android:entries="@array/statusoftask"
-        android:background="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/update_description"/>
+        app:layout_constraintTop_toBottomOf="@id/update_description" />
 
     <Button
         android:id="@+id/updateTaskbutton"
@@ -93,5 +93,16 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/statusSpinner" />
+
+    <Button
+        android:id="@+id/deleteTaskButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Delete"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/updateTaskbutton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

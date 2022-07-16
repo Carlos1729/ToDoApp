@@ -44,8 +44,8 @@
 
 
     <string-array name="statusoftask">
-        <item>Pending</item>
-        <item>Completed</item>
+        <item>pending</item>
+        <item>completed</item>
     </string-array>
 
 

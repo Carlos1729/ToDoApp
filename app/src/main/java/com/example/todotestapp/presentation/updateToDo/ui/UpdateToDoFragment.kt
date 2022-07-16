@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.todotestapp.MainActivity
 import com.example.todotestapp.R
@@ -45,6 +46,7 @@ class UpdateToDoFragment : Fragment() {
     private var todostatus: String? = null
     private var idOfTask: Int? = null
     private var button: Button? = null
+    private var deleteButton: Button? = null
     private lateinit var addToDoUserEmail :String
     private lateinit var viewModel: UpdateToDoViewModel
 
@@ -90,16 +92,11 @@ class UpdateToDoFragment : Fragment() {
                 var updatedTitle: String = titleTV?.text.toString()
                 var updatedDescription: String = descriptionTV?.text.toString()
                 var updatedStatus: String = statusspin?.selectedItem.toString()
+                Log.v("Madhukar",idOfTask.toString())
                 var presentUpdateToDoRequest = UpdateToDoRequest(updatedTitle,updatedDescription,updatedStatus)
+                Log.v("Madhukar",updatedStatus)
                 viewModel.updateToDo(idOfTask,presentUpdateToDoRequest)
                 observeUpdateToDoViewModel()
-
-//                var addStatus : String =
-                //Call the API for updation
-                //if the response is success
-
-                Toast.makeText(context, "ToDo Updated Successfully", Toast.LENGTH_SHORT)
-                    .show()
             }
             else
             {
@@ -117,6 +114,31 @@ class UpdateToDoFragment : Fragment() {
             }
         }
 
+        deleteButton?.setOnClickListener {
+            val viewModelFactory  = UpdateToDoViewModelFactory(repository)
+            viewModel = ViewModelProvider(this, viewModelFactory)[UpdateToDoViewModel::class.java]
+            Log.v("Madhukar",idOfTask.toString())
+            viewModel.deleteToDo(idOfTask)
+            observeDeleteToDoViewModel()
+        }
+
+    }
+
+    private fun observeDeleteToDoViewModel() {
+        viewModel.myDeleteToDoResponse.observe(viewLifecycleOwner) {
+            if (it.body() != null) {
+                Toast.makeText(context, "ToDo Deleted Successfully", Toast.LENGTH_SHORT)
+                    .show()             //dismiss sheet and load todolist fragment
+                findNavController().navigate(R.id.action_updateTaskFragment_to_listTaskFragment)
+            }
+            else if(it.code()==404){
+                Toast.makeText(
+                    context,
+                    "Something Went Wrong Please Try Again",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     private fun observeUpdateToDoViewModel() {
@@ -124,6 +146,7 @@ class UpdateToDoFragment : Fragment() {
             if (it.body() != null) {
                 Toast.makeText(context, "ToDo Updated Successfully", Toast.LENGTH_SHORT)
                     .show()             //dismiss sheet and load todolist fragment
+                findNavController().navigate(R.id.action_updateTaskFragment_to_listTaskFragment)
             }
             else if(it.code()==404){
                 Toast.makeText(
@@ -151,6 +174,7 @@ class UpdateToDoFragment : Fragment() {
                 if (it.body() != null) {
                     Toast.makeText(context, "ToDo Added Successfully", Toast.LENGTH_SHORT)
                         .show()             //dismiss sheet and load todolist fragment
+                    findNavController().navigate(R.id.action_updateTaskFragment_to_listTaskFragment)
                 }
                 else if(it.code()==404){
                     Toast.makeText(
@@ -230,5 +254,6 @@ class UpdateToDoFragment : Fragment() {
         descriptionTV = binding?.updateDescription
         button = binding?.updateTaskbutton
         statusspin = binding?.statusSpinner
+        deleteButton = binding?.deleteTaskButton
     }
 }

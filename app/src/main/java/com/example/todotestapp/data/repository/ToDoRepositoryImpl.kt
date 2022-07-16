@@ -1,5 +1,6 @@
 package com.example.todotestapp.data.repository
 
+import android.util.Log
 import com.example.todotestapp.data.db.*
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import okhttp3.RequestBody
@@ -35,7 +36,12 @@ class ToDoRepositoryImpl : ToDoRepository {
 
     override suspend fun updateToDo(id: Int?, requestBody: UpdateToDoRequest): Response<UpdateToDoResponse>
     {
+//        Log.v("MadhukarKolli",id.toString())
         return RetrofitInstance.api.updateToDo(id,requestBody)
+    }
+
+    override suspend fun deleteToDo(id: Int?): Response<BaseResponse> {
+        return RetrofitInstance.api.deleteToDo(id)
     }
 
 }
