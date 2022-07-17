@@ -4,16 +4,17 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.view.ViewGroup.MarginLayoutParams
 import android.widget.Button
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.setMargins
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.todotestapp.presentation.MainActivity
 import com.example.todotestapp.R
 import com.example.todotestapp.data.db.AddToDoRequest
 import com.example.todotestapp.data.db.BaseListToDoResponse
@@ -22,6 +23,7 @@ import com.example.todotestapp.data.repository.Constants
 import com.example.todotestapp.data.repository.ToDoRepositoryImpl
 import com.example.todotestapp.databinding.FragmentUpdateTodoBinding
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
+import com.example.todotestapp.presentation.MainActivity
 import com.example.todotestapp.presentation.SharedViewModel
 import com.example.todotestapp.presentation.updateToDo.viewmodel.UpdateToDoViewModel
 import com.example.todotestapp.presentation.updateToDo.viewmodel.UpdateToDoViewModelFactory
@@ -62,6 +64,9 @@ class UpdateToDoFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentUpdateTodoBinding.inflate(inflater)
         binding?.statusSpinner?.visibility = View.GONE
+        binding?.deleteTaskButton?.visibility = View.GONE
+        binding?.statusHeading?.visibility = View.GONE
+
 
         val view = binding?.root
 
@@ -104,16 +109,12 @@ class UpdateToDoFragment : Fragment() {
                 var presentAddToDoRequest = AddToDoRequest(addUserEmail,addTitle,addDescription,addStatus)
                 viewModel.addToDo(presentAddToDoRequest)
                 observeAddToDoViewModel()
-                Log.v("signDownFlagTest",addUserEmail)
-                //Call the API for updation
-                //if the response is success
             }
         }
 
         deleteButton?.setOnClickListener {
             val viewModelFactory  = UpdateToDoViewModelFactory(repository)
             viewModel = ViewModelProvider(this, viewModelFactory)[UpdateToDoViewModel::class.java]
-            Log.v("Madhukar",idOfTask.toString())
             viewModel.deleteToDo(idOfTask)
             observeDeleteToDoViewModel()
         }
@@ -220,6 +221,8 @@ class UpdateToDoFragment : Fragment() {
         if (title != null || description != null) {
             button?.text = getString(R.string.update_button)
             binding?.statusSpinner?.visibility = View.VISIBLE
+            binding?.deleteTaskButton?.visibility = View.VISIBLE
+            binding?.statusHeading?.visibility = View.VISIBLE
             statusspin?.setSelection(parseStatus(todostatus))
             (activity as MainActivity).supportActionBar?.title = "Update ToDo"
 
@@ -229,6 +232,7 @@ class UpdateToDoFragment : Fragment() {
             addToDoFlag = true
         }
     }
+
 
     private fun fetchArguments() {
 

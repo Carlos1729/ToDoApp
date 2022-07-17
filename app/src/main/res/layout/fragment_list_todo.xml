@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:id = "@+id/listLayout"
     tools:context=".presentation.listToDo.ui.ListToDoFragment">
 
@@ -11,7 +11,7 @@
         android:id="@+id/recyclerViewId"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:paddingTop="8dp"
+        android:paddingTop="4dp"
         android:clipToPadding="false"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"

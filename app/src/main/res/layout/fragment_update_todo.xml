@@ -55,6 +55,7 @@
         app:layout_constraintStart_toStartOf="@id/update_title_heading"
         app:layout_constraintTop_toBottomOf="@id/update_title" />
 
+
     <EditText
         android:id="@+id/update_description"
         android:layout_width="match_parent"
@@ -76,18 +77,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/update_description_heading" />
 
+    <TextView
+        android:id="@+id/status_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Status"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/statusSpinner"
+        app:layout_constraintStart_toStartOf="@id/update_title_heading"
+        app:layout_constraintTop_toBottomOf="@id/update_description" />
+
     <Spinner
         android:id="@+id/statusSpinner"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginTop="8dp"
-        android:background="@android:color/transparent"
+        android:background="@drawable/custom_input"
         android:entries="@array/statusoftask"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/update_description" />
+        app:layout_constraintTop_toBottomOf="@id/status_heading" />
 
     <Button
         android:id="@+id/updateTaskbutton"
@@ -107,6 +121,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="24dp"
+        android:backgroundTint="@color/darkGray"
         android:text="Delete"
         app:layout_goneMarginEnd="30dp"
         app:layout_constraintEnd_toEndOf="parent"

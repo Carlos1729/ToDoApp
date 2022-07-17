@@ -38,6 +38,12 @@ interface ToDoApi {
         @Query("email") email:String
     ): Response<ListToDoResponse>
 
+//    @GET("tasks")
+//    suspend fun listToDoCompleted(
+//        @Query("authorId") id:Int,
+//        @Query("status") status: String
+//    ): Response<ListToDoResponse>
+
     @PATCH("tasks/{id}")
     suspend fun updateToDo(
         @Path("id") id:Int?,

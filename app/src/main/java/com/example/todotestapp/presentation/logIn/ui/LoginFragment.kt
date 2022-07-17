@@ -22,11 +22,11 @@ import com.example.todotestapp.data.repository.Constants.USER_NAME
 import com.example.todotestapp.data.repository.ToDoRepositoryImpl
 import com.example.todotestapp.databinding.FragmentLoginBinding
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
+import com.example.todotestapp.presentation.MainActivity
 import com.example.todotestapp.presentation.SharedViewModel
 import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModel
 import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import org.json.JSONObject
 
 class LoginFragment : BottomSheetDialogFragment() {
 
@@ -65,6 +65,8 @@ class LoginFragment : BottomSheetDialogFragment() {
 
         signUpFlag = false
 
+        (activity as MainActivity).supportActionBar?.title = "Login ToDo"
+
         binding?.loginButton?.setOnClickListener {
 
 
@@ -84,6 +86,7 @@ class LoginFragment : BottomSheetDialogFragment() {
                 }
             }
             else{
+//                (activity as MainActivity).supportActionBar?.title = "Sign Up"
                 val username = binding?.usernameInputEditText?.text.toString()
                 val presentUser  = SignUpUserRequest(useremail,username)
                 viewModel.signUpUser(presentUser)
@@ -172,6 +175,7 @@ class LoginFragment : BottomSheetDialogFragment() {
         binding?.loginButton?.text = getString(R.string.sign_up)
         binding?.userInputLayout?.visibility = View.VISIBLE
     }
+
 
 
     override fun onDestroyView() {

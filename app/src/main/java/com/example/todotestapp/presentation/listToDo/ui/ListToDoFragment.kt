@@ -25,6 +25,7 @@ import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.example.todotestapp.data.repository.ToDoRepositoryImpl
 import com.example.todotestapp.databinding.FragmentListTodoBinding
 import com.example.todotestapp.databinding.FragmentLoginBinding
+import com.example.todotestapp.presentation.MainActivity
 import com.example.todotestapp.presentation.SharedViewModel
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModel
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModelFactory
@@ -51,6 +52,7 @@ class ListToDoFragment : Fragment() {
         binding = FragmentListTodoBinding.inflate(inflater)
         val view = binding?.root
 
+        (activity as MainActivity).supportActionBar?.title = "List ToDo"
         val repository : ToDoRepository = ToDoRepositoryImpl()
         val viewModelFactory  = ListViewModelFactory(repository)
         viewModel = ViewModelProvider(this,viewModelFactory)[ListViewModel::class.java]
@@ -64,15 +66,6 @@ class ListToDoFragment : Fragment() {
                    }
         })
 
-//        val myTask = (1,11,"Play PUBG","Winner Winner Chicken Dinner")
-//        viewModel.pushTask(myTask)
-//        viewModel.myresponse.observe(viewLifecycleOwner, Observer{  response->
-//            if(response.isSuccessful)
-//            {
-//                Log.d("Hey Hii",response.body().toString())
-//            }
-//        })
-//        val myDataset = DataSource().loadTasks()
         val recyclerView = binding?.recyclerViewId
         recyclerView?.adapter = myAdapter
         recyclerView?.layoutManager = LinearLayoutManager(requireActivity())

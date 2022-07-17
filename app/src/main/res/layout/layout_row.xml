@@ -4,14 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp">
+    android:layout_margin="3dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/row_background"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_height="100dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:background="@drawable/list_background"
@@ -22,9 +20,9 @@
         app:layout_constraintTop_toTopOf="parent" >
 
         <androidx.cardview.widget.CardView
-            android:layout_width="16dp"
+            android:layout_width="12dp"
             android:id = "@+id/priority_indicator"
-            android:layout_height="16dp"
+            android:layout_height="12dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             app:cardBackgroundColor="@color/Red"
@@ -34,8 +32,10 @@
         <TextView
             android:id="@+id/title_txt"
             android:layout_width="wrap_content"
+            android:maxLines="1"
+            android:maxLength="25"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="16dp"
             android:text="My Title"
             android:textColor="@color/black"
@@ -46,13 +46,14 @@
 
         <TextView
             android:id="@+id/description_txt"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:maxEms="10"
+            android:maxLength="25"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:maxLength="200"
-            android:maxLines="5"
+            android:layout_marginBottom="18dp"
+            android:maxLines="1"
             android:text="@string/description_goes_here"
             android:textColor="@color/darkGray"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -61,6 +62,32 @@
             app:layout_constraintStart_toStartOf="@+id/title_txt"
             app:layout_constraintTop_toBottomOf="@+id/title_txt"
             app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/created_at"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="150dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.528"
+            app:layout_constraintTop_toBottomOf="@id/title_txt" />
+
+        <TextView
+            android:id="@+id/modifited_at"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:text="TextView"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="6dp"
+            app:layout_constraintStart_toStartOf="@id/created_at"
+            app:layout_constraintTop_toBottomOf="@id/created_at"
+            tools:layout_editor_absoluteX="318dp"
+            tools:layout_editor_absoluteY="70dp" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
