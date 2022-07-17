@@ -1,6 +1,5 @@
 package com.example.todotestapp.presentation.updateToDo.ui
 
-import android.app.ProgressDialog.show
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -14,19 +13,16 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.todotestapp.MainActivity
+import com.example.todotestapp.presentation.MainActivity
 import com.example.todotestapp.R
 import com.example.todotestapp.data.db.AddToDoRequest
 import com.example.todotestapp.data.db.BaseListToDoResponse
-import com.example.todotestapp.data.db.ToDo
 import com.example.todotestapp.data.db.UpdateToDoRequest
+import com.example.todotestapp.data.repository.Constants
 import com.example.todotestapp.data.repository.ToDoRepositoryImpl
-import com.example.todotestapp.databinding.FragmentLoginBinding
 import com.example.todotestapp.databinding.FragmentUpdateTodoBinding
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.example.todotestapp.presentation.SharedViewModel
-import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModel
-import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModelFactory
 import com.example.todotestapp.presentation.updateToDo.viewmodel.UpdateToDoViewModel
 import com.example.todotestapp.presentation.updateToDo.viewmodel.UpdateToDoViewModelFactory
 
@@ -159,10 +155,10 @@ class UpdateToDoFragment : Fragment() {
     }
 
     private fun loadData() {
-            val sharedPreferences = activity!!.getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
-            val savedEmail = sharedPreferences.getString("EMAILID",null)
-            val savedUsername = sharedPreferences.getString("USERNAME",null)
-            val savedId = sharedPreferences.getInt("ID",-1)
+            val sharedPreferences = activity!!.getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE)
+            val savedEmail = sharedPreferences.getString(Constants.EMAIL,null)
+            val savedUsername = sharedPreferences.getString(Constants.USER_NAME,null)
+            val savedId = sharedPreferences.getInt(Constants.ID,-1)
             if (savedEmail != null) {
                 addToDoUserEmail = savedEmail
             }

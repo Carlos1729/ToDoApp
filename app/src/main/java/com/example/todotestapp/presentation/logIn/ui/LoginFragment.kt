@@ -13,6 +13,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todotestapp.R
 import com.example.todotestapp.data.db.SignUpUserRequest
+import com.example.todotestapp.data.db.UserDetails
+import com.example.todotestapp.data.repository.Constants.EMAIL
+import com.example.todotestapp.data.repository.Constants.ID
+import com.example.todotestapp.data.repository.Constants.IS_USER_LOGGED_IN
+import com.example.todotestapp.data.repository.Constants.SHARED_PREFERENCES
+import com.example.todotestapp.data.repository.Constants.USER_NAME
 import com.example.todotestapp.data.repository.ToDoRepositoryImpl
 import com.example.todotestapp.databinding.FragmentLoginBinding
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
@@ -79,7 +85,7 @@ class LoginFragment : BottomSheetDialogFragment() {
             }
             else{
                 val username = binding?.usernameInputEditText?.text.toString()
-                var presentUser  = SignUpUserRequest(useremail,username)
+                val presentUser  = SignUpUserRequest(useremail,username)
                 viewModel.signUpUser(presentUser)
                 observeSignUpViewModel()
             }
@@ -103,7 +109,9 @@ class LoginFragment : BottomSheetDialogFragment() {
                     context,"User Signed Up Successfully",
                     Toast.LENGTH_SHORT
                 ).show()
-                savedata(it.body()?.author?.email.toString(),it.body()?.author?.name.toString(),it.body()?.author?.id!!.toInt())
+                it.body()?.author?.let { user ->
+                    savedata(user)
+                }
                 dismiss()
                 findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
                 //dismiss sheet and load todolist fragment
@@ -127,7 +135,9 @@ class LoginFragment : BottomSheetDialogFragment() {
                     getString(R.string.user_login_successful),
                     Toast.LENGTH_SHORT
                 ).show()
-                savedata(it.body()?.author?.email.toString(),it.body()?.author?.name.toString(),it.body()?.author?.id!!.toInt())
+                it.body()?.author?.let { user ->
+                    savedata(user)
+                }
                 dismiss()
                 findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
                 //dismiss sheet and load todolist fragment
@@ -147,18 +157,15 @@ class LoginFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun savedata(email:String, username:String, Id:Int) {
-        val sharedPreferences = activity!!.getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
+    private fun savedata(userDetails: UserDetails) {
+        val sharedPreferences = activity!!.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.apply{
-            putString("EMAILID",email)
-            putString("USERNAME",username)
-            putInt("ID",Id)
-            putBoolean("SHAREDFLAG", false)
+            putString(EMAIL,userDetails.email)
+            putString(USER_NAME,userDetails.name)
+            putInt(ID,userDetails.id)
+            putBoolean(IS_USER_LOGGED_IN, true)
         }.apply()
-
-        Log.v("signUpFlagTest",email)
-        Toast.makeText(context,"Data Saved",Toast.LENGTH_SHORT).show()
     }
 
     private fun showSignUpUI() {

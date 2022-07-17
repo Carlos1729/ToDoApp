@@ -1,6 +1,7 @@
 package com.example.todotestapp.presentation.listToDo.ui
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.icu.lang.UCharacter.GraphemeClusterBreak.V
 import android.os.Bundle
 import android.util.Log
@@ -16,6 +17,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todotestapp.R
+import com.example.todotestapp.data.repository.Constants.EMAIL
+import com.example.todotestapp.data.repository.Constants.ID
+import com.example.todotestapp.data.repository.Constants.SHARED_PREFERENCES
+import com.example.todotestapp.data.repository.Constants.USER_NAME
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.example.todotestapp.data.repository.ToDoRepositoryImpl
 import com.example.todotestapp.databinding.FragmentListTodoBinding
@@ -29,7 +34,7 @@ class ListToDoFragment : Fragment() {
 
     private lateinit var viewModel: ListViewModel
     private  var binding: FragmentListTodoBinding ?= null
-    lateinit var listToDoUserEmail: String
+    private var listToDoUserEmail: String = ""
     private val myAdapter by lazy { ListToDoAdapter() }
 
     private val sharedViewModel: SharedViewModel by activityViewModels()
@@ -46,12 +51,9 @@ class ListToDoFragment : Fragment() {
         binding = FragmentListTodoBinding.inflate(inflater)
         val view = binding?.root
 
-
-
-
         val repository : ToDoRepository = ToDoRepositoryImpl()
         val viewModelFactory  = ListViewModelFactory(repository)
-        viewModel = ViewModelProvider(this,viewModelFactory).get(ListViewModel::class.java)
+        viewModel = ViewModelProvider(this,viewModelFactory)[ListViewModel::class.java]
         loadData()
         viewModel.getTasks(listToDoUserEmail)
         Log.v("ThisisTest",listToDoUserEmail)
@@ -120,13 +122,15 @@ class ListToDoFragment : Fragment() {
 
 
     private fun loadData() {
-        val sharedPreferences = activity!!.getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
-        val savedEmail = sharedPreferences.getString("EMAILID",null)
-        val savedUsername = sharedPreferences.getString("USERNAME",null)
-        val savedId = sharedPreferences.getInt("ID",-1)
-        if (savedEmail != null) {
-            listToDoUserEmail = savedEmail
+        val sharedPreferences = activity?.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
+        sharedPreferences?.let {
+            if (sharedPreferences.contains(EMAIL)) {
+                listToDoUserEmail = sharedPreferences.getString(EMAIL, "") ?:""
+            }
+            val savedUsername = sharedPreferences.getString(USER_NAME,"")
+            val savedId = sharedPreferences.getInt(ID,-1)
         }
+
     }
 
 

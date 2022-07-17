@@ -1,7 +1,7 @@
 package com.example.todotestapp.data.repository
 
 import com.example.todotestapp.data.api.ToDoApi
-import com.example.todotestapp.data.repository.Constants.Companion.BASE_URL
+import com.example.todotestapp.data.repository.Constants.BASE_URL
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

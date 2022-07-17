@@ -23,15 +23,17 @@
     <EditText
         android:id="@+id/update_title"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/custom_input"
         android:ems="10"
         android:hint="Title Goes Here"
         android:inputType="textPersonName"
         android:maxLength="25"
-        android:paddingStart="8dp"
-        android:paddingEnd="24dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
         app:helperText="Required"
         app:helperTextTextColor="@color/Red"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,18 +57,21 @@
 
     <EditText
         android:id="@+id/update_description"
-        android:layout_width="0dp"
-        android:layout_height="250dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="4"
         android:layout_marginTop="8dp"
         android:background="@drawable/custom_input"
         android:ems="10"
+        android:minLines="2"
         android:gravity="start|top"
         android:hint="@string/description_goes_here"
         android:inputType="textMultiLine"
         android:maxLength="125"
-        android:paddingStart="8dp"
-        android:paddingTop="16dp"
-        android:paddingEnd="24dp"
+        android:paddingStart="15dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingEnd="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/update_description_heading" />
@@ -88,21 +93,23 @@
         android:id="@+id/updateTaskbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="30dp"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/statusSpinner" />
+        app:layout_constraintTop_toBottomOf="@id/statusSpinner"
+        android:textColorHint="@color/white"
+        android:hint="Add ToDo"/>
 
     <Button
         android:id="@+id/deleteTaskButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="24dp"
         android:text="Delete"
+        app:layout_goneMarginEnd="30dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updateTaskbutton" />
+        app:layout_constraintTop_toBottomOf="@+id/statusSpinner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
