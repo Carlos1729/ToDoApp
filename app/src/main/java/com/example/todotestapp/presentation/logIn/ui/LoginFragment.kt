@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todotestapp.R
@@ -23,7 +22,6 @@ import com.example.todotestapp.data.repository.ToDoRepositoryImpl
 import com.example.todotestapp.databinding.FragmentLoginBinding
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.example.todotestapp.presentation.MainActivity
-import com.example.todotestapp.presentation.SharedViewModel
 import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModel
 import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -38,7 +36,6 @@ class LoginFragment : BottomSheetDialogFragment() {
     private var signUpFlag = false
     private val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
 
-    private val sharedViewModel: SharedViewModel by activityViewModels()
 
 
 
@@ -90,6 +87,7 @@ class LoginFragment : BottomSheetDialogFragment() {
                 val username = binding?.usernameInputEditText?.text.toString()
                 val presentUser  = SignUpUserRequest(useremail,username)
                 viewModel.signUpUser(presentUser)
+                binding?.userInputLayout?.helperText = ""
                 observeSignUpViewModel()
             }
         }
@@ -129,6 +127,9 @@ class LoginFragment : BottomSheetDialogFragment() {
         }
     }
 
+
+    //the first parameter is the owner and the second parameter is the  owner ok so based on the lifecycle of the login fragment fetch or send dara
+    //whenever there is change in the present login response this gets executed
     private fun observeLoginViewModel() {
         viewModel.myLoginResponse.observe(viewLifecycleOwner) {
             Log.v("signUpFlagTest",it.code().toString())
@@ -143,7 +144,6 @@ class LoginFragment : BottomSheetDialogFragment() {
                 }
                 dismiss()
                 findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
-                //dismiss sheet and load todolist fragment
             }
             else if(it.code()==404){
                 Toast.makeText(
@@ -155,6 +155,11 @@ class LoginFragment : BottomSheetDialogFragment() {
                 signUpFlag = true
             }
             else{
+                Toast.makeText(
+                    context,
+                    "No Internet Connection",
+                    Toast.LENGTH_SHORT
+                ).show()
                 //show Toast something went wrong.
             }
         }

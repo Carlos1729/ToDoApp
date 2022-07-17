@@ -17,6 +17,8 @@ object RetrofitInstance {
     }
 
     //The Retrofit class generates an implementation of the ToDoAPIService interface.
+    //// Create an instance of our ToDoApiService interface.
+
     val api: ToDoApi by lazy {
         retrofit.create(ToDoApi::class.java)
     }

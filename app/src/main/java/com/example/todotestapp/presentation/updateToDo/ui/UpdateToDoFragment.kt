@@ -4,12 +4,10 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.view.ViewGroup.MarginLayoutParams
 import android.widget.Button
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.view.setMargins
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
@@ -24,7 +22,6 @@ import com.example.todotestapp.data.repository.ToDoRepositoryImpl
 import com.example.todotestapp.databinding.FragmentUpdateTodoBinding
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.example.todotestapp.presentation.MainActivity
-import com.example.todotestapp.presentation.SharedViewModel
 import com.example.todotestapp.presentation.updateToDo.viewmodel.UpdateToDoViewModel
 import com.example.todotestapp.presentation.updateToDo.viewmodel.UpdateToDoViewModelFactory
 
@@ -49,7 +46,6 @@ class UpdateToDoFragment : Fragment() {
     private lateinit var viewModel: UpdateToDoViewModel
 
 
-    private val sharedViewModel:SharedViewModel by activityViewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

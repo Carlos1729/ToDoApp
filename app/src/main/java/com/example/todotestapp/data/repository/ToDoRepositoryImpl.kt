@@ -1,26 +1,18 @@
 package com.example.todotestapp.data.repository
 
-import android.util.Log
 import com.example.todotestapp.data.db.*
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
-import okhttp3.RequestBody
 import retrofit2.Response
 
 class ToDoRepositoryImpl : ToDoRepository {
 
-//    override suspend fun getTask(id: Int) : Response<List<ToDo>> {
-//        return RetrofitInstance.api.getTask(id)
-//    }
 
-//    override suspend fun loginUser(email: String): Response<LoginResponse> {
-//        return RetrofitInstance.api.loginUser(email)
-//    }
+    //this an api call which it knows that it will take time to get the response so what is does it tries is that the thread that it is getting executing will now use its resourses to
+    //execute other functions until we gwt a response this property of using the same thread is coroutines
 
     override suspend fun loginUser(email: String): Response<LoginResponse> {
         return RetrofitInstance.api.loginUser(email)
     }
-
-
 
     override suspend fun signUpUser(requestBody: SignUpUserRequest): Response<SignUpUserResponse> {
         return RetrofitInstance.api.signUpUser(requestBody)
@@ -36,7 +28,6 @@ class ToDoRepositoryImpl : ToDoRepository {
 
     override suspend fun updateToDo(id: Int?, requestBody: UpdateToDoRequest): Response<UpdateToDoResponse>
     {
-//        Log.v("MadhukarKolli",id.toString())
         return RetrofitInstance.api.updateToDo(id,requestBody)
     }
 

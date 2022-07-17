@@ -1,7 +1,5 @@
 package com.example.todotestapp.domain.usecase
 
-import com.example.todotestapp.data.db.AddToDoRequest
-import com.example.todotestapp.data.db.AddToDoResponse
 import com.example.todotestapp.data.db.UpdateToDoRequest
 import com.example.todotestapp.data.db.UpdateToDoResponse
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository

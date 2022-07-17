@@ -26,7 +26,6 @@ import com.example.todotestapp.data.repository.ToDoRepositoryImpl
 import com.example.todotestapp.databinding.FragmentListTodoBinding
 import com.example.todotestapp.databinding.FragmentLoginBinding
 import com.example.todotestapp.presentation.MainActivity
-import com.example.todotestapp.presentation.SharedViewModel
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModel
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -38,7 +37,6 @@ class ListToDoFragment : Fragment() {
     private var listToDoUserEmail: String = ""
     private val myAdapter by lazy { ListToDoAdapter() }
 
-    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(
 

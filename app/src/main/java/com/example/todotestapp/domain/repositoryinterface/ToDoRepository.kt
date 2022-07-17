@@ -1,7 +1,6 @@
 package com.example.todotestapp.domain.repositoryinterface
 
 import com.example.todotestapp.data.db.*
-import okhttp3.RequestBody
 import retrofit2.Response
 
 interface ToDoRepository {

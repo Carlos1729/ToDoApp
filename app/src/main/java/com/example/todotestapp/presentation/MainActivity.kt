@@ -10,6 +10,7 @@ import com.example.todotestapp.R
 import com.example.todotestapp.data.repository.Constants.IS_USER_LOGGED_IN
 import com.example.todotestapp.data.repository.Constants.SHARED_PREFERENCES
 import com.facebook.stetho.Stetho
+import java.net.InetAddress
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         Stetho.initializeWithDefaults(this)
         navHostFragment = supportFragmentManager.findFragmentById(R.id.naviHostFragment) as NavHostFragment
         navController = navHostFragment.navController
+
 
         if(checkForLoginSignUpFlow()){
             navigateToListScreen()
@@ -50,6 +52,17 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.naviHostFragment)
        return navController.navigateUp() || super.onSupportNavigateUp()
 }
+
+
+    fun isInternetAvailable(): Boolean {
+        return try {
+            val ipAddr: InetAddress = InetAddress.getByName("google.com")
+            //You can replace it with your name
+            !ipAddr.equals("")
+        } catch (e: Exception) {
+            false
+        }
+    }
 
 
 
