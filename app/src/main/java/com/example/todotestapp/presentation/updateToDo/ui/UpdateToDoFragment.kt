@@ -89,9 +89,7 @@ class UpdateToDoFragment : Fragment() {
                 var updatedTitle: String = titleTV?.text.toString()
                 var updatedDescription: String = descriptionTV?.text.toString()
                 var updatedStatus: String = statusspin?.selectedItem.toString()
-                Log.v("Madhukar",idOfTask.toString())
                 var presentUpdateToDoRequest = UpdateToDoRequest(updatedTitle,updatedDescription,updatedStatus)
-                Log.v("Madhukar",updatedStatus)
                 viewModel.updateToDo(idOfTask,presentUpdateToDoRequest)
                 observeUpdateToDoViewModel()
             }
@@ -165,14 +163,14 @@ class UpdateToDoFragment : Fragment() {
 
             viewModel.myAddToDoResponse.observe(viewLifecycleOwner) {
                 if (it.body() != null) {
-                    Toast.makeText(context, "ToDo Added Successfully", Toast.LENGTH_SHORT)
+                    Toast.makeText(context, getString(R.string.todoadds), Toast.LENGTH_SHORT)
                         .show()             //dismiss sheet and load todolist fragment
                     findNavController().navigate(R.id.action_updateTaskFragment_to_listTaskFragment)
                 }
                 else if(it.code()==404){
                     Toast.makeText(
                         context,
-                        "Something Went Wrong Please Try Again",
+                        getString(R.string.swrpta),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -221,11 +219,11 @@ class UpdateToDoFragment : Fragment() {
             binding?.deleteTaskButton?.visibility = View.VISIBLE
             binding?.statusHeading?.visibility = View.VISIBLE
             statusspin?.setSelection(parseStatus(todostatus))
-            (activity as MainActivity).supportActionBar?.title = "Update ToDo"
+            (activity as MainActivity).supportActionBar?.title = "Update Item"
 
         } else {
             button?.text = getString(R.string.add_button)
-            (activity as MainActivity).supportActionBar?.title = "Add ToDo"
+            (activity as MainActivity).supportActionBar?.title = "Add Item"
             addToDoFlag = true
         }
     }

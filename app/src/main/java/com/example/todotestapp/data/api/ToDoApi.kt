@@ -14,11 +14,6 @@ interface ToDoApi {
         @Query("id") id:Int
     ): Response<List<ToDo>>
 
-//    @GET("author")
-//    suspend fun loginUser(
-//        @Query("email") email:String
-//    ): Response<BaseResponse<LoginResponse>>
-
     @GET("author")
     suspend fun loginUser(
         @Query("email") email:String

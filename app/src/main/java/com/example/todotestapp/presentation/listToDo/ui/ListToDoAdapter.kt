@@ -1,5 +1,6 @@
 package com.example.todotestapp.presentation.listToDo.ui
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -87,17 +88,27 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
 
     private fun timecheck(subSequence: String): String {
 
-
+        Log.v("Madhukartestfinal",subSequence)
         var timth : String = ""
         val h1 = subSequence[0] - '0'
-        val h2 = subSequence[0] - '0'
+        val h2 = subSequence[1] - '0'
+        Log.v("Madhukartestfinal",subSequence)
+        Log.v("Madhukartestfinal",h2.toString())
 
         var hh = h1 * 10 + h2
+        Log.v("Madhukartestfinal",hh.toString())
+
 
         val Meridien: String
-        Meridien = if (hh < 12) {
-            "AM"
-        } else "PM"
+
+        if(hh < 12)
+        {
+            Meridien = "AM"
+        }
+        else
+        {
+            Meridien = "PM"
+        }
 
             hh %= 12
 

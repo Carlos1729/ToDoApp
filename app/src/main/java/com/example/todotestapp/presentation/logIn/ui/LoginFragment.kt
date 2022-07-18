@@ -142,7 +142,6 @@ class LoginFragment : BottomSheetDialogFragment() {
                 it.body()?.author?.let { user ->
                     savedata(user)
                 }
-                dismiss()
                 findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
             }
             else if(it.code()==404){
@@ -157,7 +156,7 @@ class LoginFragment : BottomSheetDialogFragment() {
             else{
                 Toast.makeText(
                     context,
-                    "No Internet Connection",
+                    getString(R.string.noic),
                     Toast.LENGTH_SHORT
                 ).show()
                 //show Toast something went wrong.

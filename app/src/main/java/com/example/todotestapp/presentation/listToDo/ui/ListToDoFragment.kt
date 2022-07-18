@@ -51,13 +51,12 @@ class ListToDoFragment : Fragment() {
         binding = FragmentListTodoBinding.inflate(inflater)
         val view = binding?.root
 
-        (activity as MainActivity).supportActionBar?.title = "List ToDo"
+        (activity as MainActivity).supportActionBar?.title = "ToDo's"
         val repository : ToDoRepository = ToDoRepositoryImpl()
         val viewModelFactory  = ListViewModelFactory(repository)
         viewModel = ViewModelProvider(this,viewModelFactory)[ListViewModel::class.java]
         loadData()
         viewModel.getTasks(listToDoUserEmail)
-        Log.v("ThisisTest",listToDoUserEmail)
         viewModel.myToDoList.observe(viewLifecycleOwner, Observer{ response ->
                    if(response.isSuccessful){
                        Log.d("Main",response.body().toString())
@@ -67,19 +66,12 @@ class ListToDoFragment : Fragment() {
 
         val recyclerView = binding?.recyclerViewId
         recyclerView?.adapter = myAdapter
-        recyclerView?.layoutManager = LinearLayoutManager(requireActivity())
-
-
-
+        recyclerView?.layoutManager = LinearLayoutManager(requireActivity())//to make sure it is visible in the linear fashion
 
         val addtodo = binding?.floatingActionButton
-
         addtodo?.setOnClickListener {
-            findNavController().navigate(R.id.action_listTaskFragment_to_updateTaskFragment,null)
+            findNavController().navigate(R.id.action_listTaskFragment_to_updateTaskFragment,null)//args is null here beacuse while creating a add to do no need to pass the data
         }
-
-
-
 
         return view
     }
@@ -99,10 +91,8 @@ class ListToDoFragment : Fragment() {
                     R.id.menu_completed -> {
 
                         viewModel.getTasksByStatus(listToDoUserId,"completed")
-//                        Log.v("ThisisTest",listToDoUserEmail)
                         viewModel.myToDoListStatus.observe(viewLifecycleOwner, Observer{ response ->
                             if(response.isSuccessful){
-                                Log.d("Main",response.body().toString())
                                 response.body()?.let { myAdapter.setData(it) }
                             }
                         })
@@ -110,10 +100,8 @@ class ListToDoFragment : Fragment() {
                     }
                     R.id.menu_pending -> {
                         viewModel.getTasksByStatus(listToDoUserId,"pending")
-//                        Log.v("ThisisTest",listToDoUserEmail)
                         viewModel.myToDoListStatus.observe(viewLifecycleOwner, Observer{ response ->
                             if(response.isSuccessful){
-                                Log.d("Main",response.body().toString())
                                 response.body()?.let { myAdapter.setData(it) }
                             }
                         })
@@ -121,10 +109,8 @@ class ListToDoFragment : Fragment() {
                     }
                     R.id.menu_all ->{
                         viewModel.getTasks(listToDoUserEmail)
-                        Log.v("ThisisTest",listToDoUserEmail)
                         viewModel.myToDoList.observe(viewLifecycleOwner, Observer{ response ->
                             if(response.isSuccessful){
-                                Log.d("Main",response.body().toString())
                                 response.body()?.let { myAdapter.setData(it) }
                             }
                         })

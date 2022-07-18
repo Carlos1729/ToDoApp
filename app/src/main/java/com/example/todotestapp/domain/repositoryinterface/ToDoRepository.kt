@@ -5,8 +5,6 @@ import retrofit2.Response
 
 interface ToDoRepository {
 
-//    suspend fun getTask(id: Int) : Response<List<ToDo>>
-//    suspend fun loginUser(email: String) : Response<LoginResponse>
     suspend fun loginUser(email: String) : Response<LoginResponse>
     suspend fun signUpUser(requestBody: SignUpUserRequest): Response<SignUpUserResponse>
     suspend fun addToDo(requestBody: AddToDoRequest): Response<AddToDoResponse>
@@ -14,4 +12,5 @@ interface ToDoRepository {
     suspend fun updateToDo(id: Int?,requestBody: UpdateToDoRequest): Response<UpdateToDoResponse>
     suspend fun deleteToDo(id: Int?): Response<BaseResponse>
     suspend fun listToDoCompleted(id:Int,status: String) : Response<ListToDoResponse>
+
 }

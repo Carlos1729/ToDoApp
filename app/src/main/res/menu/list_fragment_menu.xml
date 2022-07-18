@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/menu_completed"
-        android:title="@string/completed"/>
+        android:title="@string/completed"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/menu_pending"
-        android:title="@string/pending"/>
+        android:title="@string/pending"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/menu_all"
-        android:title="@string/all"/>
+        android:title="@string/all"
+        app:showAsAction="ifRoom"/>
 
 </menu>
