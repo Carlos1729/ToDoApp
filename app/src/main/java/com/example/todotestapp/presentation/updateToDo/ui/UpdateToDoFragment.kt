@@ -217,6 +217,7 @@ class UpdateToDoFragment : Fragment() {
         if (title != null || description != null) {
             button?.text = getString(R.string.update_button)
             binding?.statusSpinner?.visibility = View.VISIBLE
+//            binding?.statusSpinner?.onItemSelectedListener
             binding?.deleteTaskButton?.visibility = View.VISIBLE
             binding?.statusHeading?.visibility = View.VISIBLE
             statusspin?.setSelection(parseStatus(todostatus))

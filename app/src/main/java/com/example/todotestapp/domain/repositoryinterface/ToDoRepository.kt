@@ -13,4 +13,5 @@ interface ToDoRepository {
     suspend fun listToDo(email: String): Response<ListToDoResponse>
     suspend fun updateToDo(id: Int?,requestBody: UpdateToDoRequest): Response<UpdateToDoResponse>
     suspend fun deleteToDo(id: Int?): Response<BaseResponse>
+    suspend fun listToDoCompleted(id:Int,status: String) : Response<ListToDoResponse>
 }

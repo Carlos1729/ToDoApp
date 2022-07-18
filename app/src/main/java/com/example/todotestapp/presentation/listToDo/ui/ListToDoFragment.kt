@@ -35,6 +35,7 @@ class ListToDoFragment : Fragment() {
     private lateinit var viewModel: ListViewModel
     private  var binding: FragmentListTodoBinding ?= null
     private var listToDoUserEmail: String = ""
+    private var listToDoUserId: Int = -1
     private val myAdapter by lazy { ListToDoAdapter() }
 
 
@@ -97,11 +98,36 @@ class ListToDoFragment : Fragment() {
                 return when (menuItem.itemId) {
                     R.id.menu_completed -> {
 
-                        // clearCompletedTasks()
+                        viewModel.getTasksByStatus(listToDoUserId,"completed")
+//                        Log.v("ThisisTest",listToDoUserEmail)
+                        viewModel.myToDoListStatus.observe(viewLifecycleOwner, Observer{ response ->
+                            if(response.isSuccessful){
+                                Log.d("Main",response.body().toString())
+                                response.body()?.let { myAdapter.setData(it) }
+                            }
+                        })
                         true
                     }
                     R.id.menu_pending -> {
-                        // loadTasks(true)
+                        viewModel.getTasksByStatus(listToDoUserId,"pending")
+//                        Log.v("ThisisTest",listToDoUserEmail)
+                        viewModel.myToDoListStatus.observe(viewLifecycleOwner, Observer{ response ->
+                            if(response.isSuccessful){
+                                Log.d("Main",response.body().toString())
+                                response.body()?.let { myAdapter.setData(it) }
+                            }
+                        })
+                        true
+                    }
+                    R.id.menu_all ->{
+                        viewModel.getTasks(listToDoUserEmail)
+                        Log.v("ThisisTest",listToDoUserEmail)
+                        viewModel.myToDoList.observe(viewLifecycleOwner, Observer{ response ->
+                            if(response.isSuccessful){
+                                Log.d("Main",response.body().toString())
+                                response.body()?.let { myAdapter.setData(it) }
+                            }
+                        })
                         true
                     }
                     else -> false
@@ -117,11 +143,10 @@ class ListToDoFragment : Fragment() {
         sharedPreferences?.let {
             if (sharedPreferences.contains(EMAIL)) {
                 listToDoUserEmail = sharedPreferences.getString(EMAIL, "") ?:""
+                listToDoUserId = sharedPreferences.getInt(ID,-1)
             }
             val savedUsername = sharedPreferences.getString(USER_NAME,"")
-            val savedId = sharedPreferences.getInt(ID,-1)
         }
-
     }
 
 

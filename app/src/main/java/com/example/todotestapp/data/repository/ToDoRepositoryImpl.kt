@@ -35,4 +35,8 @@ class ToDoRepositoryImpl : ToDoRepository {
         return RetrofitInstance.api.deleteToDo(id)
     }
 
+    override suspend fun listToDoCompleted(id: Int, status: String): Response<ListToDoResponse> {
+        return RetrofitInstance.api.listToDoCompleted(id,status)
+    }
+
 }
