@@ -17,4 +17,9 @@
         android:title="@string/all"
         app:showAsAction="ifRoom"/>
 
+    <item
+        android:id="@+id/logout"
+        android:title="@string/logout"
+        />
+
 </menu>

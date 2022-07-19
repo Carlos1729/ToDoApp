@@ -45,6 +45,7 @@
     <string name="swrpta">Something Went Wrong Please Try Again</string>
     <string name="todoadds">ToDo Added Successfully</string>
     <string name="noic">No Internet Connection</string>
+    <string name="logout">Logout</string>
 
 
     <string-array name="statusoftask">

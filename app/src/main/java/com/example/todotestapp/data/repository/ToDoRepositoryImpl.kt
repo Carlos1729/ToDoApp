@@ -22,8 +22,8 @@ class ToDoRepositoryImpl : ToDoRepository {
         return RetrofitInstance.api.addToDo(requestBody)
     }
 
-    override suspend fun listToDo(email: String): Response<ListToDoResponse> {
-        return RetrofitInstance.api.listToDo(email)
+    override suspend fun listToDo(id: Int): Response<ListToDoResponse> {
+        return RetrofitInstance.api.listToDo(id)
     }
 
     override suspend fun updateToDo(id: Int?, requestBody: UpdateToDoRequest): Response<UpdateToDoResponse>

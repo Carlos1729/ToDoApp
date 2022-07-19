@@ -16,7 +16,7 @@ import java.util.*
 
 class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
 
-    private var myList = emptyList<BaseListToDoResponse>()
+    var myList = emptyList<BaseListToDoResponse>()
     var sdf: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
     var output: SimpleDateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
 
@@ -69,10 +69,6 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
                 val thtime = timecheck(time2.subSequence(11, 16).toString())
                 holder.binding.modifitedAt.text = "Updated : " + thtime
             }
-
-
-
-
 
         when(myList[position].status){
                 "completed"-> holder.binding.priorityIndicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.green))
@@ -142,6 +138,8 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
     override fun getItemViewType(position: Int): Int {
         return position
     }
+
+
 
     fun setData(newList: ListToDoResponse)
     {

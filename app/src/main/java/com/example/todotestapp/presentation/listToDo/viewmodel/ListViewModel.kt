@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todotestapp.data.db.*
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
+import com.example.todotestapp.domain.usecase.DeleteToDoUseCase
 import com.example.todotestapp.domain.usecase.ListToDoByStatusUseCase
 import com.example.todotestapp.domain.usecase.ListToDoUseCase
 import kotlinx.coroutines.launch
@@ -17,9 +18,9 @@ class ListViewModel(private val repository: ToDoRepository) : ViewModel(){
 
         val myToDoList : MutableLiveData<Response<ListToDoResponse>> = MutableLiveData()
 
-        fun getTasks(email: String){
+        fun getTasks(id: Int){
             viewModelScope.launch {
-                val response : Response<ListToDoResponse> = todofetch.listToDoByEmail(email)
+                val response : Response<ListToDoResponse> = todofetch.listToDoByEmail(id)
                 myToDoList.value = response
             }
         }
@@ -33,6 +34,17 @@ class ListViewModel(private val repository: ToDoRepository) : ViewModel(){
         viewModelScope.launch {
             val response : Response<ListToDoResponse> = todostatusfetch.listToDoByIdStatus(id,status)
             myToDoListStatus.value = response
+        }
+    }
+
+    private val tododelete = DeleteToDoUseCase(repository)
+
+    val myDeleteToDoResponse : MutableLiveData<Response<BaseResponse>> = MutableLiveData()
+
+    fun deleteToDo(id: Int?) {
+        viewModelScope.launch {
+            val response = id?.let { tododelete.deleteTaskById(it) }
+            myDeleteToDoResponse.value = response
         }
     }
 

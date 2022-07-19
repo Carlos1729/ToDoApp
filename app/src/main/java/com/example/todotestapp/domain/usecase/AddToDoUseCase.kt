@@ -4,8 +4,9 @@ import com.example.todotestapp.data.db.AddToDoRequest
 import com.example.todotestapp.data.db.AddToDoResponse
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import retrofit2.Response
+import javax.inject.Inject
 
-class AddToDoUseCase(private val todoRepo: ToDoRepository) {
+class AddToDoUseCase @Inject constructor(private val todoRepo: ToDoRepository) {
 
 
     suspend fun addToDoByRequest(addToDoDetails: AddToDoRequest): Response<AddToDoResponse>

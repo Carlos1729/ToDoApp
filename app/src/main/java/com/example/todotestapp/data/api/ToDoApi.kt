@@ -32,7 +32,7 @@ interface ToDoApi {
 
     @GET("tasks")
     suspend fun listToDo(
-        @Query("email") email:String
+        @Query("authorId") id:Int,
     ): Response<ListToDoResponse>
 
     @GET("tasks")
