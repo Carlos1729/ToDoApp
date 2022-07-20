@@ -11,40 +11,35 @@ import com.example.todotestapp.domain.usecase.ListToDoUseCase
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
-class ListViewModel(private val repository: ToDoRepository) : ViewModel(){
+class ListViewModel(private val repository: ToDoRepository) : ViewModel() {
 
 
-    private val todofetch = ListToDoUseCase(repository)
+    private val toDoFetch = ListToDoUseCase(repository)
+    private val toDoStatusFetch = ListToDoByStatusUseCase(repository)
+    private val toDoDelete = DeleteToDoUseCase(repository)
 
-        val myToDoList : MutableLiveData<Response<ListToDoResponse>> = MutableLiveData()
+    val myToDoList: MutableLiveData<Response<ListToDoResponse>> = MutableLiveData()
+    val deleteToDoItemLiveData: MutableLiveData<Response<BaseResponse>> = MutableLiveData()
 
-        fun getTasks(id: Int){
-            viewModelScope.launch {
-                val response : Response<ListToDoResponse> = todofetch.listToDoByEmail(id)
-                myToDoList.value = response
-            }
-        }
-
-    private val todostatusfetch = ListToDoByStatusUseCase(repository)
-
-    val myToDoListStatus : MutableLiveData<Response<ListToDoResponse>> = MutableLiveData()
-
-
-    fun getTasksByStatus(id:Int,status : String){
+    fun getTasks(id: Int) {
         viewModelScope.launch {
-            val response : Response<ListToDoResponse> = todostatusfetch.listToDoByIdStatus(id,status)
-            myToDoListStatus.value = response
+            val response: Response<ListToDoResponse> = toDoFetch.listToDoByEmail(id)
+            myToDoList.value = response
         }
     }
 
-    private val tododelete = DeleteToDoUseCase(repository)
-
-    val myDeleteToDoResponse : MutableLiveData<Response<BaseResponse>> = MutableLiveData()
+    fun getTasksByStatus(id: Int, status: String) {
+        viewModelScope.launch {
+            val response: Response<ListToDoResponse> =
+                toDoStatusFetch.listToDoByIdStatus(id, status)
+            myToDoList.value = response
+        }
+    }
 
     fun deleteToDo(id: Int?) {
         viewModelScope.launch {
-            val response = id?.let { tododelete.deleteTaskById(it) }
-            myDeleteToDoResponse.value = response
+            val response = id?.let { toDoDelete.deleteTaskById(it) }
+            deleteToDoItemLiveData.value = response
         }
     }
 
