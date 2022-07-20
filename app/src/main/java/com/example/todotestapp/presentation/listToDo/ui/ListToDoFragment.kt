@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -27,15 +29,20 @@ import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.example.todotestapp.presentation.MainActivity
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModel
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModelFactory
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
 
 class ListToDoFragment : Fragment() {
 
-    private lateinit var viewModel: ListViewModel
     private  var binding: FragmentListTodoBinding ?= null
     private var listToDoUserEmail: String = ""
     private var listToDoUserId: Int = -1
     private val myAdapter by lazy { ListToDoAdapter() }
+    @Inject
+    lateinit var listViewModelFactory: ListViewModelFactory
+
+    private val viewModel : ListViewModel by activityViewModels { listViewModelFactory }
 
 
     override fun onCreateView(
@@ -51,9 +58,7 @@ class ListToDoFragment : Fragment() {
         val view = binding?.root
 
         (activity as MainActivity).supportActionBar?.title = "ToDo's"
-        val repository : ToDoRepository = ToDoRepositoryImpl()
-        val viewModelFactory  = ListViewModelFactory(repository)
-        viewModel = ViewModelProvider(this,viewModelFactory)[ListViewModel::class.java]
+
         loadData()
         viewModel.getTasks(listToDoUserId)
         viewModel.myToDoList.observe(viewLifecycleOwner, Observer{ response ->

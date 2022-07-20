@@ -22,8 +22,12 @@ import com.example.todotestapp.data.repository.ToDoRepositoryImpl
 import com.example.todotestapp.databinding.FragmentUpdateTodoBinding
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.example.todotestapp.presentation.MainActivity
+import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModel
+import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModelFactory
 import com.example.todotestapp.presentation.updateToDo.viewmodel.UpdateToDoViewModel
 import com.example.todotestapp.presentation.updateToDo.viewmodel.UpdateToDoViewModelFactory
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
 
 class UpdateToDoFragment : Fragment() {
@@ -43,8 +47,10 @@ class UpdateToDoFragment : Fragment() {
     private var button: Button? = null
     private var deleteButton: Button? = null
     private lateinit var addToDoUserEmail :String
-    private lateinit var viewModel: UpdateToDoViewModel
+    @Inject
+    lateinit var updateToDoViewModelFactory: UpdateToDoViewModelFactory
 
+    private val viewModel : UpdateToDoViewModel by activityViewModels {updateToDoViewModelFactory}
 
 
 
@@ -83,8 +89,7 @@ class UpdateToDoFragment : Fragment() {
         button?.setOnClickListener {
             checkInput(view)
 
-            val viewModelFactory  = UpdateToDoViewModelFactory(repository)
-            viewModel = ViewModelProvider(this, viewModelFactory)[UpdateToDoViewModel::class.java]
+
             if(!addToDoFlag) {
                 var updatedTitle: String = titleTV?.text.toString()
                 var updatedDescription: String = descriptionTV?.text.toString()
@@ -107,8 +112,6 @@ class UpdateToDoFragment : Fragment() {
         }
 
         deleteButton?.setOnClickListener {
-            val viewModelFactory  = UpdateToDoViewModelFactory(repository)
-            viewModel = ViewModelProvider(this, viewModelFactory)[UpdateToDoViewModel::class.java]
             viewModel.deleteToDo(idOfTask)
             observeDeleteToDoViewModel()
         }

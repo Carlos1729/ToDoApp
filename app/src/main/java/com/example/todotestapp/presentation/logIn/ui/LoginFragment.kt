@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todotestapp.R
@@ -22,19 +23,26 @@ import com.example.todotestapp.data.repository.ToDoRepositoryImpl
 import com.example.todotestapp.databinding.FragmentLoginBinding
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.example.todotestapp.presentation.MainActivity
+import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModel
+import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModelFactory
 import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModel
 import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
 class LoginFragment : BottomSheetDialogFragment() {
 
 
 
 
-    private lateinit var viewModel: LoginViewModel
     private var binding: FragmentLoginBinding ?= null
     private var signUpFlag = false
     private val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
+    @Inject
+    lateinit var loginViewModelFactory: LoginViewModelFactory
+
+    private val viewModel : LoginViewModel by activityViewModels {loginViewModelFactory}
 
 
 
@@ -47,10 +55,10 @@ class LoginFragment : BottomSheetDialogFragment() {
     ): View? {
 
 
+
         binding = FragmentLoginBinding.inflate(inflater)
         binding?.userInputLayout?.visibility = View.GONE
         val view = binding?.root
-        getDialog()?.getWindow()?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         return view
 
     }
@@ -67,8 +75,6 @@ class LoginFragment : BottomSheetDialogFragment() {
         binding?.loginButton?.setOnClickListener {
 
 
-            val viewModelFactory  = LoginViewModelFactory(repository)
-            viewModel = ViewModelProvider(this, viewModelFactory)[LoginViewModel::class.java]
             val useremail = binding?.emailInputEditText?.text.toString()
             if(!signUpFlag) {
                 if (isValidEmail(useremail)) {
@@ -113,7 +119,6 @@ class LoginFragment : BottomSheetDialogFragment() {
                 it.body()?.author?.let { user ->
                     savedata(user)
                 }
-                dismiss()
                 findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
                 //dismiss sheet and load todolist fragment
             }

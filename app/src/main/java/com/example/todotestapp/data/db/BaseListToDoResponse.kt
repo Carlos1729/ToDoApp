@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class BaseListToDoResponse(
-    @SerializedName("authorId")
+    @SerializedName("author_id")
     val authorId: Int?,
     @SerializedName("authorName")
     val authorName: String?,

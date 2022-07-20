@@ -18,9 +18,8 @@ import com.example.todotestapp.domain.usecase.UpdateToDoUseCase
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
-class UpdateToDoViewModel(private val repository: ToDoRepository) : ViewModel(){
+class UpdateToDoViewModel( private val todoadd : AddToDoUseCase, private val todoupdate : UpdateToDoUseCase, private val tododelete : DeleteToDoUseCase) : ViewModel(){
 
-    private val todoadd = AddToDoUseCase(repository)
 
     val myAddToDoResponse : MutableLiveData<Response<AddToDoResponse>> = MutableLiveData()
 
@@ -31,7 +30,6 @@ class UpdateToDoViewModel(private val repository: ToDoRepository) : ViewModel(){
         }
     }
 
-    private val todoupdate = UpdateToDoUseCase(repository)
 
     val myUpdateToDoResponse : MutableLiveData<Response<UpdateToDoResponse>> = MutableLiveData()
 
@@ -42,7 +40,6 @@ class UpdateToDoViewModel(private val repository: ToDoRepository) : ViewModel(){
         }
     }
 
-    private val tododelete = DeleteToDoUseCase(repository)
 
     val myDeleteToDoResponse : MutableLiveData<Response<BaseResponse>> = MutableLiveData()
 

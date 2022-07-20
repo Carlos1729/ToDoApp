@@ -14,10 +14,8 @@ import retrofit2.Response
 
 
 //Here to make the view model of login we are extending ViewModel cLASS
-class LoginViewModel(private val repository: ToDoRepository) : ViewModel() {
+class LoginViewModel( private val userlogin : LoginUserUseCase,  private val userSignUp : SignUpUserUseCase) : ViewModel() {
 
-    private val userlogin = LoginUserUseCase(repository)
-    private val userSignUp = SignUpUserUseCase(repository)
 
     val myLoginResponse : MutableLiveData<Response<LoginResponse>> = MutableLiveData()//whernever there is change in data it sends that data back to active user
                                                                                      //This is not preferable in real time scenarios as it mutable live data gets exposed insted to outside
