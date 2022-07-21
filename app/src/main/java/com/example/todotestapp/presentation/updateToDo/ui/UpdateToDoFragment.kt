@@ -14,9 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.todotestapp.R
-import com.example.todotestapp.data.db.AddToDoRequest
-import com.example.todotestapp.data.db.BaseListToDoResponse
-import com.example.todotestapp.data.db.UpdateToDoRequest
+import com.example.todotestapp.data.db.*
 import com.example.todotestapp.data.repository.Constants
 import com.example.todotestapp.data.repository.ToDoRepositoryImpl
 import com.example.todotestapp.databinding.FragmentUpdateTodoBinding
@@ -24,6 +22,7 @@ import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.example.todotestapp.presentation.MainActivity
 import com.example.todotestapp.presentation.updateToDo.viewmodel.UpdateToDoViewModel
 import com.example.todotestapp.presentation.updateToDo.viewmodel.UpdateToDoViewModelFactory
+import retrofit2.Response
 
 
 class UpdateToDoFragment : Fragment() {
@@ -117,57 +116,64 @@ class UpdateToDoFragment : Fragment() {
 
     private fun observeDeleteToDoViewModel() {
         viewModel.myDeleteToDoResponse.observe(viewLifecycleOwner) {
-            if (it.body() != null) {
-                Toast.makeText(context, "ToDo Deleted Successfully", Toast.LENGTH_SHORT)
-                    .show()             //dismiss sheet and load todolist fragment
-                findNavController().navigate(R.id.action_updateTaskFragment_to_listTaskFragment)
-            }
-            else if(it.code()==404){
-                Toast.makeText(
-                    context,
-                    "Something Went Wrong Please Try Again",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+
+            handleResponseDelete(it)
         }
+    }
+
+    private fun handleResponseDelete(mydtr: StateData<Response<BaseResponse>>?) {
+           when(mydtr?.status)
+           {
+               StateData.DataStatus.LOADING ->{
+                   //Add Loading Progress bar
+//                binding?.loginProgressBar?.visibility = View.VISIBLE
+               }
+               StateData.DataStatus.SUCCESS -> {
+//                binding?.loginProgressBar?.visibility = View.GONE
+
+
+                   if(mydtr.data?.body() != null)
+                   {
+                                Toast.makeText(context, getString(R.string.mtds), Toast.LENGTH_SHORT)
+                                    .show()             //dismiss sheet and load todolist fragment
+                                findNavController().navigate(R.id.action_updateTaskFragment_to_listTaskFragment)
+                   }
+                   else if(mydtr.data?.code() == 400)
+                   {
+                       Toast.makeText(
+                           context,
+                           getString(R.string.swrpta),
+                           Toast.LENGTH_SHORT
+                       ).show()
+                   }
+               }
+           }
     }
 
     private fun observeUpdateToDoViewModel() {
+
         viewModel.myUpdateToDoResponse.observe(viewLifecycleOwner) {
-            if (it.body() != null) {
-                Toast.makeText(context, "ToDo Updated Successfully", Toast.LENGTH_SHORT)
-                    .show()             //dismiss sheet and load todolist fragment
-                findNavController().navigate(R.id.action_updateTaskFragment_to_listTaskFragment)
-            }
-            else if(it.code()==404){
-                Toast.makeText(
-                    context,
-                    "Something Went Wrong Please Try Again",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+            handleResponseUpdate(it)
         }
     }
 
-    private fun loadData() {
-            val sharedPreferences = activity!!.getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE)
-            val savedEmail = sharedPreferences.getString(Constants.EMAIL,null)
-            val savedUsername = sharedPreferences.getString(Constants.USER_NAME,null)
-            val savedId = sharedPreferences.getInt(Constants.ID,-1)
-            if (savedEmail != null) {
-                addToDoUserEmail = savedEmail
+    private fun handleResponseUpdate(myutr: StateData<Response<UpdateToDoResponse>>?) {
+
+        when(myutr?.status)
+        {
+            StateData.DataStatus.LOADING ->{
+                //Add Loading Progress bar
+//                binding?.loginProgressBar?.visibility = View.VISIBLE
             }
-    }
-
-    private fun observeAddToDoViewModel() {
-
-            viewModel.myAddToDoResponse.observe(viewLifecycleOwner) {
-                if (it.body() != null) {
-                    Toast.makeText(context, getString(R.string.todoadds), Toast.LENGTH_SHORT)
-                        .show()             //dismiss sheet and load todolist fragment
+            StateData.DataStatus.SUCCESS -> {
+//                binding?.loginProgressBar?.visibility = View.GONE
+                if(myutr.data?.body() != null)
+                {
+                    Toast.makeText(context, getString(R.string.utds), Toast.LENGTH_SHORT).show()             //dismiss sheet and load todolist fragment
                     findNavController().navigate(R.id.action_updateTaskFragment_to_listTaskFragment)
                 }
-                else if(it.code()==404){
+                else if(myutr.data?.code() == 400)
+                {
                     Toast.makeText(
                         context,
                         getString(R.string.swrpta),
@@ -175,8 +181,53 @@ class UpdateToDoFragment : Fragment() {
                     ).show()
                 }
             }
+        }
+
     }
 
+    private fun observeAddToDoViewModel() {
+
+            viewModel.myAddToDoResponse.observe(viewLifecycleOwner) {
+                handleResponse(it)
+            }
+    }
+
+    private fun handleResponse(myatr: StateData<Response<AddToDoResponse>>?) {
+        when(myatr?.status)
+        {
+            StateData.DataStatus.LOADING ->{
+                //Add Loading Progress bar
+//                binding?.loginProgressBar?.visibility = View.VISIBLE
+            }
+            StateData.DataStatus.SUCCESS -> {
+//                binding?.loginProgressBar?.visibility = View.GONE
+                if(myatr.data?.body() != null)
+                {
+                    Toast.makeText(context, getString(R.string.todoadds), Toast.LENGTH_SHORT).show()             //dismiss sheet and load todolist fragment
+                    findNavController().navigate(R.id.action_updateTaskFragment_to_listTaskFragment)
+                }
+                else if(myatr.data?.code() == 400)
+                {
+                    Toast.makeText(
+                        context,
+                        getString(R.string.swrpta),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+
+    }
+
+    private fun loadData() {
+        val sharedPreferences = activity!!.getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE)
+        val savedEmail = sharedPreferences.getString(Constants.EMAIL,null)
+        val savedUsername = sharedPreferences.getString(Constants.USER_NAME,null)
+        val savedId = sharedPreferences.getInt(Constants.ID,-1)
+        if (savedEmail != null) {
+            addToDoUserEmail = savedEmail
+        }
+    }
 
     private fun checkInput(view: View) {
 

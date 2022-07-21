@@ -19,11 +19,11 @@ class ListViewModel(private val repository: ToDoRepository) : ViewModel() {
     private val toDoDelete = DeleteToDoUseCase(repository)
 
     val myToDoList: StateLiveData<Response<ListToDoResponse>> = StateLiveData()
-    val deleteToDoItemLiveData: MutableLiveData<Response<BaseResponse>> = MutableLiveData()
+    val deleteToDoItemLiveData: StateLiveData<Response<BaseResponse>> = StateLiveData()
 
     fun getTasks(id: Int) {
-        myToDoList.postLoading()
         viewModelScope.launch {
+            myToDoList.postLoading()
             val response: Response<ListToDoResponse> = toDoFetch.listToDoByEmail(id)
             if(response.isSuccessful)
             {
@@ -55,7 +55,11 @@ class ListViewModel(private val repository: ToDoRepository) : ViewModel() {
     fun deleteToDo(id: Int?) {
         viewModelScope.launch {
             val response = id?.let { toDoDelete.deleteTaskById(it) }
-            deleteToDoItemLiveData.value = response
+            if (response != null) {
+                if(response.isSuccessful) {
+                    deleteToDoItemLiveData.postSuccess(response)
+                }
+            }
         }
     }
 

@@ -96,10 +96,12 @@ class ListToDoFragment : Fragment() {
                     R.id.menu_completed -> {
 
                         viewModel.getTasksByStatus(listToDoUserId, "completed")
+                        observeLiveData()
                         true
                     }
                     R.id.menu_pending -> {
                         viewModel.getTasksByStatus(listToDoUserId, "pending")
+                        observeLiveData()
                         true
                     }
                     R.id.menu_all -> {
@@ -156,6 +158,7 @@ class ListToDoFragment : Fragment() {
             viewModel.getTasks(listToDoUserId)
         })
     }
+
 
     private fun handleResponse(mlistr: StateData<Response<ListToDoResponse>>?) {
         when(mlistr?.status)

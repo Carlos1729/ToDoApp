@@ -46,6 +46,8 @@
     <string name="todoadds">ToDo Added Successfully</string>
     <string name="noic">No Internet Connection</string>
     <string name="logout">Logout</string>
+    <string name="utds">ToDo Updated Successfully</string>
+    <string name="mtds">ToDo Deleted Successfully</string>
 
 
     <string-array name="statusoftask">

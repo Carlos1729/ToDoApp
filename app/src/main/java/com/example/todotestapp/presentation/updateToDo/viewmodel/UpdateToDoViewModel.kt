@@ -22,34 +22,48 @@ class UpdateToDoViewModel(private val repository: ToDoRepository) : ViewModel(){
 
     private val todoadd = AddToDoUseCase(repository)
 
-    val myAddToDoResponse : MutableLiveData<Response<AddToDoResponse>> = MutableLiveData()
+    val myAddToDoResponse : StateLiveData<Response<AddToDoResponse>> = StateLiveData()
+
+//    val myAddToDoResponse : MutableLiveData<Response<AddToDoResponse>> = MutableLiveData()
 
     fun addToDo(requestBody: AddToDoRequest) {
+        myAddToDoResponse.postLoading()
         viewModelScope.launch {
             val response = todoadd.addToDoByRequest(requestBody)
-            myAddToDoResponse.value = response
+            if(response.isSuccessful)
+            {
+                myAddToDoResponse.postSuccess(response)
+            }
         }
     }
 
     private val todoupdate = UpdateToDoUseCase(repository)
 
-    val myUpdateToDoResponse : MutableLiveData<Response<UpdateToDoResponse>> = MutableLiveData()
+    val myUpdateToDoResponse : StateLiveData<Response<UpdateToDoResponse>> = StateLiveData()
 
     fun updateToDo(id: Int?, requestBody: UpdateToDoRequest) {
+        myUpdateToDoResponse.postLoading()
         viewModelScope.launch {
             val response = todoupdate.updateToDoByRequest(id,requestBody)
-            myUpdateToDoResponse.value = response
+            if(response.isSuccessful)
+            {
+                myUpdateToDoResponse.postSuccess(response)
+            }
         }
     }
 
     private val tododelete = DeleteToDoUseCase(repository)
 
-    val myDeleteToDoResponse : MutableLiveData<Response<BaseResponse>> = MutableLiveData()
+    val myDeleteToDoResponse : StateLiveData<Response<BaseResponse>> = StateLiveData()
 
     fun deleteToDo(id: Int?) {
+        myDeleteToDoResponse.postLoading()
         viewModelScope.launch {
             val response = id?.let { tododelete.deleteTaskById(it) }
-            myDeleteToDoResponse.value = response
+            if(response!!.isSuccessful)
+            {
+                myDeleteToDoResponse.postSuccess(response)
+            }
         }
     }
 
