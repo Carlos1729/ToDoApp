@@ -66,7 +66,7 @@ class LoginViewModel (private val repository: ToDoRepository) : ViewModel() {
             {
                 mySignupResponse.postSuccess(response)
             }
-            else if(response.code() == 404)
+            else if(response.code() == 400)
             {
                 mySignupResponse.postSuccess(response)
             }

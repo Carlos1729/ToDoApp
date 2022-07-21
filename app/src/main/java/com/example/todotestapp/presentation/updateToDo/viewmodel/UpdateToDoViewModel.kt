@@ -34,6 +34,10 @@ class UpdateToDoViewModel(private val repository: ToDoRepository) : ViewModel(){
             {
                 myAddToDoResponse.postSuccess(response)
             }
+            if(response.code() == 400)
+            {
+                myAddToDoResponse.postSuccess(response)
+            }
         }
     }
 
@@ -46,6 +50,10 @@ class UpdateToDoViewModel(private val repository: ToDoRepository) : ViewModel(){
             myUpdateToDoResponse.postLoading()
             val response = todoupdate.updateToDoByRequest(id,requestBody)
             if(response.isSuccessful)
+            {
+                myUpdateToDoResponse.postSuccess(response)
+            }
+            if(response.code() == 400)
             {
                 myUpdateToDoResponse.postSuccess(response)
             }

@@ -89,15 +89,53 @@ class LoginFragment : BottomSheetDialogFragment() {
                 }
             }
             else{
-//                (activity as MainActivity).supportActionBar?.title = "Sign Up"
+                (activity as MainActivity).supportActionBar?.title = "Sign Up"
                 val username = binding?.usernameInputEditText?.text.toString()
-                val presentUser  = SignUpUserRequest(useremail,username)
-                viewModel.signUpUser(presentUser)
-                binding?.userInputLayout?.helperText = ""
-                observeSignUpViewModel()
+                if(!isValidEmail((useremail)) && !checkInputs(username))
+                {
+                    Toast.makeText(
+                        context,
+                        "Invalid Email Address and Username",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                else if(!isValidEmail((useremail)))
+                {
+                    Toast.makeText(
+                        context,
+                        "Invalid Email Address",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                else if(!checkInputs(username))
+                {
+                    Toast.makeText(
+                        context,
+                        "Invalid Username",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                else {
+                    val presentUser = SignUpUserRequest(useremail, username)
+                    viewModel.signUpUser(presentUser)
+                    binding?.userInputLayout?.helperText = ""
+                    observeSignUpViewModel()
+                }
             }
         }
 
+    }
+
+    private fun checkInputs(username: String) : Boolean{
+        if(username == "")
+        {
+            Toast.makeText(
+                context,"Invalid Username",
+                Toast.LENGTH_SHORT
+            ).show()
+            return false
+        }
+        return true
     }
 
     private fun isValidEmail(email: String): Boolean {
@@ -140,6 +178,14 @@ class LoginFragment : BottomSheetDialogFragment() {
                     "Something Went Wrong Please Try Again",
                     Toast.LENGTH_SHORT
                 ).show()
+                }
+                else if(mysur.data?.code() == 400)
+                {
+                    Log.v("deee",mysur.data?.body()!!.errorMessage.toString())
+                    Toast.makeText(
+                        context,"Invalid Email",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }

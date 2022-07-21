@@ -183,9 +183,10 @@ class UpdateToDoFragment : Fragment() {
                 {
                     Toast.makeText(
                         context,
-                        getString(R.string.swrpta),
+                        getString(R.string.duplititle),
                         Toast.LENGTH_SHORT
                     ).show()
+
                 }
             }
         }
@@ -217,7 +218,7 @@ class UpdateToDoFragment : Fragment() {
                 {
                     Toast.makeText(
                         context,
-                        getString(R.string.swrpta),
+                        getString(R.string.duplititle),
                         Toast.LENGTH_SHORT
                     ).show()
                 }

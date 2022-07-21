@@ -48,6 +48,7 @@
     <string name="logout">Logout</string>
     <string name="utds">ToDo Updated Successfully</string>
     <string name="mtds">ToDo Deleted Successfully</string>
+    <string name="duplititle">Tasks with Same Title Cannot be created please try with new title</string>
 
 
     <string-array name="statusoftask">
