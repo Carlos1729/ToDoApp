@@ -17,6 +17,9 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todotestapp.R
+import com.example.todotestapp.data.db.ListToDoResponse
+import com.example.todotestapp.data.db.LoginResponse
+import com.example.todotestapp.data.db.StateData
 import com.example.todotestapp.data.repository.Constants.ID
 import com.example.todotestapp.data.repository.Constants.SHARED_PREFERENCES
 import com.example.todotestapp.data.repository.ToDoRepositoryImpl
@@ -26,6 +29,7 @@ import com.example.todotestapp.presentation.MainActivity
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModel
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import retrofit2.Response
 
 
 class ListToDoFragment : Fragment() {
@@ -37,12 +41,14 @@ class ListToDoFragment : Fragment() {
     private val myAdapter by lazy { ListToDoAdapter() }
 
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentListTodoBinding.inflate(inflater)
         val view = binding?.root
+        binding?.noTodo?.visibility = View.GONE
         (activity as MainActivity).supportActionBar?.title = "ToDo's"
         setUpUI()
         setUpClickListeners()
@@ -141,13 +147,8 @@ class ListToDoFragment : Fragment() {
     }
 
     private fun observeLiveData() {
-        viewModel.myToDoList.observe(viewLifecycleOwner, Observer{ response ->
-            if(response.isSuccessful){
-                response.body()?.let { myAdapter.setData(it) }
-            }
-            else{
-                //
-            }
+        viewModel.myToDoList.observe(viewLifecycleOwner, Observer{
+            handleResponse(it)
         })
 
         viewModel.deleteToDoItemLiveData.observe(viewLifecycleOwner,Observer{
@@ -155,6 +156,32 @@ class ListToDoFragment : Fragment() {
             viewModel.getTasks(listToDoUserId)
         })
     }
+
+    private fun handleResponse(mlistr: StateData<Response<ListToDoResponse>>?) {
+        when(mlistr?.status)
+        {
+//            StateData.DataStatus.LOADING ->{
+//                binding?.loginProgressBar?.visibility = View.VISIBLE
+//            }
+            StateData.DataStatus.SUCCESS -> {
+//                binding?.loginProgressBar?.visibility = View.GONE
+                if (mlistr.data?.body() != null) {
+                    if ((mlistr.data?.body()!!.tasks?.size) == 0)
+                    {
+                        binding?.noTodo?.visibility = View.VISIBLE
+                        //Show Empty Icon
+                    }
+                    else {
+                        binding?.noTodo?.visibility = View.GONE
+                        mlistr.data?.body().let { myAdapter.setData(mlistr?.data?.body()!!).let { it } }
+                    }
+                }
+
+            }
+        }
+
+    }
+
 
     private fun setupRecyclerView() {
         val recyclerView = binding?.recyclerViewId

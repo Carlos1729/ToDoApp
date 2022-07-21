@@ -1,6 +1,7 @@
 package com.example.todotestapp.presentation.logIn.ui
 
 import android.content.Context
+import android.icu.lang.UCharacter.GraphemeClusterBreak.V
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,7 +12,10 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todotestapp.R
+import com.example.todotestapp.data.db.LoginResponse
 import com.example.todotestapp.data.db.SignUpUserRequest
+import com.example.todotestapp.data.db.StateData
+import com.example.todotestapp.data.db.StateData.DataStatus
 import com.example.todotestapp.data.db.UserDetails
 import com.example.todotestapp.data.repository.Constants.EMAIL
 import com.example.todotestapp.data.repository.Constants.ID
@@ -25,6 +29,9 @@ import com.example.todotestapp.presentation.MainActivity
 import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModel
 import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import retrofit2.Response
+
+
 
 class LoginFragment : BottomSheetDialogFragment() {
 
@@ -63,6 +70,8 @@ class LoginFragment : BottomSheetDialogFragment() {
         signUpFlag = false
 
         (activity as MainActivity).supportActionBar?.title = "Login ToDo"
+
+        binding?.loginProgressBar?.visibility = View.GONE
 
         binding?.loginButton?.setOnClickListener {
 
@@ -127,41 +136,175 @@ class LoginFragment : BottomSheetDialogFragment() {
         }
     }
 
+    private fun handleResponse(mlr : StateData<Response<LoginResponse>>?) {
+        when (mlr?.status) {
+            DataStatus.LOADING ->{
+                binding?.loginProgressBar?.visibility = View.VISIBLE
+            }
+            DataStatus.SUCCESS -> {
+                binding?.loginProgressBar?.visibility = View.GONE
+//                Log.v("Iamhere", "I am here")
+                if (mlr.data?.body() != null) {
+                    Log.v("Iamhere", "I am here")
+                    Toast.makeText(
+                        context,
+                        getString(R.string.user_login_successful),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    mlr.data?.body()?.author?.let { user ->
+                        savedata(user)
+                    }
+                    findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
+                }
+                else if(mlr.data?.code()==404){
+                    Toast.makeText(
+                        context,
+                        getString(R.string.please_sign_up),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    showSignUpUI()
+                    signUpFlag = true
+                }
+            }
+        }
+    }
+
+
+
+//    private fun handleResponse(mlr : StateData<Response<LoginResponse>>?) {
+//        when (mlr?.status) {
+//            DataStatus.LOADING ->{
+//                binding?.loginProgressBar?.visibility = View.VISIBLE
+//            }
+//            DataStatus.SUCCESS -> {
+//                binding?.loginProgressBar?.visibility = View.GONE
+////                Log.v("Iamhere", "I am here")
+//                if (mlr.data?.body() != null) {
+//                    Log.v("Iamhere", "I am here")
+//                    Toast.makeText(
+//                        context,
+//                        getString(R.string.user_login_successful),
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                    mlr.data?.body()?.author?.let { user ->
+//                        savedata(user)
+//                    }
+//                    findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
+//                }
+//                else if(mlr.data?.code()==404){
+//                    Toast.makeText(
+//                        context,
+//                        getString(R.string.please_sign_up),
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                    showSignUpUI()
+//                    signUpFlag = true
+//                }
+//            }
+//        }
+//    }
+
 
     //the first parameter is the owner and the second parameter is the  owner ok so based on the lifecycle of the login fragment fetch or send dara
     //whenever there is change in the present login response this gets executed
     private fun observeLoginViewModel() {
-        viewModel.myLoginResponse.observe(viewLifecycleOwner) {
-            Log.v("signUpFlagTest",it.code().toString())
-            if (it.body() != null) {
-                Toast.makeText(
-                    context,
-                    getString(R.string.user_login_successful),
-                    Toast.LENGTH_SHORT
-                ).show()
-                it.body()?.author?.let { user ->
-                    savedata(user)
-                }
-                findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
-            }
-            else if(it.code()==404){
-                Toast.makeText(
-                    context,
-                    getString(R.string.please_sign_up),
-                    Toast.LENGTH_SHORT
-                ).show()
-                showSignUpUI()
-                signUpFlag = true
-            }
-            else{
-                Toast.makeText(
-                    context,
-                    getString(R.string.noic),
-                    Toast.LENGTH_SHORT
-                ).show()
-                //show Toast something went wrong.
-            }
+        viewModel.myLoginResponse?.observe(viewLifecycleOwner) {
+            handleResponse(
+                it
+            )
         }
+//        viewModel.myLoginResponse?.observe(viewLifecycleOwner) {
+//            Log.v("signUpFlagTest",it?.data?.code().toString())
+//            Log.v("ThisisDebug", it?.status.toString())
+//            when(it?.status)
+//            {
+//                DataStatus.SUCCESS -> {
+//
+//                    if (it.data?.body() != null) {
+//                        Toast.makeText(
+//                            context,
+//                            getString(R.string.user_login_successful),
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                        it.data?.body()?.author?.let { user ->
+//                            savedata(user)
+//                        }
+//                        findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
+//                    }
+//                    else if(it.data?.code()==404){
+//                        Toast.makeText(
+//                            context,
+//                            getString(R.string.please_sign_up),
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                        showSignUpUI()
+//                        signUpFlag = true
+//                    }
+//                }
+//                DataStatus.ERROR -> {
+////                    val e: Throwable = it.error()
+//                }
+////                is NetworkResult.Loading -> {}
+////                is NetworkResult.Success -> {
+////                    if (it.data?.body() != null) {
+////                        Toast.makeText(
+////                            context,
+////                            getString(R.string.user_login_successful),
+////                            Toast.LENGTH_SHORT
+////                        ).show()
+////                        it.data.body()?.author?.let { user ->
+////                            savedata(user)
+////                        }
+////                        findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
+////                    }
+////                    else if(it.data?.code()==404){
+////                        Toast.makeText(
+////                            context,
+////                            getString(R.string.please_sign_up),
+////                            Toast.LENGTH_SHORT
+////                        ).show()
+////                        showSignUpUI()
+////                        signUpFlag = true
+////                    }
+////                }
+////                is NetworkResult.Error -> {
+////                    Toast.makeText(
+////                        context, it.errorMessage.toString(),
+////                        Toast.LENGTH_SHORT
+////                    ).show()
+////                }
+//                else -> {}
+//            }
+//            Log.v("signUpFlagTest",it.code().toString())
+//            if (it.body() != null) {
+//                Toast.makeText(
+//                    context,
+//                    getString(R.string.user_login_successful),
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//                it.body()?.author?.let { user ->
+//                    savedata(user)
+//                }
+//                findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
+//            }
+//            else if(it.code()==404){
+//                Toast.makeText(
+//                    context,
+//                    getString(R.string.please_sign_up),
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//                showSignUpUI()
+//                signUpFlag = true
+//            }
+//            else{
+//                Toast.makeText(
+//                    context,
+//                    getString(R.string.noic),
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//                //show Toast something went wrong.
+//            }
+//        }
     }
 
     private fun savedata(userDetails: UserDetails) {

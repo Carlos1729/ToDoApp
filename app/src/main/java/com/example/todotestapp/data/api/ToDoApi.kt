@@ -32,12 +32,12 @@ interface ToDoApi {
 
     @GET("tasks")
     suspend fun listToDo(
-        @Query("authorId") id:Int,
+        @Query("author_id") id:Int,
     ): Response<ListToDoResponse>
 
     @GET("tasks")
     suspend fun listToDoCompleted(
-        @Query("authorId") id:Int,
+        @Query("author_id") id:Int,
         @Query("status") status: String
     ): Response<ListToDoResponse>
 
