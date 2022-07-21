@@ -79,6 +79,9 @@ class UpdateToDoFragment : Fragment() {
 
         val repository : ToDoRepository = ToDoRepositoryImpl()
 
+        binding?.updateProgressBar?.visibility = View.GONE
+
+
         button?.setOnClickListener {
             checkInput(view)
 
@@ -125,10 +128,14 @@ class UpdateToDoFragment : Fragment() {
            when(mydtr?.status)
            {
                StateData.DataStatus.LOADING ->{
+                   binding?.updateProgressBar?.visibility = View.VISIBLE
+
                    //Add Loading Progress bar
 //                binding?.loginProgressBar?.visibility = View.VISIBLE
                }
                StateData.DataStatus.SUCCESS -> {
+                   binding?.updateProgressBar?.visibility = View.GONE
+
 //                binding?.loginProgressBar?.visibility = View.GONE
 
 
@@ -162,11 +169,11 @@ class UpdateToDoFragment : Fragment() {
         when(myutr?.status)
         {
             StateData.DataStatus.LOADING ->{
-                //Add Loading Progress bar
-//                binding?.loginProgressBar?.visibility = View.VISIBLE
+                binding?.updateProgressBar?.visibility = View.VISIBLE
             }
             StateData.DataStatus.SUCCESS -> {
-//                binding?.loginProgressBar?.visibility = View.GONE
+                binding?.updateProgressBar?.visibility = View.GONE
+
                 if(myutr.data?.body() != null)
                 {
                     Toast.makeText(context, getString(R.string.utds), Toast.LENGTH_SHORT).show()             //dismiss sheet and load todolist fragment
@@ -196,11 +203,11 @@ class UpdateToDoFragment : Fragment() {
         when(myatr?.status)
         {
             StateData.DataStatus.LOADING ->{
-                //Add Loading Progress bar
-//                binding?.loginProgressBar?.visibility = View.VISIBLE
+                binding?.updateProgressBar?.visibility = View.VISIBLE
+
             }
             StateData.DataStatus.SUCCESS -> {
-//                binding?.loginProgressBar?.visibility = View.GONE
+                binding?.updateProgressBar?.visibility = View.GONE
                 if(myatr.data?.body() != null)
                 {
                     Toast.makeText(context, getString(R.string.todoadds), Toast.LENGTH_SHORT).show()             //dismiss sheet and load todolist fragment

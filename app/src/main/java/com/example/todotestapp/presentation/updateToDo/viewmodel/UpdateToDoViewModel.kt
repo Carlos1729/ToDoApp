@@ -27,8 +27,8 @@ class UpdateToDoViewModel(private val repository: ToDoRepository) : ViewModel(){
 //    val myAddToDoResponse : MutableLiveData<Response<AddToDoResponse>> = MutableLiveData()
 
     fun addToDo(requestBody: AddToDoRequest) {
-        myAddToDoResponse.postLoading()
         viewModelScope.launch {
+            myAddToDoResponse.postLoading()
             val response = todoadd.addToDoByRequest(requestBody)
             if(response.isSuccessful)
             {
@@ -42,8 +42,8 @@ class UpdateToDoViewModel(private val repository: ToDoRepository) : ViewModel(){
     val myUpdateToDoResponse : StateLiveData<Response<UpdateToDoResponse>> = StateLiveData()
 
     fun updateToDo(id: Int?, requestBody: UpdateToDoRequest) {
-        myUpdateToDoResponse.postLoading()
         viewModelScope.launch {
+            myUpdateToDoResponse.postLoading()
             val response = todoupdate.updateToDoByRequest(id,requestBody)
             if(response.isSuccessful)
             {
@@ -57,8 +57,8 @@ class UpdateToDoViewModel(private val repository: ToDoRepository) : ViewModel(){
     val myDeleteToDoResponse : StateLiveData<Response<BaseResponse>> = StateLiveData()
 
     fun deleteToDo(id: Int?) {
-        myDeleteToDoResponse.postLoading()
         viewModelScope.launch {
+            myDeleteToDoResponse.postLoading()
             val response = id?.let { tododelete.deleteTaskById(it) }
             if(response!!.isSuccessful)
             {

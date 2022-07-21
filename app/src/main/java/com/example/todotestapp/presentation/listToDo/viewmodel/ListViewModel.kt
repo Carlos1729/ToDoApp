@@ -37,8 +37,8 @@ class ListViewModel(private val repository: ToDoRepository) : ViewModel() {
     }
 
     fun getTasksByStatus(id: Int, status: String) {
-        myToDoList.postLoading()
         viewModelScope.launch {
+            myToDoList.postLoading()
             val response: Response<ListToDoResponse> =
                 toDoStatusFetch.listToDoByIdStatus(id, status)
             if(response.isSuccessful)

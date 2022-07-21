@@ -49,6 +49,7 @@ class ListToDoFragment : Fragment() {
         binding = FragmentListTodoBinding.inflate(inflater)
         val view = binding?.root
         binding?.noTodo?.visibility = View.GONE
+        binding?.listProgressBar?.visibility = View.GONE
         (activity as MainActivity).supportActionBar?.title = "ToDo's"
         setUpUI()
         setUpClickListeners()
@@ -163,11 +164,11 @@ class ListToDoFragment : Fragment() {
     private fun handleResponse(mlistr: StateData<Response<ListToDoResponse>>?) {
         when(mlistr?.status)
         {
-//            StateData.DataStatus.LOADING ->{
-//                binding?.loginProgressBar?.visibility = View.VISIBLE
-//            }
+            StateData.DataStatus.LOADING ->{
+                binding?.listProgressBar?.visibility = View.VISIBLE
+            }
             StateData.DataStatus.SUCCESS -> {
-//                binding?.loginProgressBar?.visibility = View.GONE
+                binding?.listProgressBar?.visibility = View.GONE
                 if (mlistr.data?.body() != null) {
                     if ((mlistr.data?.body()!!.tasks?.size) == 0)
                     {
