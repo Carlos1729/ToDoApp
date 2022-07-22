@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todotestapp.R
@@ -29,28 +28,18 @@ import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModelFactor
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import retrofit2.Response
 
-
 class LoginFragment : BottomSheetDialogFragment() {
-
-
-
 
     private lateinit var viewModel: LoginViewModel
     private var binding: FragmentLoginBinding ?= null
     private var signUpFlag = false
     private val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
 
-
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
         binding = FragmentLoginBinding.inflate(inflater)
         binding?.userInputLayout?.visibility = View.GONE
         val view = binding?.root
@@ -59,77 +48,46 @@ class LoginFragment : BottomSheetDialogFragment() {
 
     }
 
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         val repository : ToDoRepository = ToDoRepositoryImpl()
-     //   var loginResponseData: Response<LoginResponse>
-
         signUpFlag = false
-
         (activity as MainActivity).supportActionBar?.title = "Login ToDo"
 
         binding?.loginProgressBar?.visibility = View.GONE
+        val viewModelFactory  = LoginViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, viewModelFactory)[LoginViewModel::class.java]
 
         binding?.loginButton?.setOnClickListener {
-
-
-            val viewModelFactory  = LoginViewModelFactory(repository)
-            viewModel = ViewModelProvider(this, viewModelFactory)[LoginViewModel::class.java]
-            binding?.emailInputEditText?.setOnFocusChangeListener{ _, focused ->
-                    if(focused)
-                    {
-                        binding?.emailInputLayout?.helperText = checkemail()
-                    }
+            binding?.emailInputEditText?.setOnFocusChangeListener { _, focused ->
+                if (focused) {
+                    binding?.emailInputLayout?.helperText = checkemail()
+                }
             }
             val useremail = binding?.emailInputEditText?.text.toString()
-            if(!signUpFlag) {
+            if (!signUpFlag) {
                 if (isValidEmail(useremail)) {
                     viewModel.loginUser(useremail)
                     observeLoginViewModel()
                 } else {
-                    Toast.makeText(
-                        context,
-                        getString(R.string.invalid_email_address),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    binding?.emailInputLayout?.error = getString(R.string.invalid_email)
                 }
-            }
-            else{
+            } else {
                 (activity as MainActivity).supportActionBar?.title = "Sign Up"
-                binding?.emailInputEditText?.setOnFocusChangeListener{ _, focused ->
-                    if(!focused)
-                    {
+                binding?.emailInputEditText?.setOnFocusChangeListener { _, focused ->
+                    if (!focused) {
                         binding?.emailInputLayout?.helperText = checkemail()
                     }
                 }
                 val username = binding?.usernameInputEditText?.text.toString()
-                if(!isValidEmail((useremail)) && !checkInputs(username))
-                {
-                    Toast.makeText(
-                        context,
-                        "Invalid Email Address and Username",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                else if(!isValidEmail((useremail)))
-                {
-                    Toast.makeText(
-                        context,
-                        "Invalid Email Address",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                else if(!checkInputs(username))
-                {
-                    Toast.makeText(
-                        context,
-                        "Invalid Username",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                else {
+                if (!isValidEmail((useremail)) && !checkInputs(username)) {
+                    binding?.emailInputLayout?.error = getString(R.string.invalid_email)
+                    binding?.userInputLayout?.error = getString(R.string.invalid_username)
+                } else if (!isValidEmail((useremail))) {
+                    binding?.emailInputLayout?.error = getString(R.string.invalid_email)
+                } else if (!checkInputs(username)) {
+                    binding?.userInputLayout?.error = getString(R.string.invalid_username)
+                } else {
                     val presentUser = SignUpUserRequest(useremail, username)
                     viewModel.signUpUser(presentUser)
                     binding?.userInputLayout?.helperText = ""
@@ -138,17 +96,14 @@ class LoginFragment : BottomSheetDialogFragment() {
             }
         }
 
-
-
     }
 
 
     private fun checkemail(): String? {
-
         val email = binding?.emailInputEditText?.text.toString()
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches())
         {
-            return "Invalid Email Address"
+            binding?.emailInputLayout?.error = getString(R.string.invalid_email)
         }
         return null
     }
@@ -156,10 +111,7 @@ class LoginFragment : BottomSheetDialogFragment() {
     private fun checkInputs(username: String) : Boolean{
         if(username == "")
         {
-            Toast.makeText(
-                context,"Invalid Username",
-                Toast.LENGTH_SHORT
-            ).show()
+            binding?.userInputLayout?.error = getString(R.string.invalid_username)
             return false
         }
         return true
@@ -167,14 +119,13 @@ class LoginFragment : BottomSheetDialogFragment() {
 
     private fun isValidEmail(email: String): Boolean {
         if (!email.matches(emailPattern.toRegex())) {
-            Toast.makeText(context, "Invalid email address", Toast.LENGTH_SHORT).show()
+            binding?.emailInputLayout?.error = getString(R.string.invalid_email)
             return false
         }
         return true
     }
 
     private fun observeSignUpViewModel() {
-
         viewModel.mySignupResponse.observe(viewLifecycleOwner) {
            handleResponseSignUp(it)
         }
@@ -209,10 +160,7 @@ class LoginFragment : BottomSheetDialogFragment() {
                 else if(mysur.data?.code() == 400)
                 {
                     Log.v("deee",mysur.data?.body()!!.errorMessage.toString())
-                    Toast.makeText(
-                        context,"Invalid Email",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    binding?.emailInputLayout?.error = getString(R.string.invalid_email)
                 }
             }
         }
@@ -274,8 +222,6 @@ class LoginFragment : BottomSheetDialogFragment() {
         binding?.loginButton?.text = getString(R.string.sign_up)
         binding?.userInputLayout?.visibility = View.VISIBLE
     }
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()
