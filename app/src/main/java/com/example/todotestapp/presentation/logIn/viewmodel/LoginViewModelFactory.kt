@@ -6,8 +6,9 @@ import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.example.todotestapp.domain.usecase.LoginUserUseCase
 import com.example.todotestapp.domain.usecase.SignUpUserUseCase
 
-class LoginViewModelFactory(private val repository: ToDoRepository , private val signUpUseCase :  SignUpUserUseCase , private val loginUseCase : LoginUserUseCase) : ViewModelProvider.Factory {
+class LoginViewModelFactory(private val signUpUseCase :  SignUpUserUseCase ,
+                            private val loginUseCase : LoginUserUseCase) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return LoginViewModel(repository,signUpUseCase,loginUseCase) as T
+        return LoginViewModel(signUpUseCase,loginUseCase) as T
     }
 }

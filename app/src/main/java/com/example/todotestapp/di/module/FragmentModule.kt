@@ -2,8 +2,7 @@ package com.example.todotestapp.di.module
 
 
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
-import com.example.todotestapp.domain.usecase.LoginUserUseCase
-import com.example.todotestapp.domain.usecase.SignUpUserUseCase
+import com.example.todotestapp.domain.usecase.*
 import com.example.todotestapp.presentation.listToDo.ui.ListToDoFragment
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModelFactory
 import com.example.todotestapp.presentation.logIn.ui.LoginFragment
@@ -18,34 +17,67 @@ import dagger.android.ContributesAndroidInjector
 abstract class FragmentModule {
 
     @ContributesAndroidInjector
-    abstract fun getLoginFragment() : LoginFragment
+    abstract fun getLoginFragment(): LoginFragment
 
     @ContributesAndroidInjector
-    abstract fun getListToDoFragment() : ListToDoFragment
+    abstract fun getListToDoFragment(): ListToDoFragment
 
     @ContributesAndroidInjector
-    abstract fun getUpdateFragment() : UpdateToDoFragment
+    abstract fun getUpdateFragment(): UpdateToDoFragment
 
 
-    companion object{
+    companion object {
 
         @Provides
         fun provideLoginUseCase(toDoRepository: ToDoRepository) = LoginUserUseCase(toDoRepository)
 
         @Provides
-        fun provideSignUpuserCache(toDoRepository: ToDoRepository) = SignUpUserUseCase(toDoRepository)
+        fun provideSignUpuserCache(toDoRepository: ToDoRepository) =
+            SignUpUserUseCase(toDoRepository)
 
         @Provides
-        fun provideLoginViewModelFactory(toDoRepository: ToDoRepository,signUpUseCase: SignUpUserUseCase
-                                         ,loginUseCase : LoginUserUseCase) : LoginViewModelFactory {
-            return LoginViewModelFactory(toDoRepository,signUpUseCase,loginUseCase)
+        fun provideListToDoUseCase(toDoRepository: ToDoRepository) = ListToDoUseCase(toDoRepository)
+
+        @Provides
+        fun provideListToDoByStatusUseCase(toDoRepository: ToDoRepository) =
+            ListToDoByStatusUseCase(toDoRepository)
+
+        @Provides
+        fun provideDeleteUseCase(toDoRepository: ToDoRepository) = DeleteToDoUseCase(toDoRepository)
+
+        @Provides
+        fun provideAddToDoUseCase(toDoRepository: ToDoRepository) = AddToDoUseCase(toDoRepository)
+
+        @Provides
+        fun provideUpdateToDoUseCase(toDoRepository: ToDoRepository) =
+            UpdateToDoUseCase(toDoRepository)
+
+
+        @Provides
+        fun provideLoginViewModelFactory(
+            signUpUseCase: SignUpUserUseCase, loginUseCase: LoginUserUseCase
+        ): LoginViewModelFactory {
+            return LoginViewModelFactory(signUpUseCase, loginUseCase)
         }
 
         @Provides
-         fun provideListViewModelFactory(toDoRepository: ToDoRepository) : ListViewModelFactory =  ListViewModelFactory(toDoRepository)
+        fun provideListViewModelFactory(
+            toDoListUseCase: ListToDoUseCase,
+            toListByStatusUseCase: ListToDoByStatusUseCase,
+            deleteToDoUseCase: DeleteToDoUseCase
+        ): ListViewModelFactory {
+            return ListViewModelFactory(toDoListUseCase, toListByStatusUseCase, deleteToDoUseCase)
+        }
 
         @Provides
-         fun provideUpdateToDoViewModelFactory(toDoRepository: ToDoRepository) = UpdateToDoViewModelFactory(toDoRepository)
+        fun provideUpdateToDoViewModelFactory(
+            addToDoAppUseCase: AddToDoUseCase,
+            updateToDouseCase: UpdateToDoUseCase,
+            deleteToDoUseCase: DeleteToDoUseCase
+        ) = UpdateToDoViewModelFactory(
+            addToDoAppUseCase,
+            updateToDouseCase, deleteToDoUseCase
+        )
 
     }
 

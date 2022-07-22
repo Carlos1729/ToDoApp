@@ -17,12 +17,19 @@ import com.example.todotestapp.domain.usecase.DeleteToDoUseCase
 import com.example.todotestapp.domain.usecase.UpdateToDoUseCase
 import kotlinx.coroutines.launch
 import retrofit2.Response
+import javax.inject.Inject
 
-class UpdateToDoViewModel(private val repository: ToDoRepository) : ViewModel(){
+class UpdateToDoViewModel @Inject constructor(addToDoAppUseCase : AddToDoUseCase,
+                                              updateToDouseCase : UpdateToDoUseCase,
+                                              deleteToDoUseCase: DeleteToDoUseCase ) : ViewModel(){
 
-    private val todoadd = AddToDoUseCase(repository)
+    private val todoadd =addToDoAppUseCase
+    private val todoupdate = updateToDouseCase
+    private val tododelete = deleteToDoUseCase
 
     val myAddToDoResponse : MutableLiveData<Response<AddToDoResponse>> = MutableLiveData()
+    val myUpdateToDoResponse : MutableLiveData<Response<UpdateToDoResponse>> = MutableLiveData()
+    val myDeleteToDoResponse : MutableLiveData<Response<BaseResponse>> = MutableLiveData()
 
     fun addToDo(requestBody: AddToDoRequest) {
         viewModelScope.launch {
@@ -31,20 +38,12 @@ class UpdateToDoViewModel(private val repository: ToDoRepository) : ViewModel(){
         }
     }
 
-    private val todoupdate = UpdateToDoUseCase(repository)
-
-    val myUpdateToDoResponse : MutableLiveData<Response<UpdateToDoResponse>> = MutableLiveData()
-
     fun updateToDo(id: Int?, requestBody: UpdateToDoRequest) {
         viewModelScope.launch {
             val response = todoupdate.updateToDoByRequest(id,requestBody)
             myUpdateToDoResponse.value = response
         }
     }
-
-    private val tododelete = DeleteToDoUseCase(repository)
-
-    val myDeleteToDoResponse : MutableLiveData<Response<BaseResponse>> = MutableLiveData()
 
     fun deleteToDo(id: Int?) {
         viewModelScope.launch {

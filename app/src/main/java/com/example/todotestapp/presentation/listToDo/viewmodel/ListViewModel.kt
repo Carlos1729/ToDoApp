@@ -10,13 +10,15 @@ import com.example.todotestapp.domain.usecase.ListToDoByStatusUseCase
 import com.example.todotestapp.domain.usecase.ListToDoUseCase
 import kotlinx.coroutines.launch
 import retrofit2.Response
+import javax.inject.Inject
 
-class ListViewModel(private val repository: ToDoRepository) : ViewModel() {
+class ListViewModel @Inject constructor(toDoFetchUseCase : ListToDoUseCase
+                                        , toDoStatusFetchUseCase : ListToDoByStatusUseCase,
+                                        toDoDeleteUseCase : DeleteToDoUseCase ) : ViewModel() {
 
-
-    private val toDoFetch = ListToDoUseCase(repository)
-    private val toDoStatusFetch = ListToDoByStatusUseCase(repository)
-    private val toDoDelete = DeleteToDoUseCase(repository)
+    private val toDoFetch = toDoFetchUseCase
+    private val toDoStatusFetch = toDoStatusFetchUseCase
+    private val toDoDelete = toDoDeleteUseCase
 
     val myToDoList: MutableLiveData<Response<ListToDoResponse>> = MutableLiveData()
     val deleteToDoItemLiveData: MutableLiveData<Response<BaseResponse>> = MutableLiveData()

@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 
 //Here to make the view model of login we are extending ViewModel cLASS
-class LoginViewModel @Inject constructor(  repository: ToDoRepository ,  signUpUseCase : SignUpUserUseCase , loginUseCase : LoginUserUseCase ) : ViewModel() {
+class LoginViewModel @Inject constructor(signUpUseCase : SignUpUserUseCase , loginUseCase : LoginUserUseCase ) : ViewModel() {
 
     private val userlogin = loginUseCase
     private val userSignUp = signUpUseCase
