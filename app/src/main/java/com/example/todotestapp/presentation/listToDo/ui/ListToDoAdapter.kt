@@ -140,6 +140,7 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
     }
 
     fun setData(newList: ListToDoResponse) {
+
         val toDoDiffUtil = ToDoDiffUtil(myList,newList.tasks!!)
         val toDoDiffResult = DiffUtil.calculateDiff(toDoDiffUtil)
         myList = newList.tasks

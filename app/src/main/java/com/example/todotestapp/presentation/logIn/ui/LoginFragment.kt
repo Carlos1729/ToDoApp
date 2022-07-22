@@ -1,14 +1,15 @@
 package com.example.todotestapp.presentation.logIn.ui
 
 import android.content.Context
-import android.icu.lang.UCharacter.GraphemeClusterBreak.V
 import android.os.Bundle
 import android.util.Log
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todotestapp.R
@@ -27,7 +28,6 @@ import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModel
 import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import retrofit2.Response
-
 
 
 class LoginFragment : BottomSheetDialogFragment() {
@@ -59,6 +59,8 @@ class LoginFragment : BottomSheetDialogFragment() {
 
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         val repository : ToDoRepository = ToDoRepositoryImpl()
@@ -75,6 +77,12 @@ class LoginFragment : BottomSheetDialogFragment() {
 
             val viewModelFactory  = LoginViewModelFactory(repository)
             viewModel = ViewModelProvider(this, viewModelFactory)[LoginViewModel::class.java]
+            binding?.emailInputEditText?.setOnFocusChangeListener{ _, focused ->
+                    if(focused)
+                    {
+                        binding?.emailInputLayout?.helperText = checkemail()
+                    }
+            }
             val useremail = binding?.emailInputEditText?.text.toString()
             if(!signUpFlag) {
                 if (isValidEmail(useremail)) {
@@ -90,6 +98,12 @@ class LoginFragment : BottomSheetDialogFragment() {
             }
             else{
                 (activity as MainActivity).supportActionBar?.title = "Sign Up"
+                binding?.emailInputEditText?.setOnFocusChangeListener{ _, focused ->
+                    if(!focused)
+                    {
+                        binding?.emailInputLayout?.helperText = checkemail()
+                    }
+                }
                 val username = binding?.usernameInputEditText?.text.toString()
                 if(!isValidEmail((useremail)) && !checkInputs(username))
                 {
@@ -124,6 +138,19 @@ class LoginFragment : BottomSheetDialogFragment() {
             }
         }
 
+
+
+    }
+
+
+    private fun checkemail(): String? {
+
+        val email = binding?.emailInputEditText?.text.toString()
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches())
+        {
+            return "Invalid Email Address"
+        }
+        return null
     }
 
     private fun checkInputs(username: String) : Boolean{
@@ -230,98 +257,6 @@ class LoginFragment : BottomSheetDialogFragment() {
                 it
             )
         }
-//        viewModel.myLoginResponse?.observe(viewLifecycleOwner) {
-//            Log.v("signUpFlagTest",it?.data?.code().toString())
-//            Log.v("ThisisDebug", it?.status.toString())
-//            when(it?.status)
-//            {
-//                DataStatus.SUCCESS -> {
-//
-//                    if (it.data?.body() != null) {
-//                        Toast.makeText(
-//                            context,
-//                            getString(R.string.user_login_successful),
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                        it.data?.body()?.author?.let { user ->
-//                            savedata(user)
-//                        }
-//                        findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
-//                    }
-//                    else if(it.data?.code()==404){
-//                        Toast.makeText(
-//                            context,
-//                            getString(R.string.please_sign_up),
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                        showSignUpUI()
-//                        signUpFlag = true
-//                    }
-//                }
-//                DataStatus.ERROR -> {
-////                    val e: Throwable = it.error()
-//                }
-////                is NetworkResult.Loading -> {}
-////                is NetworkResult.Success -> {
-////                    if (it.data?.body() != null) {
-////                        Toast.makeText(
-////                            context,
-////                            getString(R.string.user_login_successful),
-////                            Toast.LENGTH_SHORT
-////                        ).show()
-////                        it.data.body()?.author?.let { user ->
-////                            savedata(user)
-////                        }
-////                        findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
-////                    }
-////                    else if(it.data?.code()==404){
-////                        Toast.makeText(
-////                            context,
-////                            getString(R.string.please_sign_up),
-////                            Toast.LENGTH_SHORT
-////                        ).show()
-////                        showSignUpUI()
-////                        signUpFlag = true
-////                    }
-////                }
-////                is NetworkResult.Error -> {
-////                    Toast.makeText(
-////                        context, it.errorMessage.toString(),
-////                        Toast.LENGTH_SHORT
-////                    ).show()
-////                }
-//                else -> {}
-//            }
-//            Log.v("signUpFlagTest",it.code().toString())
-//            if (it.body() != null) {
-//                Toast.makeText(
-//                    context,
-//                    getString(R.string.user_login_successful),
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//                it.body()?.author?.let { user ->
-//                    savedata(user)
-//                }
-//                findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
-//            }
-//            else if(it.code()==404){
-//                Toast.makeText(
-//                    context,
-//                    getString(R.string.please_sign_up),
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//                showSignUpUI()
-//                signUpFlag = true
-//            }
-//            else{
-//                Toast.makeText(
-//                    context,
-//                    getString(R.string.noic),
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//                //show Toast something went wrong.
-//            }
-//        }
     }
 
     private fun savedata(userDetails: UserDetails) {

@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todotestapp.R
+import com.example.todotestapp.data.db.BaseResponse
 import com.example.todotestapp.data.db.ListToDoResponse
 import com.example.todotestapp.data.db.LoginResponse
 import com.example.todotestapp.data.db.StateData
@@ -37,6 +38,7 @@ class ListToDoFragment : Fragment() {
     private lateinit var viewModel: ListViewModel
     private  var binding: FragmentListTodoBinding ?= null
     private var listToDoUserId: Int = -1
+    private var timecount: Int = -1
     private var addToDoButton : FloatingActionButton? =null
     private val myAdapter by lazy { ListToDoAdapter() }
 
@@ -58,7 +60,9 @@ class ListToDoFragment : Fragment() {
         viewModel = ViewModelProvider(this, viewModelFactory)[ListViewModel::class.java]
         checkForUserLocalData()
         viewModel.getTasks(listToDoUserId)
-        observeLiveData()
+        if(timecount == -1) {
+            observeLiveData()
+        }
 
         return view
     }
@@ -97,16 +101,20 @@ class ListToDoFragment : Fragment() {
                     R.id.menu_completed -> {
 
                         viewModel.getTasksByStatus(listToDoUserId, "completed")
-                        observeLiveData()
+                        timecount = 1
+                        observeLiveDataStatus("completed")
                         true
                     }
                     R.id.menu_pending -> {
                         viewModel.getTasksByStatus(listToDoUserId, "pending")
-                        observeLiveData()
+                        timecount = 2
+                        observeLiveDataStatus("pending")
                         true
                     }
                     R.id.menu_all -> {
                         viewModel.getTasks(listToDoUserId)
+                        observeLiveData()
+                        timecount = 3
                         true
                     }
                     R.id.logout -> {
@@ -142,6 +150,12 @@ class ListToDoFragment : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val itemToDelete = myAdapter.myList[viewHolder.adapterPosition]
                 viewModel.deleteToDo(itemToDelete.taskId)
+                observeDelete()
+
+//                        viewModel.deleteToDoItemLiveData.observe(viewLifecycleOwner,Observer{
+//            //when getting success
+//            viewModel.getTasks(listToDoUserId)
+//        })
                 Toast.makeText(context, "ToDo Deleted Successfully", Toast.LENGTH_SHORT).show()
             }
         }
@@ -149,15 +163,86 @@ class ListToDoFragment : Fragment() {
         itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
+    private fun observeDelete() {
+        viewModel.deleteToDoItemLiveData.observe(viewLifecycleOwner, Observer{
+                handleResponseDelete(it)
+        })
+    }
+
+    private fun handleResponseDelete(mydlr: StateData<Response<BaseResponse>>?) {
+
+        when(mydlr?.status)
+        {
+            StateData.DataStatus.LOADING ->{
+                binding?.listProgressBar?.visibility = View.VISIBLE
+            }
+            StateData.DataStatus.SUCCESS -> {
+                binding?.listProgressBar?.visibility = View.GONE
+                Log.v("TIMECOUNT",timecount.toString())
+                if(timecount == -1 || timecount == 3)
+                {
+                    viewModel.getTasks(listToDoUserId)
+                    observeLiveData()
+                }
+                if(timecount == 1)
+                {
+                    viewModel.getTasksByStatus(listToDoUserId,"completed")
+                    observeLiveDataStatus("completed")
+                }
+                if(timecount == 2)
+                {
+                    viewModel.getTasksByStatus(listToDoUserId,"pending")
+                    observeLiveDataStatus("pending")
+                }
+
+                }
+
+        }
+    }
+
     private fun observeLiveData() {
         viewModel.myToDoList.observe(viewLifecycleOwner, Observer{
             handleResponse(it)
         })
 
-        viewModel.deleteToDoItemLiveData.observe(viewLifecycleOwner,Observer{
-            //when getting success
-            viewModel.getTasks(listToDoUserId)
+//        viewModel.deleteToDoItemLiveData.observe(viewLifecycleOwner,Observer{
+//            //when getting success
+//            viewModel.getTasks(listToDoUserId)
+//        })
+    }
+
+    private fun observeLiveDataStatus(status:String){
+        viewModel.myToDoListStatus.observe(viewLifecycleOwner,Observer{
+            handleResponseStatus(it)
         })
+//        viewModel.deleteToDoItemLiveData.observe(viewLifecycleOwner,Observer{
+//            //when getting success
+//            viewModel.getTasksByStatus(listToDoUserId, status)
+//        })
+    }
+
+    private fun handleResponseStatus(mylbs: StateData<Response<ListToDoResponse>>?) {
+
+        when(mylbs?.status)
+        {
+            StateData.DataStatus.LOADING ->{
+                binding?.listProgressBar?.visibility = View.VISIBLE
+            }
+            StateData.DataStatus.SUCCESS -> {
+                binding?.listProgressBar?.visibility = View.GONE
+                if (mylbs.data?.body() != null) {
+                    if ((mylbs.data?.body()!!.tasks?.size) == 0)
+                    {
+                        binding?.noTodo?.visibility = View.VISIBLE
+                    }
+                    else {
+                        binding?.noTodo?.visibility = View.GONE
+                        mylbs.data?.body().let { myAdapter.setData(mylbs?.data?.body()!!).let { it } }
+                    }
+                }
+
+            }
+        }
     }
 
 
