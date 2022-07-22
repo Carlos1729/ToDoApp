@@ -58,10 +58,8 @@ class ListToDoFragment : Fragment() {
         viewModel = ViewModelProvider(this, viewModelFactory)[ListViewModel::class.java]
         checkForUserLocalData()
         viewModel.getTasks(listToDoUserId)
-        if(timecount == -1) {
-            observeLiveData()
-        }
-
+        observeLiveData()
+        observeDelete()
         return view
     }
 
@@ -148,12 +146,6 @@ class ListToDoFragment : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val itemToDelete = myAdapter.myList[viewHolder.adapterPosition]
                 viewModel.deleteToDo(itemToDelete.taskId)
-                observeDelete()
-
-//                        viewModel.deleteToDoItemLiveData.observe(viewLifecycleOwner,Observer{
-//            //when getting success
-//            viewModel.getTasks(listToDoUserId)
-//        })
                 Toast.makeText(context, "ToDo Deleted Successfully", Toast.LENGTH_SHORT).show()
             }
         }
@@ -180,17 +172,14 @@ class ListToDoFragment : Fragment() {
                 if(timecount == -1 || timecount == 3)
                 {
                     viewModel.getTasks(listToDoUserId)
-                    observeLiveData()
                 }
                 if(timecount == 1)
                 {
                     viewModel.getTasksByStatus(listToDoUserId,"completed")
-                    observeLiveDataStatus("completed")
                 }
                 if(timecount == 2)
                 {
                     viewModel.getTasksByStatus(listToDoUserId,"pending")
-                    observeLiveDataStatus("pending")
                 }
 
                 }
@@ -233,6 +222,8 @@ class ListToDoFragment : Fragment() {
                     if ((mylbs.data?.body()!!.tasks?.size) == 0)
                     {
                         binding?.loginNoResultsTv?.visibility = View.VISIBLE
+                        mylbs.data?.body().let { myAdapter.setData(mylbs?.data?.body()!!).let { it } }
+
                     }
                     else {
                         binding?.loginNoResultsTv?.visibility = View.GONE
