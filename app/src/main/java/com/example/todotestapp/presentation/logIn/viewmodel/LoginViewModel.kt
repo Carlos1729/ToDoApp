@@ -11,16 +11,20 @@ import com.example.todotestapp.domain.usecase.LoginUserUseCase
 import com.example.todotestapp.domain.usecase.SignUpUserUseCase
 import kotlinx.coroutines.launch
 import retrofit2.Response
+import javax.inject.Inject
 
 
 //Here to make the view model of login we are extending ViewModel cLASS
-class LoginViewModel(private val repository: ToDoRepository) : ViewModel() {
+class LoginViewModel @Inject constructor(  repository: ToDoRepository , userLoginUseCase : LoginUserUseCase , userSignUpUseCase : SignUpUserUseCase) : ViewModel() {
 
-    private val userlogin = LoginUserUseCase(repository)
-    private val userSignUp = SignUpUserUseCase(repository)
+    private val userlogin = userLoginUseCase
+    private val userSignUp = userSignUpUseCase
 
     val myLoginResponse : MutableLiveData<Response<LoginResponse>> = MutableLiveData()//whernever there is change in data it sends that data back to active user
                                                                                      //This is not preferable in real time scenarios as it mutable live data gets exposed insted to outside
+
+    val mySignupResponse : MutableLiveData<Response<SignUpUserResponse>> = MutableLiveData()
+
     fun loginUser(email : String) {
         viewModelScope.launch {
             val response  = userlogin.loginUserByEmail(email) //loginUserByEmail is a suspend function hence it has to be executed in a certain coroutine scope I might have used live data here
@@ -28,18 +32,12 @@ class LoginViewModel(private val repository: ToDoRepository) : ViewModel() {
         }
     }
 
-
-
-    val mySignupResponse : MutableLiveData<Response<SignUpUserResponse>> = MutableLiveData()
-
-
     fun signUpUser(requestBody: SignUpUserRequest) {
         viewModelScope.launch {
             val response = userSignUp.SignUpUserByDetails(requestBody)//as long as this view model is alive run this couroutine
             mySignupResponse.value = response
         }
     }
-
 
 }
 
