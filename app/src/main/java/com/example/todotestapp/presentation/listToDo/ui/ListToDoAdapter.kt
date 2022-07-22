@@ -54,7 +54,7 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
             {
                 val thtime = timecheck(time1.subSequence(11, 16).toString())
 
-                holder.binding.createdAt.text = "Created Today : " + thtime
+                holder.binding.createdAt.text = "Created : " + thtime
             }
 
             val diffa: Long = presDate.time - newDate.time
@@ -140,6 +140,7 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
     }
 
     fun setData(newList: ListToDoResponse) {
+
         val toDoDiffUtil = ToDoDiffUtil(myList,newList.tasks!!)
         val toDoDiffResult = DiffUtil.calculateDiff(toDoDiffUtil)
         myList = newList.tasks

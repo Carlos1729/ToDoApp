@@ -3,7 +3,7 @@ package com.example.todotestapp.data.db
 import com.google.gson.annotations.SerializedName
 
 data class BaseAddToDoResponse(
-    @SerializedName("authorId")
+    @SerializedName("author_id")
     val authorId: Int?,
     @SerializedName("content")
     val description: String?,

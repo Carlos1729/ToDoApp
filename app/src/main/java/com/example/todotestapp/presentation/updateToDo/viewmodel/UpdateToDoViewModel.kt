@@ -27,28 +27,48 @@ class UpdateToDoViewModel @Inject constructor(addToDoAppUseCase : AddToDoUseCase
     private val todoupdate = updateToDouseCase
     private val tododelete = deleteToDoUseCase
 
-    val myAddToDoResponse : MutableLiveData<Response<AddToDoResponse>> = MutableLiveData()
-    val myUpdateToDoResponse : MutableLiveData<Response<UpdateToDoResponse>> = MutableLiveData()
-    val myDeleteToDoResponse : MutableLiveData<Response<BaseResponse>> = MutableLiveData()
+    val myAddToDoResponse : StateLiveData<Response<AddToDoResponse>> = StateLiveData()
+    val myUpdateToDoResponse : StateLiveData<Response<UpdateToDoResponse>> = StateLiveData()
+    val myDeleteToDoResponse : StateLiveData<Response<BaseResponse>> = StateLiveData()
 
     fun addToDo(requestBody: AddToDoRequest) {
         viewModelScope.launch {
+            myAddToDoResponse.postLoading()
             val response = todoadd.addToDoByRequest(requestBody)
-            myAddToDoResponse.value = response
+            if(response.isSuccessful)
+            {
+                myAddToDoResponse.postSuccess(response)
+            }
+            if(response.code() == 400)
+            {
+                myAddToDoResponse.postSuccess(response)
+            }
         }
     }
 
     fun updateToDo(id: Int?, requestBody: UpdateToDoRequest) {
         viewModelScope.launch {
+            myUpdateToDoResponse.postLoading()
             val response = todoupdate.updateToDoByRequest(id,requestBody)
-            myUpdateToDoResponse.value = response
+            if(response.isSuccessful)
+            {
+                myUpdateToDoResponse.postSuccess(response)
+            }
+            if(response.code() == 400)
+            {
+                myUpdateToDoResponse.postSuccess(response)
+            }
         }
     }
 
     fun deleteToDo(id: Int?) {
         viewModelScope.launch {
+            myDeleteToDoResponse.postLoading()
             val response = id?.let { tododelete.deleteTaskById(it) }
-            myDeleteToDoResponse.value = response
+            if(response!!.isSuccessful)
+            {
+                myDeleteToDoResponse.postSuccess(response)
+            }
         }
     }
 

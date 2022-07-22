@@ -1,34 +1,26 @@
 package com.example.todotestapp.presentation.updateToDo.ui
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.todotestapp.R
-import com.example.todotestapp.data.db.AddToDoRequest
-import com.example.todotestapp.data.db.BaseListToDoResponse
-import com.example.todotestapp.data.db.UpdateToDoRequest
+import com.example.todotestapp.data.db.*
 import com.example.todotestapp.data.repository.Constants
-import com.example.todotestapp.data.repository.ToDoRepositoryImpl
 import com.example.todotestapp.databinding.FragmentUpdateTodoBinding
-import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.example.todotestapp.presentation.MainActivity
-import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModelFactory
 import com.example.todotestapp.presentation.updateToDo.viewmodel.UpdateToDoViewModel
 import com.example.todotestapp.presentation.updateToDo.viewmodel.UpdateToDoViewModelFactory
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
+import retrofit2.Response
 
 class UpdateToDoFragment : DaggerFragment() {
 
@@ -54,11 +46,6 @@ class UpdateToDoFragment : DaggerFragment() {
     private var deleteButton: Button? = null
     private lateinit var addToDoUserEmail :String
     private lateinit var viewModel: UpdateToDoViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -86,16 +73,19 @@ class UpdateToDoFragment : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         viewModel = ViewModelProvider(this, viewModelFactory)[UpdateToDoViewModel::class.java]
+        setUpClickListeners(view)
+        observeViewModel()
+    }
+
+    private fun setUpClickListeners(view :  View) {
         button?.setOnClickListener {
             checkInput(view)
-
             if(!addToDoFlag) {
                 var updatedTitle: String = titleTV?.text.toString()
                 var updatedDescription: String = descriptionTV?.text.toString()
                 var updatedStatus: String = statusspin?.selectedItem.toString()
                 var presentUpdateToDoRequest = UpdateToDoRequest(updatedTitle,updatedDescription,updatedStatus)
                 viewModel.updateToDo(idOfTask,presentUpdateToDoRequest)
-                observeUpdateToDoViewModel()
             }
             else
             {
@@ -106,69 +96,27 @@ class UpdateToDoFragment : DaggerFragment() {
                 var addUserEmail: String = addToDoUserEmail
                 var presentAddToDoRequest = AddToDoRequest(addUserEmail,addTitle,addDescription,addStatus)
                 viewModel.addToDo(presentAddToDoRequest)
-                observeAddToDoViewModel()
+
             }
         }
 
         deleteButton?.setOnClickListener {
             viewModel.deleteToDo(idOfTask)
-            observeDeleteToDoViewModel()
-        }
-
-    }
-
-    private fun observeDeleteToDoViewModel() {
-        viewModel.myDeleteToDoResponse.observe(viewLifecycleOwner) {
-            if (it.body() != null) {
-                Toast.makeText(context, "ToDo Deleted Successfully", Toast.LENGTH_SHORT)
-                    .show()             //dismiss sheet and load todolist fragment
-                findNavController().navigate(R.id.action_updateTaskFragment_to_listTaskFragment)
-            }
-            else if(it.code()==404){
-                Toast.makeText(
-                    context,
-                    "Something Went Wrong Please Try Again",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
         }
     }
 
-    private fun observeUpdateToDoViewModel() {
-        viewModel.myUpdateToDoResponse.observe(viewLifecycleOwner) {
-            if (it.body() != null) {
-                Toast.makeText(context, "ToDo Updated Successfully", Toast.LENGTH_SHORT)
-                    .show()             //dismiss sheet and load todolist fragment
-                findNavController().navigate(R.id.action_updateTaskFragment_to_listTaskFragment)
+    private fun handleResponseDelete(mydtr: StateData<Response<BaseResponse>>?) {
+        when (mydtr?.status) {
+            StateData.DataStatus.LOADING -> {
+                binding?.updateProgressBar?.visibility = View.VISIBLE
             }
-            else if(it.code()==404){
-                Toast.makeText(
-                    context,
-                    "Something Went Wrong Please Try Again",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
-
-    private fun loadData() {
-            val savedEmail = sharedPreferences.getString(Constants.EMAIL,null)
-            val savedUsername = sharedPreferences.getString(Constants.USER_NAME,null)
-            val savedId = sharedPreferences.getInt(Constants.ID,-1)
-            if (savedEmail != null) {
-                addToDoUserEmail = savedEmail
-            }
-    }
-
-    private fun observeAddToDoViewModel() {
-
-            viewModel.myAddToDoResponse.observe(viewLifecycleOwner) {
-                if (it.body() != null) {
-                    Toast.makeText(context, getString(R.string.todoadds), Toast.LENGTH_SHORT)
-                        .show()             //dismiss sheet and load todolist fragment
+            StateData.DataStatus.SUCCESS -> {
+                binding?.updateProgressBar?.visibility = View.GONE
+                if (mydtr.data?.body() != null) {
+                    Toast.makeText(context, getString(R.string.mtds), Toast.LENGTH_SHORT)
+                        .show()
                     findNavController().navigate(R.id.action_updateTaskFragment_to_listTaskFragment)
-                }
-                else if(it.code()==404){
+                } else if (mydtr.data?.code() == 400) {
                     Toast.makeText(
                         context,
                         getString(R.string.swrpta),
@@ -176,41 +124,100 @@ class UpdateToDoFragment : DaggerFragment() {
                     ).show()
                 }
             }
+        }
     }
 
+    private fun observeViewModel() {
+        viewModel.myUpdateToDoResponse.observe(viewLifecycleOwner) {
+            handleResponseUpdate(it)
+        }
+
+        viewModel.myAddToDoResponse.observe(viewLifecycleOwner) {
+            handleResponse(it)
+        }
+
+        viewModel.myDeleteToDoResponse.observe(viewLifecycleOwner) {
+            handleResponseDelete(it)
+        }
+    }
+
+    private fun handleResponseUpdate(myutr: StateData<Response<UpdateToDoResponse>>?) {
+        when (myutr?.status) {
+            StateData.DataStatus.LOADING -> {
+                binding?.updateProgressBar?.visibility = View.VISIBLE
+            }
+            StateData.DataStatus.SUCCESS -> {
+                binding?.updateProgressBar?.visibility = View.GONE
+                if (myutr.data?.body() != null) {
+                    Toast.makeText(context, getString(R.string.utds), Toast.LENGTH_SHORT).show()
+                    findNavController().navigate(R.id.action_updateTaskFragment_to_listTaskFragment)
+                } else if (myutr.data?.code() == 400) {
+                    Toast.makeText(
+                        context,
+                        getString(R.string.duplititle),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
+
+
+    private fun handleResponse(myatr: StateData<Response<AddToDoResponse>>?) {
+        when (myatr?.status) {
+            StateData.DataStatus.LOADING -> {
+                binding?.updateProgressBar?.visibility = View.VISIBLE
+            }
+            StateData.DataStatus.SUCCESS -> {
+                binding?.updateProgressBar?.visibility = View.GONE
+                if (myatr.data?.body() != null) {
+                    Toast.makeText(context, getString(R.string.todoadds), Toast.LENGTH_SHORT)
+                        .show()             //dismiss sheet and load todolist fragment
+                    findNavController().navigateUp()
+                } else if (myatr.data?.code() == 400) {
+                    Toast.makeText(
+                        context,
+                        getString(R.string.duplititle),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
+
+    private fun loadData() {
+            val savedEmail = sharedPreferences.getString(Constants.EMAIL,null)
+            if (savedEmail != null) {
+                addToDoUserEmail = savedEmail
+            }
+    }
 
     private fun checkInput(view: View) {
         if (titleTV?.text?.isBlank() == true) {
             Toast.makeText(context, getString(R.string.title_cant_be_empty), Toast.LENGTH_SHORT)
                 .show()
         } else if (descriptionTV?.text?.isBlank() == true) {
-            Toast.makeText(
-                context,
-                getString(R.string.description_cant_be_empty),
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(context, getString(R.string.description_cant_be_empty), Toast.LENGTH_SHORT).show()
         }
-
     }
 
     private fun parseStatus(status: String?): Int{
-        return when(status)
-        {
+        return when(status) {
             "completed" -> 1
             "pending"->0
             else -> {-1}
         }
     }
 
-
     private fun setUpUI() {
-
         if (title != null) {
             titleTV?.text = title
         }
+
         if (description != null) {
             descriptionTV?.text = description
         }
+
         if (title != null || description != null) {
             button?.text = getString(R.string.update_button)
             binding?.statusSpinner?.visibility = View.VISIBLE
@@ -227,12 +234,7 @@ class UpdateToDoFragment : DaggerFragment() {
         }
     }
 
-
     private fun fetchArguments() {
-
-        if (arguments != null  && args.presentitem != null) {
-
-        }
         todoItem = arguments?.getParcelable<BaseListToDoResponse>("presentitem")
         todoItem?.let {
             title = it.title

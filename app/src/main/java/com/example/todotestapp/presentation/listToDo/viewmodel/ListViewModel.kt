@@ -20,28 +20,50 @@ class ListViewModel @Inject constructor(toDoFetchUseCase : ListToDoUseCase
     private val toDoStatusFetch = toDoStatusFetchUseCase
     private val toDoDelete = toDoDeleteUseCase
 
-    val myToDoList: MutableLiveData<Response<ListToDoResponse>> = MutableLiveData()
-    val deleteToDoItemLiveData: MutableLiveData<Response<BaseResponse>> = MutableLiveData()
+    val myToDoList: StateLiveData<Response<ListToDoResponse>> = StateLiveData()
+    val myToDoListStatus: StateLiveData<Response<ListToDoResponse>> = StateLiveData()
+    val deleteToDoItemLiveData: StateLiveData<Response<BaseResponse>> = StateLiveData()
 
     fun getTasks(id: Int) {
         viewModelScope.launch {
+            myToDoList.postLoading()
             val response: Response<ListToDoResponse> = toDoFetch.listToDoByEmail(id)
-            myToDoList.value = response
+            if(response.isSuccessful)
+            {
+                myToDoList.postSuccess(response)
+            }
+            else if(response.code() == 404)
+            {
+                myToDoList.postSuccess(response)
+            }
         }
     }
 
     fun getTasksByStatus(id: Int, status: String) {
         viewModelScope.launch {
+            myToDoListStatus.postLoading()
             val response: Response<ListToDoResponse> =
                 toDoStatusFetch.listToDoByIdStatus(id, status)
-            myToDoList.value = response
+            if(response.isSuccessful)
+            {
+                myToDoListStatus.postSuccess(response)
+            }
+            else if(response.code() == 404)
+            {
+                myToDoListStatus.postSuccess(response)
+            }
         }
     }
 
     fun deleteToDo(id: Int?) {
         viewModelScope.launch {
+            deleteToDoItemLiveData.postLoading()
             val response = id?.let { toDoDelete.deleteTaskById(it) }
-            deleteToDoItemLiveData.value = response
+            if (response != null) {
+                if(response.isSuccessful) {
+                    deleteToDoItemLiveData.postSuccess(response)
+                }
+            }
         }
     }
 
