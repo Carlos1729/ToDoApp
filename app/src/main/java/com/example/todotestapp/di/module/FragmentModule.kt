@@ -1,17 +1,41 @@
 package com.example.todotestapp.di.module
 
-import androidx.recyclerview.widget.ListAdapter
-import com.example.todotestapp.presentation.listToDo.ui.ListToDoAdapter
+
+import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
+import com.example.todotestapp.presentation.listToDo.ui.ListToDoFragment
+import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModelFactory
+import com.example.todotestapp.presentation.logIn.ui.LoginFragment
+import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModelFactory
+import com.example.todotestapp.presentation.updateToDo.ui.UpdateToDoFragment
+import com.example.todotestapp.presentation.updateToDo.viewmodel.UpdateToDoViewModelFactory
+import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
+import dagger.android.ContributesAndroidInjector
 
-class FragmentModule {
+@Module
+abstract class FragmentModule {
 
-    @Provides
-    @Singleton
-    fun provideToDoListAdapter() : ListToDoAdapter{
-        return ListToDoAdapter()
+    @ContributesAndroidInjector
+    abstract fun getLoginFragment() : LoginFragment
+
+    @ContributesAndroidInjector
+    abstract fun getListToDoFragment() : ListToDoFragment
+
+    @ContributesAndroidInjector
+    abstract fun getUpdateFragment() : UpdateToDoFragment
+
+
+    companion object{
+
+        @Provides
+        fun provideLoginViewModelFactory(toDoRepository: ToDoRepository) = LoginViewModelFactory(toDoRepository)
+
+        @Provides
+         fun provideListViewModelFactory(toDoRepository: ToDoRepository) =  ListViewModelFactory(toDoRepository)
+
+        @Provides
+         fun provideUpdateToDoViewModelFactory(toDoRepository: ToDoRepository) = UpdateToDoViewModelFactory(toDoRepository)
+
     }
-
 
 }

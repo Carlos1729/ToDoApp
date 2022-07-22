@@ -3,6 +3,7 @@ package com.example.todotestapp.presentation
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -10,9 +11,11 @@ import com.example.todotestapp.R
 import com.example.todotestapp.data.repository.Constants.IS_USER_LOGGED_IN
 import com.example.todotestapp.data.repository.Constants.SHARED_PREFERENCES
 import com.facebook.stetho.Stetho
+import dagger.android.support.DaggerAppCompatActivity
 import java.net.InetAddress
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : DaggerAppCompatActivity() {
 
     private lateinit var navController: NavController
     private lateinit var  navHostFragment : NavHostFragment
@@ -23,7 +26,6 @@ class MainActivity : AppCompatActivity() {
         Stetho.initializeWithDefaults(this)
         navHostFragment = supportFragmentManager.findFragmentById(R.id.naviHostFragment) as NavHostFragment
         navController = navHostFragment.navController
-
 
         if(checkForLoginSignUpFlow()){
             navigateToListScreen()

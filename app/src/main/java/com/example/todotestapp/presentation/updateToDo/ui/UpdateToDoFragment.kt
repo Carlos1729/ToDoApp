@@ -1,6 +1,7 @@
 package com.example.todotestapp.presentation.updateToDo.ui
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -22,11 +23,20 @@ import com.example.todotestapp.data.repository.ToDoRepositoryImpl
 import com.example.todotestapp.databinding.FragmentUpdateTodoBinding
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.example.todotestapp.presentation.MainActivity
+import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModelFactory
 import com.example.todotestapp.presentation.updateToDo.viewmodel.UpdateToDoViewModel
 import com.example.todotestapp.presentation.updateToDo.viewmodel.UpdateToDoViewModelFactory
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
 
-class UpdateToDoFragment : Fragment() {
+class UpdateToDoFragment : DaggerFragment() {
+
+    @Inject
+    lateinit var viewModelFactory: UpdateToDoViewModelFactory
+
+    @Inject
+    lateinit var sharedPreferences : SharedPreferences
 
 
     private val args by navArgs<UpdateToDoFragmentArgs>()
@@ -44,9 +54,6 @@ class UpdateToDoFragment : Fragment() {
     private var deleteButton: Button? = null
     private lateinit var addToDoUserEmail :String
     private lateinit var viewModel: UpdateToDoViewModel
-
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,13 +85,10 @@ class UpdateToDoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val repository : ToDoRepository = ToDoRepositoryImpl()
-
+        viewModel = ViewModelProvider(this, viewModelFactory)[UpdateToDoViewModel::class.java]
         button?.setOnClickListener {
             checkInput(view)
 
-            val viewModelFactory  = UpdateToDoViewModelFactory(repository)
-            viewModel = ViewModelProvider(this, viewModelFactory)[UpdateToDoViewModel::class.java]
             if(!addToDoFlag) {
                 var updatedTitle: String = titleTV?.text.toString()
                 var updatedDescription: String = descriptionTV?.text.toString()
@@ -107,8 +111,6 @@ class UpdateToDoFragment : Fragment() {
         }
 
         deleteButton?.setOnClickListener {
-            val viewModelFactory  = UpdateToDoViewModelFactory(repository)
-            viewModel = ViewModelProvider(this, viewModelFactory)[UpdateToDoViewModel::class.java]
             viewModel.deleteToDo(idOfTask)
             observeDeleteToDoViewModel()
         }
@@ -150,7 +152,6 @@ class UpdateToDoFragment : Fragment() {
     }
 
     private fun loadData() {
-            val sharedPreferences = activity!!.getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE)
             val savedEmail = sharedPreferences.getString(Constants.EMAIL,null)
             val savedUsername = sharedPreferences.getString(Constants.USER_NAME,null)
             val savedId = sharedPreferences.getInt(Constants.ID,-1)
@@ -179,8 +180,6 @@ class UpdateToDoFragment : Fragment() {
 
 
     private fun checkInput(view: View) {
-
-
         if (titleTV?.text?.isBlank() == true) {
             Toast.makeText(context, getString(R.string.title_cant_be_empty), Toast.LENGTH_SHORT)
                 .show()
@@ -244,7 +243,6 @@ class UpdateToDoFragment : Fragment() {
     }
 
     private fun initWidgets(view: View) {
-
         titleTV = binding?.updateTitle
         descriptionTV = binding?.updateDescription
         button = binding?.updateTaskbutton

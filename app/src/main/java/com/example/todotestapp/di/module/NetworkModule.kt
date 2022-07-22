@@ -3,8 +3,11 @@ package com.example.todotestapp.di.module
 import androidx.annotation.NonNull
 import com.example.todotestapp.data.repository.Constants.BASE_URL
 import com.example.todotestapp.data.repository.ToDoRepositoryImpl
+import com.example.todotestapp.di.module.scopes.AppScoped
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.facebook.stetho.okhttp3.StethoInterceptor
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -17,11 +20,6 @@ import javax.inject.Singleton
 class NetworkModule {
 
     @Provides
-    @Singleton
-    fun provideToDoApiImpl() : ToDoRepository = ToDoRepositoryImpl()
-
-    @Provides
-    @Singleton
     fun provideHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             .addNetworkInterceptor(StethoInterceptor())
@@ -29,13 +27,18 @@ class NetworkModule {
     }
 
     @Provides
-    @Singleton
-    fun provideGsonFactory(): GsonConverterFactory {
-        return GsonConverterFactory.create()
+    fun provideGson(): Gson {
+        return GsonBuilder()
+            .setLenient()
+            .create()
     }
 
     @Provides
-    @Singleton
+    fun provideGsonFactory( gson : Gson): GsonConverterFactory {
+        return GsonConverterFactory.create(gson)
+    }
+
+    @Provides
     fun provideRetrofitInstance(
         @NonNull okHttpClient: OkHttpClient,
         @NonNull gsonFactory: GsonConverterFactory

@@ -2,7 +2,7 @@ package com.example.todotestapp.data.repository
 
 object Constants {
 
-        const val BASE_URL = "https://eb16-139-5-222-118.in.ngrok.io/api/v0/"
+        const val BASE_URL = "https://ed80-139-5-222-82.in.ngrok.io/api/v0/"
         const val LOGIN_FRAGMENT_TAG = "LoginFragment"
 
 

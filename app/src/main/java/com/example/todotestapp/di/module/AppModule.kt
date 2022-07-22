@@ -5,21 +5,31 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.annotation.NonNull
 import com.example.todotestapp.data.repository.Constants
+import com.example.todotestapp.data.repository.ToDoRepositoryImpl
+import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
+import dagger.Binds
+import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
-class AppModule {
+@Module
+abstract class AppModule() {
 
-    @Provides
-    @Singleton
-    fun provideContext(application: Application?): Context? {
-        return application
-    }
+    @Binds
+    abstract fun provideContext(application: Application?): Context
 
-    @Provides
-    @Singleton
-    fun provideSharedPreferences(@NonNull appContext :  Context) : SharedPreferences{
-      return  appContext.getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE)
+    companion object {
+
+        @Provides
+        fun provideSharedPreferences(@NonNull appContext: Context): SharedPreferences {
+            return appContext.getSharedPreferences(
+                Constants.SHARED_PREFERENCES,
+                Context.MODE_PRIVATE
+            )
+        }
+
+        @Provides
+        fun provideToDoApiImpl(): ToDoRepository = ToDoRepositoryImpl()
     }
 
 

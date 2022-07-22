@@ -2,6 +2,7 @@ package com.example.todotestapp.presentation.listToDo.ui
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -25,10 +26,19 @@ import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.example.todotestapp.presentation.MainActivity
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModel
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModelFactory
+import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
 
-class ListToDoFragment : Fragment() {
+class ListToDoFragment : DaggerFragment() {
+
+    @Inject
+    lateinit var viewModelFactory: ListViewModelFactory
+
+    @Inject
+    lateinit var sharedPreferences : SharedPreferences
 
     private lateinit var viewModel: ListViewModel
     private  var binding: FragmentListTodoBinding ?= null
@@ -46,8 +56,7 @@ class ListToDoFragment : Fragment() {
         (activity as MainActivity).supportActionBar?.title = "ToDo's"
         setUpUI()
         setUpClickListeners()
-        val repository: ToDoRepository = ToDoRepositoryImpl()
-        val viewModelFactory = ListViewModelFactory(repository)
+
         viewModel = ViewModelProvider(this, viewModelFactory)[ListViewModel::class.java]
         checkForUserLocalData()
         viewModel.getTasks(listToDoUserId)
@@ -120,8 +129,7 @@ class ListToDoFragment : Fragment() {
     }
 
     private fun checkForUserLocalData() {
-        val sharedPreferences = activity?.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
-        sharedPreferences?.let {
+        sharedPreferences.let {
             if (sharedPreferences.contains(ID)) {
                 listToDoUserId = sharedPreferences.getInt(ID,-1)
             }
