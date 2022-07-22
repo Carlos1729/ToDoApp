@@ -35,10 +35,5 @@ abstract class ViewModelModule {
     abstract fun bindListViewModel(listViewModel : ListViewModel): ViewModel
 
     companion object{
-        @Provides
-        fun provideLoginUseCase(toDoRepository: ToDoRepository) = LoginUserUseCase(toDoRepository)
-
-        @Provides
-        fun provideSignUpuserCache(toDoRepository: ToDoRepository) = SignUpUserUseCase(toDoRepository)
     }
 }

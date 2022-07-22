@@ -15,10 +15,10 @@ import javax.inject.Inject
 
 
 //Here to make the view model of login we are extending ViewModel cLASS
-class LoginViewModel @Inject constructor(  repository: ToDoRepository , userLoginUseCase : LoginUserUseCase , userSignUpUseCase : SignUpUserUseCase) : ViewModel() {
+class LoginViewModel @Inject constructor(  repository: ToDoRepository ,  signUpUseCase : SignUpUserUseCase , loginUseCase : LoginUserUseCase ) : ViewModel() {
 
-    private val userlogin = userLoginUseCase
-    private val userSignUp = userSignUpUseCase
+    private val userlogin = loginUseCase
+    private val userSignUp = signUpUseCase
 
     val myLoginResponse : MutableLiveData<Response<LoginResponse>> = MutableLiveData()//whernever there is change in data it sends that data back to active user
                                                                                      //This is not preferable in real time scenarios as it mutable live data gets exposed insted to outside
