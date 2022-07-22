@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/listLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     tools:context=".presentation.listToDo.ui.ListToDoFragment">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -32,14 +32,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <ImageView
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id = "@+id/no_todo"
-        android:scaleType="centerCrop"
+        android:id = "@+id/login_no_results_tv"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:visibility="gone"
+        android:text="@string/no_todos_please_add_todos"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/ic_baseline_insert_drive_file_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -50,8 +52,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/no_todo"
-        />
+        app:layout_constraintTop_toTopOf="@+id/recyclerViewId" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -50,8 +50,6 @@ class ListToDoFragment : Fragment() {
     ): View? {
         binding = FragmentListTodoBinding.inflate(inflater)
         val view = binding?.root
-        binding?.noTodo?.visibility = View.GONE
-        binding?.listProgressBar?.visibility = View.GONE
         (activity as MainActivity).supportActionBar?.title = "ToDo's"
         setUpUI()
         setUpClickListeners()
@@ -215,6 +213,7 @@ class ListToDoFragment : Fragment() {
         viewModel.myToDoListStatus.observe(viewLifecycleOwner,Observer{
             handleResponseStatus(it)
         })
+
 //        viewModel.deleteToDoItemLiveData.observe(viewLifecycleOwner,Observer{
 //            //when getting success
 //            viewModel.getTasksByStatus(listToDoUserId, status)
@@ -233,10 +232,10 @@ class ListToDoFragment : Fragment() {
                 if (mylbs.data?.body() != null) {
                     if ((mylbs.data?.body()!!.tasks?.size) == 0)
                     {
-                        binding?.noTodo?.visibility = View.VISIBLE
+                        binding?.loginNoResultsTv?.visibility = View.VISIBLE
                     }
                     else {
-                        binding?.noTodo?.visibility = View.GONE
+                        binding?.loginNoResultsTv?.visibility = View.GONE
                         mylbs.data?.body().let { myAdapter.setData(mylbs?.data?.body()!!).let { it } }
                     }
                 }
@@ -251,21 +250,21 @@ class ListToDoFragment : Fragment() {
         {
             StateData.DataStatus.LOADING ->{
                 binding?.listProgressBar?.visibility = View.VISIBLE
+                binding?.loginNoResultsTv?.visibility = View.GONE
             }
             StateData.DataStatus.SUCCESS -> {
                 binding?.listProgressBar?.visibility = View.GONE
                 if (mlistr.data?.body() != null) {
                     if ((mlistr.data?.body()!!.tasks?.size) == 0)
                     {
-                        binding?.noTodo?.visibility = View.VISIBLE
+                        binding?.loginNoResultsTv?.visibility = View.VISIBLE
                         //Show Empty Icon
                     }
                     else {
-                        binding?.noTodo?.visibility = View.GONE
+                        binding?.loginNoResultsTv?.visibility = View.GONE
                         mlistr.data?.body().let { myAdapter.setData(mlistr?.data?.body()!!).let { it } }
                     }
                 }
-
             }
         }
 

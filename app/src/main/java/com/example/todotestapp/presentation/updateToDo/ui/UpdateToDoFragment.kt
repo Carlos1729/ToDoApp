@@ -2,14 +2,12 @@ package com.example.todotestapp.presentation.updateToDo.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -44,12 +42,8 @@ class UpdateToDoFragment : Fragment() {
     private lateinit var addToDoUserEmail :String
     private lateinit var viewModel: UpdateToDoViewModel
 
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -76,24 +70,23 @@ class UpdateToDoFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         val repository : ToDoRepository = ToDoRepositoryImpl()
-
         binding?.updateProgressBar?.visibility = View.GONE
+        val viewModelFactory  = UpdateToDoViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, viewModelFactory)[UpdateToDoViewModel::class.java]
+        setUpClickListeners(view)
+        observeViewModel()
+    }
 
-
+    private fun setUpClickListeners(view :  View) {
         button?.setOnClickListener {
             checkInput(view)
-
-            val viewModelFactory  = UpdateToDoViewModelFactory(repository)
-            viewModel = ViewModelProvider(this, viewModelFactory)[UpdateToDoViewModel::class.java]
             if(!addToDoFlag) {
                 var updatedTitle: String = titleTV?.text.toString()
                 var updatedDescription: String = descriptionTV?.text.toString()
                 var updatedStatus: String = statusspin?.selectedItem.toString()
                 var presentUpdateToDoRequest = UpdateToDoRequest(updatedTitle,updatedDescription,updatedStatus)
                 viewModel.updateToDo(idOfTask,presentUpdateToDoRequest)
-                observeUpdateToDoViewModel()
             }
             else
             {
@@ -104,23 +97,12 @@ class UpdateToDoFragment : Fragment() {
                 var addUserEmail: String = addToDoUserEmail
                 var presentAddToDoRequest = AddToDoRequest(addUserEmail,addTitle,addDescription,addStatus)
                 viewModel.addToDo(presentAddToDoRequest)
-                observeAddToDoViewModel()
+
             }
         }
 
         deleteButton?.setOnClickListener {
-            val viewModelFactory  = UpdateToDoViewModelFactory(repository)
-            viewModel = ViewModelProvider(this, viewModelFactory)[UpdateToDoViewModel::class.java]
             viewModel.deleteToDo(idOfTask)
-            observeDeleteToDoViewModel()
-        }
-
-    }
-
-    private fun observeDeleteToDoViewModel() {
-        viewModel.myDeleteToDoResponse.observe(viewLifecycleOwner) {
-
-            handleResponseDelete(it)
         }
     }
 
@@ -157,17 +139,23 @@ class UpdateToDoFragment : Fragment() {
            }
     }
 
-    private fun observeUpdateToDoViewModel() {
-
+    private fun observeViewModel() {
         viewModel.myUpdateToDoResponse.observe(viewLifecycleOwner) {
             handleResponseUpdate(it)
+        }
+
+        viewModel.myAddToDoResponse.observe(viewLifecycleOwner) {
+            handleResponse(it)
+        }
+
+        viewModel.myDeleteToDoResponse.observe(viewLifecycleOwner) {
+            handleResponseDelete(it)
         }
     }
 
     private fun handleResponseUpdate(myutr: StateData<Response<UpdateToDoResponse>>?) {
 
-        when(myutr?.status)
-        {
+        when(myutr?.status) {
             StateData.DataStatus.LOADING ->{
                 binding?.updateProgressBar?.visibility = View.VISIBLE
             }
@@ -194,10 +182,6 @@ class UpdateToDoFragment : Fragment() {
     }
 
     private fun observeAddToDoViewModel() {
-
-            viewModel.myAddToDoResponse.observe(viewLifecycleOwner) {
-                handleResponse(it)
-            }
     }
 
     private fun handleResponse(myatr: StateData<Response<AddToDoResponse>>?) {
@@ -212,7 +196,7 @@ class UpdateToDoFragment : Fragment() {
                 if(myatr.data?.body() != null)
                 {
                     Toast.makeText(context, getString(R.string.todoadds), Toast.LENGTH_SHORT).show()             //dismiss sheet and load todolist fragment
-                    findNavController().navigate(R.id.action_updateTaskFragment_to_listTaskFragment)
+                    findNavController().navigateUp()
                 }
                 else if(myatr.data?.code() == 400)
                 {
@@ -230,16 +214,12 @@ class UpdateToDoFragment : Fragment() {
     private fun loadData() {
         val sharedPreferences = activity!!.getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE)
         val savedEmail = sharedPreferences.getString(Constants.EMAIL,null)
-        val savedUsername = sharedPreferences.getString(Constants.USER_NAME,null)
-        val savedId = sharedPreferences.getInt(Constants.ID,-1)
         if (savedEmail != null) {
             addToDoUserEmail = savedEmail
         }
     }
 
     private fun checkInput(view: View) {
-
-
         if (titleTV?.text?.isBlank() == true) {
             Toast.makeText(context, getString(R.string.title_cant_be_empty), Toast.LENGTH_SHORT)
                 .show()
@@ -261,7 +241,6 @@ class UpdateToDoFragment : Fragment() {
             else -> {-1}
         }
     }
-
 
     private fun setUpUI() {
 
@@ -287,12 +266,7 @@ class UpdateToDoFragment : Fragment() {
         }
     }
 
-
     private fun fetchArguments() {
-
-        if (arguments != null  && args.presentitem != null) {
-
-        }
         todoItem = arguments?.getParcelable<BaseListToDoResponse>("presentitem")
         todoItem?.let {
             title = it.title
@@ -303,7 +277,6 @@ class UpdateToDoFragment : Fragment() {
     }
 
     private fun initWidgets(view: View) {
-
         titleTV = binding?.updateTitle
         descriptionTV = binding?.updateDescription
         button = binding?.updateTaskbutton
