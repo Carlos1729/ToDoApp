@@ -7,10 +7,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -21,17 +19,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todotestapp.R
 import com.example.todotestapp.data.db.BaseResponse
 import com.example.todotestapp.data.db.ListToDoResponse
-import com.example.todotestapp.data.db.LoginResponse
 import com.example.todotestapp.data.db.StateData
 import com.example.todotestapp.data.repository.Constants.ID
 import com.example.todotestapp.data.repository.Constants.SHARED_PREFERENCES
-import com.example.todotestapp.data.repository.ToDoRepositoryImpl
 import com.example.todotestapp.databinding.FragmentListTodoBinding
-import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.example.todotestapp.presentation.MainActivity
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModel
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModelFactory
-import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -65,8 +59,9 @@ class ListToDoFragment : DaggerFragment() {
         setUpClickListeners()
         viewModel = ViewModelProvider(this, viewModelFactory)[ListViewModel::class.java]
         checkForUserLocalData()
-        viewModel.getTasks(listToDoUserId)
-        observeLiveData()
+        viewModel.getAllTasks(listToDoUserId)
+        observeLiveDataForComletedList()
+        observeLiveDataByStatus()
         observeDelete()
         return view
     }
@@ -105,18 +100,15 @@ class ListToDoFragment : DaggerFragment() {
                     R.id.menu_completed -> {
                         viewModel.getTasksByStatus(listToDoUserId, "completed")
                         timecount = 1
-                        observeLiveDataStatus("completed")
                         true
                     }
                     R.id.menu_pending -> {
                         viewModel.getTasksByStatus(listToDoUserId, "pending")
                         timecount = 2
-                        observeLiveDataStatus("pending")
                         true
                     }
                     R.id.menu_all -> {
-                        viewModel.getTasks(listToDoUserId)
-                        observeLiveData()
+                        viewModel.getAllTasks(listToDoUserId)
                         timecount = 3
                         true
                     }
@@ -166,36 +158,31 @@ class ListToDoFragment : DaggerFragment() {
     }
 
     private fun handleResponseDelete(mydlr: StateData<Response<BaseResponse>>?) {
-
-        when(mydlr?.status)
-        {
-            StateData.DataStatus.LOADING ->{
+        when (mydlr?.status) {
+            StateData.DataStatus.LOADING -> {
                 binding?.listProgressBar?.visibility = View.VISIBLE
             }
             StateData.DataStatus.SUCCESS -> {
                 binding?.listProgressBar?.visibility = View.GONE
-                Log.v("TIMECOUNT",timecount.toString())
-                if(timecount == -1 || timecount == 3)
-                {
-                    viewModel.getTasks(listToDoUserId)
+                Log.v("TIMECOUNT", timecount.toString())
+                if (timecount == -1 || timecount == 3) {
+                    viewModel.getAllTasks(listToDoUserId)
                 }
-                if(timecount == 1)
-                {
-                    viewModel.getTasksByStatus(listToDoUserId,"completed")
+                if (timecount == 1) {
+                    viewModel.getTasksByStatus(listToDoUserId, "completed")
                 }
-                if(timecount == 2)
-                {
-                    viewModel.getTasksByStatus(listToDoUserId,"pending")
+                if (timecount == 2) {
+                    viewModel.getTasksByStatus(listToDoUserId, "pending")
                 }
 
-                }
+            }
 
         }
     }
 
-    private fun observeLiveData() {
-        viewModel.myToDoList.observe(viewLifecycleOwner, Observer{
-            handleResponse(it)
+    private fun observeLiveDataForComletedList() {
+        viewModel.myToDoAllList.observe(viewLifecycleOwner, Observer{
+            handleResponseForAllList(it)
         })
 
 //        viewModel.deleteToDoItemLiveData.observe(viewLifecycleOwner,Observer{
@@ -204,38 +191,31 @@ class ListToDoFragment : DaggerFragment() {
 //        })
     }
 
-    private fun observeLiveDataStatus(status:String){
-        viewModel.myToDoListStatus.observe(viewLifecycleOwner,Observer{
+    private fun observeLiveDataByStatus(){
+        viewModel.myToDoListByStatus.observe(viewLifecycleOwner,Observer{
             handleResponseStatus(it)
         })
-
-//        viewModel.deleteToDoItemLiveData.observe(viewLifecycleOwner,Observer{
-//            //when getting success
-//            viewModel.getTasksByStatus(listToDoUserId, status)
-//        })
     }
 
     private fun handleResponseStatus(mylbs: StateData<Response<ListToDoResponse>>?) {
-
-        when(mylbs?.status)
-        {
-            StateData.DataStatus.LOADING ->{
+        when (mylbs?.status) {
+            StateData.DataStatus.LOADING -> {
                 binding?.listProgressBar?.visibility = View.VISIBLE
             }
             StateData.DataStatus.SUCCESS -> {
                 binding?.listProgressBar?.visibility = View.GONE
                 if (mylbs.data?.body() != null) {
-                    if ((mylbs.data?.body()!!.tasks?.size) == 0)
-                    {
+                    if ((mylbs.data?.body()!!.tasks?.size) == 0) {
                         binding?.loginNoResultsTv?.visibility = View.VISIBLE
                         binding?.emptyIcon?.visibility = View.VISIBLE
-                        mylbs.data?.body().let { myAdapter.setData(mylbs?.data?.body()!!).let { it } }
+                        mylbs.data?.body()
+                            .let { myAdapter.setData(mylbs?.data?.body()!!).let { it } }
 
-                    }
-                    else {
+                    } else {
                         binding?.loginNoResultsTv?.visibility = View.GONE
                         binding?.emptyIcon?.visibility = View.GONE
-                        mylbs.data?.body().let { myAdapter.setData(mylbs?.data?.body()!!).let { it } }
+                        mylbs.data?.body()
+                            .let { myAdapter.setData(mylbs?.data?.body()!!).let { it } }
                     }
                 }
 
@@ -244,10 +224,9 @@ class ListToDoFragment : DaggerFragment() {
     }
 
 
-    private fun handleResponse(mlistr: StateData<Response<ListToDoResponse>>?) {
-        when(mlistr?.status)
-        {
-            StateData.DataStatus.LOADING ->{
+    private fun handleResponseForAllList(mlistr: StateData<Response<ListToDoResponse>>?) {
+        when (mlistr?.status) {
+            StateData.DataStatus.LOADING -> {
                 binding?.listProgressBar?.visibility = View.VISIBLE
                 binding?.loginNoResultsTv?.visibility = View.GONE
                 binding?.emptyIcon?.visibility = View.GONE
@@ -255,21 +234,19 @@ class ListToDoFragment : DaggerFragment() {
             StateData.DataStatus.SUCCESS -> {
                 binding?.listProgressBar?.visibility = View.GONE
                 if (mlistr.data?.body() != null) {
-                    if ((mlistr.data?.body()!!.tasks?.size) == 0)
-                    {
+                    if ((mlistr.data?.body()!!.tasks?.size) == 0) {
                         binding?.loginNoResultsTv?.visibility = View.VISIBLE
                         binding?.emptyIcon?.visibility = View.VISIBLE
                         //Show Empty Icon
-                    }
-                    else {
+                    } else {
                         binding?.loginNoResultsTv?.visibility = View.GONE
                         binding?.emptyIcon?.visibility = View.GONE
-                        mlistr.data?.body().let { myAdapter.setData(mlistr?.data?.body()!!).let { it } }
+                        mlistr.data?.body()
+                            .let { myAdapter.setData(mlistr?.data?.body()!!).let { it } }
                     }
                 }
             }
         }
-
     }
 
 

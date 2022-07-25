@@ -1,10 +1,8 @@
 package com.example.todotestapp.presentation.listToDo.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todotestapp.data.db.*
-import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.example.todotestapp.domain.usecase.DeleteToDoUseCase
 import com.example.todotestapp.domain.usecase.ListToDoByStatusUseCase
 import com.example.todotestapp.domain.usecase.ListToDoUseCase
@@ -20,37 +18,35 @@ class ListViewModel @Inject constructor(toDoFetchUseCase : ListToDoUseCase
     private val toDoStatusFetch = toDoStatusFetchUseCase
     private val toDoDelete = toDoDeleteUseCase
 
-    val myToDoList: StateLiveData<Response<ListToDoResponse>> = StateLiveData()
-    val myToDoListStatus: StateLiveData<Response<ListToDoResponse>> = StateLiveData()
+    val myToDoAllList: StateLiveData<Response<ListToDoResponse>> = StateLiveData()
+    val myToDoListByStatus: StateLiveData<Response<ListToDoResponse>> = StateLiveData()
     val deleteToDoItemLiveData: StateLiveData<Response<BaseResponse>> = StateLiveData()
 
-    fun getTasks(id: Int) {
+    fun getAllTasks(id: Int) {
         viewModelScope.launch {
-            myToDoList.postLoading()
+            myToDoAllList.postLoading()
             val response: Response<ListToDoResponse> = toDoFetch.listToDoByEmail(id)
-            if(response.isSuccessful)
-            {
-                myToDoList.postSuccess(response)
+            if(response.isSuccessful) {
+                myToDoAllList.postSuccess(response)
             }
-            else if(response.code() == 404)
-            {
-                myToDoList.postSuccess(response)
+            else if(response.code() == 404) {
+                myToDoAllList.postSuccess(response)
             }
         }
     }
 
     fun getTasksByStatus(id: Int, status: String) {
         viewModelScope.launch {
-            myToDoListStatus.postLoading()
+            myToDoListByStatus.postLoading()
             val response: Response<ListToDoResponse> =
                 toDoStatusFetch.listToDoByIdStatus(id, status)
             if(response.isSuccessful)
             {
-                myToDoListStatus.postSuccess(response)
+                myToDoListByStatus.postSuccess(response)
             }
             else if(response.code() == 404)
             {
-                myToDoListStatus.postSuccess(response)
+                myToDoListByStatus.postSuccess(response)
             }
         }
     }
