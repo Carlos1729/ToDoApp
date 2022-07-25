@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -102,7 +103,6 @@ class ListToDoFragment : DaggerFragment() {
                 // Handle the menu selection
                 return when (menuItem.itemId) {
                     R.id.menu_completed -> {
-
                         viewModel.getTasksByStatus(listToDoUserId, "completed")
                         timecount = 1
                         observeLiveDataStatus("completed")
@@ -228,11 +228,13 @@ class ListToDoFragment : DaggerFragment() {
                     if ((mylbs.data?.body()!!.tasks?.size) == 0)
                     {
                         binding?.loginNoResultsTv?.visibility = View.VISIBLE
+                        binding?.emptyIcon?.visibility = View.VISIBLE
                         mylbs.data?.body().let { myAdapter.setData(mylbs?.data?.body()!!).let { it } }
 
                     }
                     else {
                         binding?.loginNoResultsTv?.visibility = View.GONE
+                        binding?.emptyIcon?.visibility = View.GONE
                         mylbs.data?.body().let { myAdapter.setData(mylbs?.data?.body()!!).let { it } }
                     }
                 }
@@ -248,6 +250,7 @@ class ListToDoFragment : DaggerFragment() {
             StateData.DataStatus.LOADING ->{
                 binding?.listProgressBar?.visibility = View.VISIBLE
                 binding?.loginNoResultsTv?.visibility = View.GONE
+                binding?.emptyIcon?.visibility = View.GONE
             }
             StateData.DataStatus.SUCCESS -> {
                 binding?.listProgressBar?.visibility = View.GONE
@@ -255,10 +258,12 @@ class ListToDoFragment : DaggerFragment() {
                     if ((mlistr.data?.body()!!.tasks?.size) == 0)
                     {
                         binding?.loginNoResultsTv?.visibility = View.VISIBLE
+                        binding?.emptyIcon?.visibility = View.VISIBLE
                         //Show Empty Icon
                     }
                     else {
                         binding?.loginNoResultsTv?.visibility = View.GONE
+                        binding?.emptyIcon?.visibility = View.GONE
                         mlistr.data?.body().let { myAdapter.setData(mlistr?.data?.body()!!).let { it } }
                     }
                 }

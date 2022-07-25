@@ -2,6 +2,7 @@ package com.example.todotestapp.presentation.logIn.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.provider.Settings.Global.getString
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -109,7 +110,7 @@ class LoginFragment : DaggerFragment() {
         }
 
         private fun checkInputs(username: String): Boolean {
-            if (username == "") {
+            if (username == "" || username.trim().isEmpty()) {
                 binding?.userInputLayout?.error = getString(R.string.invalid_username)
                 return false
             }

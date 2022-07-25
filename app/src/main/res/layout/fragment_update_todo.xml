@@ -95,7 +95,7 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/custom_input"
+        android:background="@drawable/gradient_spinner"
         android:entries="@array/statusoftask"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"

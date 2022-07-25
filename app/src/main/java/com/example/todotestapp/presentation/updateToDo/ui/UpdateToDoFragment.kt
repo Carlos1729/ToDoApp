@@ -174,7 +174,7 @@ class UpdateToDoFragment : DaggerFragment() {
                     Toast.makeText(context, getString(R.string.todoadds), Toast.LENGTH_SHORT)
                         .show()             //dismiss sheet and load todolist fragment
                     findNavController().navigateUp()
-                } else if (myatr.data?.code() == 400) {
+                } else if (myatr.data?.code() == 400 && descriptionTV?.text?.isBlank() == false && titleTV?.text?.isBlank() == false) {
                     Toast.makeText(
                         context,
                         getString(R.string.duplititle),
