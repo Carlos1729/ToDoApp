@@ -3,10 +3,7 @@ package com.example.todotestapp.presentation.updateToDo.ui
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.*
-import android.widget.Button
-import android.widget.Spinner
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -47,6 +44,13 @@ class UpdateToDoFragment : DaggerFragment() {
     private lateinit var addToDoUserEmail :String
     private lateinit var viewModel: UpdateToDoViewModel
 
+    override fun onResume() {
+        super.onResume()
+        val priorities = resources.getStringArray(R.array.priorities)
+        val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, priorities)
+        binding?.priorityDropdownEdittext?.setAdapter(arrayAdapter)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,7 +60,6 @@ class UpdateToDoFragment : DaggerFragment() {
         binding?.statusSpinner?.visibility = View.GONE
         binding?.deleteTaskButton?.visibility = View.GONE
         binding?.statusHeading?.visibility = View.GONE
-
 
         val view = binding?.root
 
@@ -69,6 +72,8 @@ class UpdateToDoFragment : DaggerFragment() {
 
         return view
     }
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 

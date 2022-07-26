@@ -2,13 +2,14 @@ package com.example.todotestapp.presentation.logIn.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.provider.Settings.Global.getString
+import android.os.CountDownTimer
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.adapters.TextViewBindingAdapter.setText
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todotestapp.R
@@ -24,10 +25,9 @@ import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.example.todotestapp.presentation.MainActivity
 import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModel
 import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModelFactory
-import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.DaggerFragment
-import javax.inject.Inject
 import retrofit2.Response
+import javax.inject.Inject
 
 
 class LoginFragment : DaggerFragment() {
@@ -43,6 +43,7 @@ class LoginFragment : DaggerFragment() {
     private var binding: FragmentLoginBinding? = null
     private var signUpFlag = false
     private val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,6 +70,7 @@ class LoginFragment : DaggerFragment() {
                     }
                 }
                 val useremail = binding?.emailInputEditText?.text.toString()
+//                Log.v("UseremailOTP",useremail)
                 if (!signUpFlag) {
                     if (isValidEmail(useremail)) {
                         viewModel.loginUser(useremail)
@@ -109,6 +111,15 @@ class LoginFragment : DaggerFragment() {
             return null
         }
 
+        private fun checkOTP(otp: String): Boolean {
+//            Log.v("OTP Length",otp.length.toString())
+            if (otp.length < 4) {
+                binding?.otpInputLayout?.error = getString(R.string.fourdigit)
+                return false
+            }
+            return true
+        }
+
         private fun checkInputs(username: String): Boolean {
             if (username == "" || username.trim().isEmpty()) {
                 binding?.userInputLayout?.error = getString(R.string.invalid_username)
@@ -139,17 +150,26 @@ class LoginFragment : DaggerFragment() {
                 DataStatus.SUCCESS -> {
                     binding?.loginProgressBar?.visibility = View.GONE
                     if (mysur.data?.body() != null) {
-                        Toast.makeText(
-                            context, "User Signed Up Successfully",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        mysur.data!!.body()?.author?.let { user ->
-                            savedata(user)
+                        showOTPUI()//If this is sucessfull then only proceed to list
+                        startTimer()
+                        binding?.verifyButton?.setOnClickListener {
+                            val currentOTP = binding?.otpInputEditText?.text.toString()
+                            if(!checkOTP(currentOTP)){
+                                binding?.otpInputLayout?.error = getString(R.string.fourdigit)
+                            }
+                            else {
+                                Toast.makeText(
+                                    context, "User Signed Up Successfully",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                mysur.data!!.body()?.author?.let { user ->
+                                    savedata(user)
+                                }
+                                findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
+                            }
+
                         }
-                        //dismiss()
-                        findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
-                        //dismiss sheet and load todolist fragment
-                    } else if (mysur.data?.code() == 404) {
+                    }else if (mysur.data?.code() == 404) {
                         Toast.makeText(
                             context,
                             "Something Went Wrong Please Try Again",
@@ -171,18 +191,27 @@ class LoginFragment : DaggerFragment() {
                 DataStatus.SUCCESS -> {
                     binding?.emailInputLayout?.isErrorEnabled = false
                     binding?.loginProgressBar?.visibility = View.GONE
-//                Log.v("Iamhere", "I am here")
                     if (mlr.data?.body() != null) {
-                        Log.v("Iamhere", "I am here")
-                        Toast.makeText(
-                            context,
-                            getString(R.string.user_login_successful),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        mlr.data?.body()?.author?.let { user ->
-                            savedata(user)
+                        showOTPUI()
+                        startTimer()
+                        binding?.verifyButton?.setOnClickListener {
+                            val currentOTP = binding?.otpInputEditText?.text.toString()
+                            if(!checkOTP(currentOTP)){
+                                binding?.otpInputLayout?.error = getString(R.string.fourdigit)
+                            }
+                            else{
+                                //If OTP is valid then only execute this body
+                                Toast.makeText(
+                                    context,
+                                    getString(R.string.user_login_successful),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                mlr.data?.body()?.author?.let { user ->
+                                    savedata(user)
+                                }
+                            findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
+                            }
                         }
-                        findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
                     } else if (mlr.data?.code() == 404) {
                         Toast.makeText(
                             context,
@@ -196,7 +225,27 @@ class LoginFragment : DaggerFragment() {
             }
         }
 
-        private fun observeLoginViewModel() {
+    private fun startTimer() {
+        var cTimer = object : CountDownTimer(10000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                binding?.otptimer?.text = (millisUntilFinished / 1000).toString() + " sec   "
+            }
+            override fun onFinish() {
+                     showNotReceivedOTPUI()
+                      binding?.otptimer?.visibility = View.GONE
+                      binding?.textResendOTP?.setOnClickListener{
+                          disableNotReceivedOTPUI()
+                          startTimer()
+                      }
+            }
+        }
+        binding?.otptimer?.visibility = View.VISIBLE
+        cTimer.start()
+    }
+
+
+
+    private fun observeLoginViewModel() {
             viewModel.myLoginResponse?.observe(viewLifecycleOwner) {
                 handleResponse(
                     it
@@ -218,6 +267,24 @@ class LoginFragment : DaggerFragment() {
         private fun showSignUpUI() {
             binding?.loginButton?.text = getString(R.string.sign_up)
             binding?.userInputLayout?.visibility = View.VISIBLE
+        }
+
+        private fun showOTPUI()
+        {
+            binding?.otpInputLayout?.visibility = View.VISIBLE
+            binding?.loginButton?.visibility = View.GONE
+            binding?.verifyButton?.visibility = View.VISIBLE
+        }
+
+        private fun showNotReceivedOTPUI()
+        {
+            binding?.notReceived?.visibility = View.VISIBLE
+            binding?.textResendOTP?.visibility = View.VISIBLE
+        }
+
+        private fun disableNotReceivedOTPUI() {
+            binding?.notReceived?.visibility = View.GONE
+            binding?.textResendOTP?.visibility = View.GONE
         }
 
         override fun onDestroyView() {

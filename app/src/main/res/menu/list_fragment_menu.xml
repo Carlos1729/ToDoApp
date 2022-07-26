@@ -18,6 +18,12 @@
         app:showAsAction="ifRoom"/>
 
     <item
+        android:id="@+id/sort_by_priority"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_filter"
+        android:title="" />
+
+    <item
         android:id="@+id/logout"
         android:title="@string/logout"
         />

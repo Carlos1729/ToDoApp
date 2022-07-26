@@ -24,8 +24,6 @@
         android:id="@+id/update_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/custom_input"
         android:ems="10"
@@ -33,7 +31,9 @@
         android:inputType="textPersonName"
         android:maxLength="25"
         android:paddingStart="15dp"
+        android:paddingTop="10dp"
         android:paddingEnd="15dp"
+        android:paddingBottom="10dp"
         app:helperText="Required"
         app:helperTextTextColor="@color/Red"
         app:layout_constraintEnd_toEndOf="parent"
@@ -60,22 +60,47 @@
         android:id="@+id/update_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxLines="4"
         android:layout_marginTop="8dp"
         android:background="@drawable/custom_input"
         android:ems="10"
-        android:minLines="2"
         android:gravity="start|top"
         android:hint="@string/description_goes_here"
         android:inputType="textMultiLine"
         android:maxLength="125"
+        android:maxLines="4"
+        android:minLines="2"
         android:paddingStart="15dp"
         android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         android:paddingEnd="15dp"
+        android:paddingBottom="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/update_description_heading" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/priority_dropdown"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:hint="@string/priority"
+        app:layout_constraintBottom_toTopOf="@id/status_heading"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/update_description"
+        app:startIconDrawable="@drawable/ic_priority_24">
+
+        <AutoCompleteTextView
+            android:id="@+id/priority_dropdown_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:inputType="none"
+            android:text="" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/status_heading"
@@ -88,7 +113,8 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/statusSpinner"
         app:layout_constraintStart_toStartOf="@id/update_title_heading"
-        app:layout_constraintTop_toBottomOf="@id/update_description" />
+        app:layout_constraintTop_toBottomOf="@id/priority_dropdown" />
+
 
     <Spinner
         android:id="@+id/statusSpinner"
@@ -104,11 +130,11 @@
         app:layout_constraintTop_toBottomOf="@id/status_heading" />
 
     <LinearLayout
+        android:id="@+id/ll"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:id = "@+id/ll"
-        android:orientation="horizontal"
         android:gravity="center_horizontal"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/statusSpinner">
@@ -119,18 +145,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:hint="Add ToDo"
             android:layout_marginEnd="20dp"
+            android:hint="Add ToDo"
             android:textColorHint="@color/white" />
 
         <Button
             android:id="@+id/deleteTaskButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="30dp"
             android:backgroundTint="@color/darkGray"
-            android:text="Delete"
-            android:layout_marginStart="20dp"/>
+            android:text="Delete" />
 
 
     </LinearLayout>
@@ -139,11 +165,11 @@
         android:id="@+id/update_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="200dp"
         android:indeterminateTint="@color/purple_500"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="200dp"
-        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
