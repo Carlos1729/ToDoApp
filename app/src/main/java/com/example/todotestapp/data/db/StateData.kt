@@ -13,7 +13,7 @@ class StateData<T> {
 
     @get:Nullable
     @Nullable
-    var error: Throwable?
+    var error: T?
         private set
 
     fun loading(): StateData<T> {
@@ -30,7 +30,7 @@ class StateData<T> {
         return this
     }
 
-    fun error(error: Throwable): StateData<T> {
+    fun error(error: T): StateData<T> {
         status = DataStatus.ERROR
         data = null
         this.error = error

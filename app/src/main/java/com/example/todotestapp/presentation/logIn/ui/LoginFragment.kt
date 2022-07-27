@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.databinding.adapters.TextViewBindingAdapter.setText
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todotestapp.R
@@ -25,6 +24,7 @@ import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.example.todotestapp.presentation.MainActivity
 import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModel
 import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModelFactory
+import com.google.gson.Gson
 import dagger.android.support.DaggerFragment
 import retrofit2.Response
 import javax.inject.Inject
@@ -41,6 +41,7 @@ class LoginFragment : DaggerFragment() {
     private lateinit var viewModel: LoginViewModel
 
     private var binding: FragmentLoginBinding? = null
+    val gson = Gson()
     private var signUpFlag = false
     private val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
 
@@ -323,9 +324,22 @@ class LoginFragment : DaggerFragment() {
                     ).show()
                     findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
                 }
+                else if(mlotpr.data?.code() == 400)
+                {
+//                    Log.v("Checkerror",mlotpr.data?.errorBody().toString())
+                    val errorRes = gson.fromJson(mlotpr.data?.errorBody().toString(),LoginOTPErrorResponse::class.java)
+//                    Toast.makeText(context, errorRes.errorMessage,Toast.LENGTH_SHORT).show()
+                }
             }
+//            DataStatus.ERROR ->{
+//                binding?.loginProgressBar?.visibility = View.GONE
+//                if(mlotpr.error?.errorBody() != null)
+//                {
+//                    Log.v("Checkerror",mlotpr.error?.errorBody()!!.)
+//                    Toast.makeText(context, mlotpr.error?.body()!!.errorMessage,Toast.LENGTH_SHORT).show()
+//                }
+//            }
         }
-
     }
 
     private fun savedata(userDetails: UserDetails) {

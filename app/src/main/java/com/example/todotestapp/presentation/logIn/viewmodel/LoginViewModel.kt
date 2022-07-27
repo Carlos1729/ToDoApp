@@ -1,21 +1,15 @@
 package com.example.todotestapp.presentation.logIn.viewmodel
 
-import android.util.Log
-import android.widget.Toast
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.todotestapp.R
 import com.example.todotestapp.data.db.*
-import com.example.todotestapp.data.repository.NetworkResult
-import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.example.todotestapp.domain.usecase.LoginUserByOTPUseCase
 import com.example.todotestapp.domain.usecase.LoginUserUseCase
 import com.example.todotestapp.domain.usecase.SignUpUserUseCase
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
-import java.net.UnknownHostException
 
 
 //Here to make the view model of login we are extending ViewModel cLASS
@@ -59,6 +53,11 @@ class LoginViewModel @Inject constructor(signUpUseCase : SignUpUserUseCase , log
             val response = userLoginByOTP.LoginUserByOTPEmail(requestBody)
             if(response.isSuccessful)
             {
+                myLoginUserByOTPResponse.postSuccess(response)
+            }
+            else if(response.code() == 400)
+            {
+                val gson = Gson()
                 myLoginUserByOTPResponse.postSuccess(response)
             }
         }

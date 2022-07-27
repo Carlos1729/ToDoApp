@@ -15,8 +15,8 @@ class StateLiveData<T> : MutableLiveData<StateData<T>?>() {
      * Use this to put the Data on a ERROR DataStatus
      * @param throwable the error to be handled
      */
-    fun postError(throwable: Throwable?) {
-        postValue(StateData<T>().error(throwable!!))
+    fun postError(error: T) {
+        postValue(StateData<T>().error(error))
     }
 
     /**
