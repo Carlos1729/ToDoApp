@@ -22,6 +22,10 @@ class ToDoRepositoryImpl : ToDoRepository {
         return RetrofitInstance.api.signUpUser(requestBody)
     }
 
+    override suspend fun signUpUserByOTP(requestBody: SignUpOTPRequest): Response<SignUpOTPResponse> {
+        return RetrofitInstance.api.signUpUserByOTP(requestBody)
+    }
+
     override suspend fun addToDo(requestBody: AddToDoRequest): Response<AddToDoResponse> {
         return RetrofitInstance.api.addToDo(requestBody)
     }

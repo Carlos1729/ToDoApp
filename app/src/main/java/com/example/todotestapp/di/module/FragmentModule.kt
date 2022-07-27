@@ -35,6 +35,9 @@ abstract class FragmentModule {
         fun provideLoginUserByOTPUseCase(toDoRepository: ToDoRepository) = LoginUserByOTPUseCase(toDoRepository)
 
         @Provides
+        fun provideSignUpUserByOTPUseCase(toDoRepository: ToDoRepository) = SignUpUserByOTPUseCase(toDoRepository)
+
+        @Provides
         fun provideSignUpuserCache(toDoRepository: ToDoRepository) =
             SignUpUserUseCase(toDoRepository)
 
@@ -58,9 +61,9 @@ abstract class FragmentModule {
 
         @Provides
         fun provideLoginViewModelFactory(
-            signUpUseCase: SignUpUserUseCase, loginUseCase: LoginUserUseCase,loginUserByOTPUseCase: LoginUserByOTPUseCase
+            signUpUseCase: SignUpUserUseCase, loginUseCase: LoginUserUseCase,loginUserByOTPUseCase: LoginUserByOTPUseCase,signUpUserByOTPUseCase: SignUpUserByOTPUseCase
         ): LoginViewModelFactory {
-            return LoginViewModelFactory(signUpUseCase, loginUseCase, loginUserByOTPUseCase)
+            return LoginViewModelFactory(signUpUseCase, loginUseCase, loginUserByOTPUseCase,signUpUserByOTPUseCase)
         }
 
         @Provides

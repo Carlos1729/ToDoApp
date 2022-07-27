@@ -8,6 +8,7 @@ interface ToDoRepository {
     suspend fun loginUser(email: String) : Response<LoginResponse>
     suspend fun loginUserByOTP(requestBody: LoginOTPRequest): Response<LoginOTPResponse>
     suspend fun signUpUser(requestBody: SignUpUserRequest): Response<SignUpUserResponse>
+    suspend fun signUpUserByOTP(requestBody: SignUpOTPRequest): Response<SignUpOTPResponse>
     suspend fun addToDo(requestBody: AddToDoRequest): Response<AddToDoResponse>
     suspend fun listToDo(id: Int): Response<ListToDoResponse>
     suspend fun updateToDo(id: Int?,requestBody: UpdateToDoRequest): Response<UpdateToDoResponse>

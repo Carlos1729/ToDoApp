@@ -24,6 +24,10 @@ interface ToDoApi {
         @Body requestBody: LoginOTPRequest
     ): Response<LoginOTPResponse>
 
+    @POST("verify")//api end point goes here
+    suspend fun signUpUserByOTP(
+        @Body requestBody: SignUpOTPRequest
+    ): Response<SignUpOTPResponse>
 
     @POST("authors")//api end point goes here
     suspend fun signUpUser(
