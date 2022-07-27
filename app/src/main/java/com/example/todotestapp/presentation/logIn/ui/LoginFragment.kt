@@ -58,53 +58,62 @@ class LoginFragment : DaggerFragment() {
 
     }
 
-        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         signUpFlag = false
         (activity as MainActivity).supportActionBar?.title = "Login ToDo"
-            viewModel = ViewModelProvider(this, viewModelFactory)[LoginViewModel::class.java]
+        viewModel = ViewModelProvider(this, viewModelFactory)[LoginViewModel::class.java]
+        obsereLiveData()
+        setUpClickListeners()
 
-            binding?.loginButton?.setOnClickListener {
+    }
+
+    private fun obsereLiveData() {
+        observeLoginViewModel()
+        observeLoginByOTPViewModel()
+        observeSignUpViewModel()
+    }
+
+    private fun setUpClickListeners() {
+        binding?.loginButton?.setOnClickListener {
+            binding?.emailInputEditText?.setOnFocusChangeListener { _, focused ->
+                if (focused) {
+                    binding?.emailInputLayout?.helperText = checkemail()
+                }
+            }
+            val useremail = binding?.emailInputEditText?.text.toString()
+//                Log.v("UseremailOTP",useremail)
+            if (!signUpFlag) {
+                if (isValidEmail(useremail)) {
+                    viewModel.loginUser(useremail)
+                } else {
+                    binding?.emailInputLayout?.error = getString(R.string.invalid_email)
+                }
+            } else {
+                (activity as MainActivity).supportActionBar?.title = "Sign Up"
                 binding?.emailInputEditText?.setOnFocusChangeListener { _, focused ->
-                    if (focused) {
+                    if (!focused) {
                         binding?.emailInputLayout?.helperText = checkemail()
                     }
                 }
-                val useremail = binding?.emailInputEditText?.text.toString()
-//                Log.v("UseremailOTP",useremail)
-                if (!signUpFlag) {
-                    if (isValidEmail(useremail)) {
-                        viewModel.loginUser(useremail)
-                        observeLoginViewModel()
-                    } else {
-                        binding?.emailInputLayout?.error = getString(R.string.invalid_email)
-                    }
+                val username = binding?.usernameInputEditText?.text.toString()
+                if (!isValidEmail((useremail)) && !checkInputs(username)) {
+                    binding?.emailInputLayout?.error = getString(R.string.invalid_email)
+                    binding?.userInputLayout?.error = getString(R.string.invalid_username)
+                } else if (!isValidEmail((useremail))) {
+                    binding?.emailInputLayout?.error = getString(R.string.invalid_email)
+                } else if (!checkInputs(username)) {
+                    binding?.userInputLayout?.error = getString(R.string.invalid_username)
                 } else {
-                    (activity as MainActivity).supportActionBar?.title = "Sign Up"
-                    binding?.emailInputEditText?.setOnFocusChangeListener { _, focused ->
-                        if (!focused) {
-                            binding?.emailInputLayout?.helperText = checkemail()
-                        }
-                    }
-                    val username = binding?.usernameInputEditText?.text.toString()
-                    if (!isValidEmail((useremail)) && !checkInputs(username)) {
-                        binding?.emailInputLayout?.error = getString(R.string.invalid_email)
-                        binding?.userInputLayout?.error = getString(R.string.invalid_username)
-                    } else if (!isValidEmail((useremail))) {
-                        binding?.emailInputLayout?.error = getString(R.string.invalid_email)
-                    } else if (!checkInputs(username)) {
-                        binding?.userInputLayout?.error = getString(R.string.invalid_username)
-                    } else {
-                        val presentUser = SignUpUserRequest(useremail, username)
-                        viewModel.signUpUser(presentUser)
-                        binding?.userInputLayout?.helperText = ""
-                        observeSignUpViewModel()
-                    }
+                    val presentUser = SignUpUserRequest(useremail, username)
+                    viewModel.signUpUser(presentUser)
+                    binding?.userInputLayout?.helperText = ""
                 }
             }
         }
+    }
 
-        private fun checkemail(): String? {
+    private fun checkemail(): String? {
             val email = binding?.emailInputEditText?.text.toString()
             if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 binding?.emailInputLayout?.error = getString(R.string.invalid_email)
@@ -206,7 +215,6 @@ class LoginFragment : DaggerFragment() {
                                 val currentUserOTP = binding?.otpInputEditText?.text.toString()
                                 val currentLoginOTPRequest = LoginOTPRequest(currentUsername,currentUserOTP,false)
                                 viewModel.loginUserByOTP(currentLoginOTPRequest)
-                                observeLoginByOTPViewModel()
                             }
                         }
                     } else if (mlr.data?.code() == 404) {
@@ -300,22 +308,19 @@ class LoginFragment : DaggerFragment() {
 //        }
 //    }
 
-    private fun handleResponseLoginOtp(mlotpr: StateData<Response<LoginOTPResponse>>?) {
+    private fun handleResponseLoginOtp(otpResponse: StateData<Response<LoginOTPResponse>>?) {
 
-        when(mlotpr?.status)
-        {
+        when (otpResponse?.status) {
             DataStatus.LOADING -> {
                 binding?.loginProgressBar?.visibility = View.VISIBLE
             }
             DataStatus.SUCCESS -> {
                 binding?.loginProgressBar?.visibility = View.GONE
-                if(mlotpr.data?.body() != null)
-                {
-                    if(mlotpr.data?.body()!!.isAuthenticated)
-                    {
-                        mlotpr.data?.body()?.author?.let { user ->
-                                savedata(user)
-                            }
+                if (otpResponse.data?.body() != null) {
+                    if (otpResponse.data?.body()!!.isAuthenticated) {
+                        otpResponse.data?.body()?.author?.let { user ->
+                            savedata(user)
+                        }
                     }
                     Toast.makeText(
                         context,
@@ -323,12 +328,10 @@ class LoginFragment : DaggerFragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                     findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
-                }
-                else if(mlotpr.data?.code() == 400)
-                {
+                } else if (otpResponse.data?.code() == 400) {
 //                    Log.v("Checkerror",mlotpr.data?.errorBody().toString())
-                    val errorRes = gson.fromJson(mlotpr.data?.errorBody().toString(),LoginOTPErrorResponse::class.java)
-//                    Toast.makeText(context, errorRes.errorMessage,Toast.LENGTH_SHORT).show()
+                    val errorRes = Gson().fromJson(otpResponse.data?.errorBody()?.string(),LoginOTPErrorResponse::class.java)
+                    Toast.makeText(context, errorRes.errorMessage,Toast.LENGTH_SHORT).show()
                 }
             }
 //            DataStatus.ERROR ->{
