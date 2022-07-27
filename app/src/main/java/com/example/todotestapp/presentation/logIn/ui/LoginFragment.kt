@@ -232,7 +232,7 @@ class LoginFragment : DaggerFragment() {
         }
 
     private fun startTimer() {
-        var cTimer = object : CountDownTimer(180000, 1000) {
+        var cTimer = object : CountDownTimer(60000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 binding?.otptimer?.text = (millisUntilFinished / 1000).toString() + " sec   "
             }
@@ -240,6 +240,8 @@ class LoginFragment : DaggerFragment() {
                      showNotReceivedOTPUI()
                       binding?.otptimer?.visibility = View.GONE
                       binding?.textResendOTP?.setOnClickListener{
+                          val useremail = binding?.emailInputEditText?.text.toString()
+                          viewModel.loginUser(useremail)
                           disableNotReceivedOTPUI()
                           startTimer()
                       }
@@ -265,48 +267,6 @@ class LoginFragment : DaggerFragment() {
         }
     }
 
-//    private fun handleResponse(mlr: StateData<Response<LoginResponse>>?) {
-//        when (mlr?.status) {
-//            DataStatus.LOADING -> {
-//                binding?.loginProgressBar?.visibility = View.VISIBLE
-//            }
-//            DataStatus.SUCCESS -> {
-//                binding?.emailInputLayout?.isErrorEnabled = false
-//                binding?.loginProgressBar?.visibility = View.GONE
-//                if (mlr.data?.body() != null) {
-//                    showOTPUI()
-//                    startTimer()
-//                    binding?.verifyButton?.setOnClickListener {
-//                        val currentOTP = binding?.otpInputEditText?.text.toString()
-//                        if(!checkOTP(currentOTP)){
-//                            binding?.otpInputLayout?.error = getString(R.string.fourdigit)
-//                        }
-//                        else{
-//                            //If OTP is valid then only execute this body
-//                            Toast.makeText(
-//                                context,
-//                                getString(R.string.user_login_successful),
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                            mlr.data?.body()?.author?.let { user ->
-//                                savedata(user)
-//                            }
-//                            findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
-//                        }
-//                    }
-//                } else if (mlr.data?.code() == 404) {
-//                    Toast.makeText(
-//                        context,
-//                        getString(R.string.please_sign_up),
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                    showSignUpUI()
-//                    signUpFlag = true
-//                }
-//            }
-//            else -> {}
-//        }
-//    }
 
     private fun handleResponseLoginOtp(otpResponse: StateData<Response<LoginOTPResponse>>?) {
 
