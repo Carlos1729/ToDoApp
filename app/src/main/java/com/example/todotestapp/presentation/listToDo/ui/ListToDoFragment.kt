@@ -64,6 +64,7 @@ class ListToDoFragment : DaggerFragment() {
         observeLiveDataByStatus()
         observeDelete()
         return view
+
     }
 
     private fun setUpClickListeners() {
@@ -110,6 +111,10 @@ class ListToDoFragment : DaggerFragment() {
                     R.id.menu_all -> {
                         viewModel.getAllTasks(listToDoUserId)
                         timecount = 3
+                        true
+                    }
+                    R.id.menu_sort_by_priority -> {
+                        findNavController().navigate(R.id.action_listTaskFragment_to_filterFragment)
                         true
                     }
                     R.id.logout -> {
@@ -174,9 +179,9 @@ class ListToDoFragment : DaggerFragment() {
                 if (timecount == 2) {
                     viewModel.getTasksByStatus(listToDoUserId, "pending")
                 }
-
             }
 
+            else -> {}
         }
     }
 
@@ -220,6 +225,7 @@ class ListToDoFragment : DaggerFragment() {
                 }
 
             }
+            else -> {}
         }
     }
 
@@ -246,6 +252,7 @@ class ListToDoFragment : DaggerFragment() {
                     }
                 }
             }
+            else -> {}
         }
     }
 

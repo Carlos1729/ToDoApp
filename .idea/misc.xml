@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/chip_text_color.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/custom_input.xml" value="0.149" />
         <entry key="app/src/main/res/drawable/gradient_spinner.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_add.xml" value="0.1195" />
@@ -16,9 +17,12 @@
         <entry key="app/src/main/res/drawable/vie_bg.xml" value="0.11" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
         <entry key="app/src/main/res/layout/bottomsheetfrag.xml" value="0.14175724637681159" />
+        <entry key="app/src/main/res/layout/chip_layout.xml" value="0.1598731884057971" />
         <entry key="app/src/main/res/layout/dropdown_item.xml" value="0.375" />
         <entry key="app/src/main/res/layout/fragment_add_task.xml" value="0.35294117647058826" />
         <entry key="app/src/main/res/layout/fragment_add_todo.xml" value="0.13072916666666667" />
+        <entry key="app/src/main/res/layout/fragment_filter_list_dialog.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_filter_list_dialog_item.xml" value="0.1598731884057971" />
         <entry key="app/src/main/res/layout/fragment_list_task.xml" value="0.2028985507246377" />
         <entry key="app/src/main/res/layout/fragment_list_todo.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_lists.xml" value="0.25" />

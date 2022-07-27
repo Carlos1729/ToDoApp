@@ -57,6 +57,8 @@
     <string name="resend_otp">RESEND OTP</string>
     <string name="fourdigit">Invalid OTP</string>
     <string name="priority">Priority</string>
+    <string name="sort_by_priority_high_string">Sort by Priority High</string>
+    <string name="sort_by_priority_low_string">Sort By Priority Low</string>
 
 
     <string-array name="statusoftask">

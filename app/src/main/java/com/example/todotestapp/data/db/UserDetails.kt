@@ -8,5 +8,7 @@ data class UserDetails(
     @SerializedName("id")
     val id: Int = -1,
     @SerializedName("name")
-    val name: String = ""
+    val name: String = "",
+    @SerializedName("role")
+    val role: String = ""
 )

@@ -9,6 +9,7 @@ import com.example.todotestapp.R
 import com.example.todotestapp.data.db.*
 import com.example.todotestapp.data.repository.NetworkResult
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
+import com.example.todotestapp.domain.usecase.LoginUserByOTPUseCase
 import com.example.todotestapp.domain.usecase.LoginUserUseCase
 import com.example.todotestapp.domain.usecase.SignUpUserUseCase
 import kotlinx.coroutines.launch
@@ -18,14 +19,17 @@ import java.net.UnknownHostException
 
 
 //Here to make the view model of login we are extending ViewModel cLASS
-class LoginViewModel @Inject constructor(signUpUseCase : SignUpUserUseCase , loginUseCase : LoginUserUseCase ) : ViewModel() {
+class LoginViewModel @Inject constructor(signUpUseCase : SignUpUserUseCase , loginUseCase : LoginUserUseCase, loginUserByOTPUseCase: LoginUserByOTPUseCase ) : ViewModel() {
 
     private val userlogin = loginUseCase
     private val userSignUp = signUpUseCase
+    private val userLoginByOTP = loginUserByOTPUseCase
 
     val myLoginResponse :StateLiveData<Response<LoginResponse>>? = StateLiveData()//whernever there is change in data it sends that data back to active user
                                                                                      //This is not preferable in real time scenarios as it mutable live data gets exposed insted to outside
     val mySignupResponse :  StateLiveData<Response<SignUpUserResponse>> = StateLiveData()
+
+    val myLoginUserByOTPResponse : StateLiveData<Response<LoginOTPResponse>> = StateLiveData()
 
     fun loginUser(email : String) {
 
@@ -48,6 +52,17 @@ class LoginViewModel @Inject constructor(signUpUseCase : SignUpUserUseCase , log
             }
 
         }
+
+    fun loginUserByOTP(requestBody: LoginOTPRequest){
+        viewModelScope.launch {
+            myLoginUserByOTPResponse.postLoading()
+            val response = userLoginByOTP.LoginUserByOTPEmail(requestBody)
+            if(response.isSuccessful)
+            {
+                myLoginUserByOTPResponse.postSuccess(response)
+            }
+        }
+    }
 
     fun signUpUser(requestBody: SignUpUserRequest) {
         viewModelScope.launch {

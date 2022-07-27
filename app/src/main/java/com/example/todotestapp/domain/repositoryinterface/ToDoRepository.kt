@@ -6,6 +6,7 @@ import retrofit2.Response
 interface ToDoRepository {
 
     suspend fun loginUser(email: String) : Response<LoginResponse>
+    suspend fun loginUserByOTP(requestBody: LoginOTPRequest): Response<LoginOTPResponse>
     suspend fun signUpUser(requestBody: SignUpUserRequest): Response<SignUpUserResponse>
     suspend fun addToDo(requestBody: AddToDoRequest): Response<AddToDoResponse>
     suspend fun listToDo(id: Int): Response<ListToDoResponse>

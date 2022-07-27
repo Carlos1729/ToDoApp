@@ -14,10 +14,15 @@ interface ToDoApi {
         @Query("id") id:Int
     ): Response<List<ToDo>>
 
-    @GET("author")
+    @GET("login")
     suspend fun loginUser(
         @Query("email") email:String
     ): Response<LoginResponse>
+
+    @POST("verify")//api end point goes here
+    suspend fun loginUserByOTP(
+        @Body requestBody: LoginOTPRequest
+    ): Response<LoginOTPResponse>
 
 
     @POST("authors")//api end point goes here

@@ -113,7 +113,7 @@ class LoginFragment : DaggerFragment() {
 
         private fun checkOTP(otp: String): Boolean {
 //            Log.v("OTP Length",otp.length.toString())
-            if (otp.length < 4) {
+            if (otp.length < 2) {
                 binding?.otpInputLayout?.error = getString(R.string.fourdigit)
                 return false
             }
@@ -180,6 +180,7 @@ class LoginFragment : DaggerFragment() {
                         binding?.emailInputLayout?.error = getString(R.string.invalid_email)
                     }
                 }
+                else -> {}
             }
         }
 
@@ -200,16 +201,11 @@ class LoginFragment : DaggerFragment() {
                                 binding?.otpInputLayout?.error = getString(R.string.fourdigit)
                             }
                             else{
-                                //If OTP is valid then only execute this body
-                                Toast.makeText(
-                                    context,
-                                    getString(R.string.user_login_successful),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                mlr.data?.body()?.author?.let { user ->
-                                    savedata(user)
-                                }
-                            findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
+                                val currentUsername = binding?.emailInputEditText?.text.toString()
+                                val currentUserOTP = binding?.otpInputEditText?.text.toString()
+                                val currentLoginOTPRequest = LoginOTPRequest(currentUsername,currentUserOTP,false)
+                                viewModel.loginUserByOTP(currentLoginOTPRequest)
+                                observeLoginByOTPViewModel()
                             }
                         }
                     } else if (mlr.data?.code() == 404) {
@@ -222,11 +218,12 @@ class LoginFragment : DaggerFragment() {
                         signUpFlag = true
                     }
                 }
+                else -> {}
             }
         }
 
     private fun startTimer() {
-        var cTimer = object : CountDownTimer(10000, 1000) {
+        var cTimer = object : CountDownTimer(180000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 binding?.otptimer?.text = (millisUntilFinished / 1000).toString() + " sec   "
             }
@@ -252,6 +249,84 @@ class LoginFragment : DaggerFragment() {
                 )
             }
         }
+
+    private fun observeLoginByOTPViewModel(){
+        viewModel.myLoginUserByOTPResponse.observe(viewLifecycleOwner){
+            handleResponseLoginOtp(it)
+        }
+    }
+
+//    private fun handleResponse(mlr: StateData<Response<LoginResponse>>?) {
+//        when (mlr?.status) {
+//            DataStatus.LOADING -> {
+//                binding?.loginProgressBar?.visibility = View.VISIBLE
+//            }
+//            DataStatus.SUCCESS -> {
+//                binding?.emailInputLayout?.isErrorEnabled = false
+//                binding?.loginProgressBar?.visibility = View.GONE
+//                if (mlr.data?.body() != null) {
+//                    showOTPUI()
+//                    startTimer()
+//                    binding?.verifyButton?.setOnClickListener {
+//                        val currentOTP = binding?.otpInputEditText?.text.toString()
+//                        if(!checkOTP(currentOTP)){
+//                            binding?.otpInputLayout?.error = getString(R.string.fourdigit)
+//                        }
+//                        else{
+//                            //If OTP is valid then only execute this body
+//                            Toast.makeText(
+//                                context,
+//                                getString(R.string.user_login_successful),
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                            mlr.data?.body()?.author?.let { user ->
+//                                savedata(user)
+//                            }
+//                            findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
+//                        }
+//                    }
+//                } else if (mlr.data?.code() == 404) {
+//                    Toast.makeText(
+//                        context,
+//                        getString(R.string.please_sign_up),
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                    showSignUpUI()
+//                    signUpFlag = true
+//                }
+//            }
+//            else -> {}
+//        }
+//    }
+
+    private fun handleResponseLoginOtp(mlotpr: StateData<Response<LoginOTPResponse>>?) {
+
+        when(mlotpr?.status)
+        {
+            DataStatus.LOADING -> {
+                binding?.loginProgressBar?.visibility = View.VISIBLE
+            }
+            DataStatus.SUCCESS -> {
+                binding?.loginProgressBar?.visibility = View.GONE
+                if(mlotpr.data?.body() != null)
+                {
+                    if(mlotpr.data?.body()!!.isAuthenticated)
+                    {
+                        mlotpr.data?.body()?.author?.let { user ->
+                                savedata(user)
+                            }
+                    }
+                    Toast.makeText(
+                        context,
+                        getString(R.string.user_login_successful),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
+                }
+            }
+        }
+
+    }
 
     private fun savedata(userDetails: UserDetails) {
         val sharedPreferences = activity!!.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)

@@ -77,7 +77,6 @@
         android:hint="@string/enter_your_otp_here"
         android:visibility="gone"
         app:counterEnabled="true"
-        app:counterMaxLength="4"
         app:endIconMode="clear_text"
         app:helperTextTextColor="@color/Red"
         app:layout_constraintEnd_toEndOf="parent"
@@ -89,7 +88,6 @@
             android:id="@+id/otpInputEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLength="4"
             android:inputType="number" />
 
     </com.google.android.material.textfield.TextInputLayout>

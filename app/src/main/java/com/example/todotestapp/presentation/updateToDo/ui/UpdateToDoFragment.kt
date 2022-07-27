@@ -129,6 +129,7 @@ class UpdateToDoFragment : DaggerFragment() {
                     ).show()
                 }
             }
+            else -> {}
         }
     }
 
@@ -164,6 +165,7 @@ class UpdateToDoFragment : DaggerFragment() {
                     ).show()
                 }
             }
+            else -> {}
         }
     }
 
@@ -187,6 +189,7 @@ class UpdateToDoFragment : DaggerFragment() {
                     ).show()
                 }
             }
+            else -> {}
         }
     }
 
