@@ -37,6 +37,7 @@ class UpdateToDoFragment : DaggerFragment() {
     private  var binding: FragmentUpdateTodoBinding ?= null
     private var descriptionTV: TextView? = null
     private var statusspin: Spinner? = null
+    private var priorityspin: AutoCompleteTextView? = null
     private var todostatus: String? = null
     private var idOfTask: Int? = null
     private var button: Button? = null
@@ -62,6 +63,9 @@ class UpdateToDoFragment : DaggerFragment() {
         binding?.statusHeading?.visibility = View.GONE
 
         val view = binding?.root
+
+
+
 
         if (view != null) {
             initWidgets(view)
@@ -94,14 +98,18 @@ class UpdateToDoFragment : DaggerFragment() {
             }
             else
             {
-                var addTitle: String = titleTV?.text.toString()
-                var addDescription: String = descriptionTV?.text.toString()
-                var addStatus : String = "pending"
+                val addTitle: String = titleTV?.text.toString()
+                val addDescription: String = descriptionTV?.text.toString()
+                val addStatus : String = "pending"
+                var hashMap : HashMap<String, String> = HashMap<String, String> ()
+                hashMap["High Priority"] = "high"
+                hashMap["Medium Priority"] = "medium"
+                hashMap["Low Priority"] = "low"
+                val addPriority: String? = hashMap[priorityspin?.text.toString()]
                 loadData()
-                var addUserEmail: String = addToDoUserEmail
-                var presentAddToDoRequest = AddToDoRequest(addUserEmail,addTitle,addDescription,addStatus)
+                val addUserEmail: String = addToDoUserEmail
+                val presentAddToDoRequest = AddToDoRequest(addUserEmail,addTitle,addDescription,addStatus,addPriority!!)
                 viewModel.addToDo(presentAddToDoRequest)
-
             }
         }
 
@@ -257,6 +265,7 @@ class UpdateToDoFragment : DaggerFragment() {
         descriptionTV = binding?.updateDescription
         button = binding?.updateTaskbutton
         statusspin = binding?.statusSpinner
+        priorityspin = binding?.priorityDropdownEdittext
         deleteButton = binding?.deleteTaskButton
     }
 }

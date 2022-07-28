@@ -10,5 +10,7 @@ data class AddToDoRequest(
     @SerializedName("content")
     val description: String?,
     @SerializedName("status")
-    val status: String?
+    val status: String?,
+    @SerializedName("priority")
+    val priority: String
 )
