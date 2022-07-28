@@ -63,7 +63,7 @@ class ListToDoFragment : DaggerFragment() {
         viewModel = ViewModelProvider(this, viewModelFactory)[ListViewModel::class.java]
         checkForUserLocalData()
         observeLiveData()
-        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1)
+        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,null,null,null)
 //        viewModel.getAllTasks(listToDoUserId)
         return view
     }
@@ -117,7 +117,7 @@ class ListToDoFragment : DaggerFragment() {
                         true
                     }
                     R.id.menu_all -> {
-                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1)
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null)
 //                        viewModel.getAllTasks(listToDoUserId)
                         timecount = 3
                         true
@@ -181,7 +181,7 @@ class ListToDoFragment : DaggerFragment() {
                 binding?.listProgressBar?.visibility = View.GONE
                 Log.v("TIMECOUNT", timecount.toString())
                 if (timecount == -1 || timecount == 3) {
-                    viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1)
+                    viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null)
 //                    viewModel.getAllTasks(listToDoUserId)
                 }
                 if (timecount == 1) {

@@ -8,9 +8,9 @@ import javax.inject.Inject
 class ListToDoPaginationUseCase @Inject constructor(private val todoRepo: ToDoRepository)  {
 
 
-    suspend fun listToDoPaginationById(role:String,id:Int,pageNo:Int) : Response<ListToDoPaginationResponse>
+    suspend fun listToDoPaginationById(role:String,id:Int,pageNo:Int?,status: String?,priority:String?) : Response<ListToDoPaginationResponse>
     {
-        return todoRepo.listToDoPagination(role,id, pageNo)
+        return todoRepo.listToDoPagination(role,id, pageNo,status,priority)
     }
 
 }
