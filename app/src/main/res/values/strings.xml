@@ -65,6 +65,8 @@
     <string name="low_priority">Low Priority</string>
     <string name="sort_by_priority_high">Sort By Priority High</string>
     <string name="sort_by_priority_low">Sort By Priority Low</string>
+    <string name="ntndce">Neither Title Nor Description can be empty</string>
+    <string name="psootp">Please select one of the priorities</string>
 
 
     <string-array name="statusoftask">

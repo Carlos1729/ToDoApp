@@ -4,9 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
@@ -19,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todotestapp.R
 import com.example.todotestapp.data.db.BaseResponse
 import com.example.todotestapp.data.db.ListToDoPaginationResponse
-import com.example.todotestapp.data.db.ListToDoResponse
 import com.example.todotestapp.data.db.StateData
 import com.example.todotestapp.data.repository.Constants.ID
 import com.example.todotestapp.data.repository.Constants.ROLE
@@ -30,9 +32,9 @@ import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModel
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.android.support.DaggerFragment
+import retrofit2.Response
 import javax.inject.Inject
 
-import retrofit2.Response
 
 class ListToDoFragment : DaggerFragment() {
 
@@ -64,7 +66,6 @@ class ListToDoFragment : DaggerFragment() {
         checkForUserLocalData()
         observeLiveData()
         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null,null)
-//        viewModel.getAllTasks(listToDoUserId)
         return view
     }
 
@@ -105,6 +106,7 @@ class ListToDoFragment : DaggerFragment() {
                 // Handle the menu selection
                 return when (menuItem.itemId) {
                     R.id.menu_completed -> {
+
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"completed",null,null,null)
 //                        viewModel.getTasksByStatus(listToDoUserId, "completed")
                         timecount = 1

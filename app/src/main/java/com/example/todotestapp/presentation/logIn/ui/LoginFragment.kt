@@ -3,12 +3,15 @@ package com.example.todotestapp.presentation.logIn.ui
 import android.content.Context
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todotestapp.R
@@ -76,12 +79,98 @@ class LoginFragment : DaggerFragment() {
     }
 
     private fun setUpClickListeners() {
-        binding?.loginButton?.setOnClickListener {
-            binding?.emailInputEditText?.setOnFocusChangeListener { _, focused ->
-                if (focused) {
-                    binding?.emailInputLayout?.helperText = checkemail()
+
+
+        var changed = false
+        binding?.emailInputEditText?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                Log.v("changedemail", changed.toString())
+                val useremail = binding?.emailInputEditText?.text.toString()
+                if(isValidEmail(useremail))
+                {
+                    if(changed) {
+                        Log.v("changedemail", "valid")
+                        binding?.emailInputLayout?.helperText = " "
+                        changed = false
+                    }
+                }
+                else if(useremail.isEmpty())
+                {
+                    if(changed) {
+                        Log.v("changedemail", "required")
+                        binding?.emailInputLayout?.helperText = "Required*"
+                        changed = false
+                    }
+                }
+                else
+                {
+                    if(!changed) {
+                        Log.v("changedemail", "invalid")
+                        binding?.emailInputLayout?.helperText = "Invalid Email"
+                        changed = true
+                    }
                 }
             }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+
+        })
+
+        binding?.usernameInputEditText?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//                Log.v("changedemail", changed.toString())
+                val username = binding?.usernameInputEditText?.text.toString()
+                if(checkInputs(username))
+                {
+                        binding?.userInputLayout?.helperText = " "
+                }
+                else if(username.trim().isEmpty())
+                {
+                        Log.v("changedemail", "required")
+                        binding?.userInputLayout?.helperText = "Required*"
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+
+        })
+
+        binding?.otpInputEditText?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//                Log.v("changedemail", changed.toString())
+                val userotp= binding?.otpInputEditText?.text.toString()
+                if(userotp.trim().isEmpty())
+                {
+                    binding?.otpInputLayout?.helperText = "Required*"
+                }
+                else
+                {
+                    binding?.otpInputLayout?.helperText = " "
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+
+        })
+
+
+       
+        binding?.loginButton?.setOnClickListener {
             val useremail = binding?.emailInputEditText?.text.toString()
             if (isValidEmail(useremail)) {
                 viewModel.loginUser(useremail)

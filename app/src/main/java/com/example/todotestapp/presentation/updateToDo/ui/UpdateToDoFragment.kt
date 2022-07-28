@@ -92,33 +92,43 @@ class UpdateToDoFragment : DaggerFragment() {
 
     private fun setUpClickListeners(view :  View) {
         button?.setOnClickListener {
-            checkInput(view)
-            if(!addToDoFlag) {
-                val updatedTitle: String = titleTV?.text.toString()
-                val updatedDescription: String = descriptionTV?.text.toString()
-                val updatedStatus: String = statusspin?.selectedItem.toString()
-                val hashMap : HashMap<String, String> = HashMap<String, String> ()
-                hashMap["High Priority"] = "high"
-                hashMap["Medium Priority"] = "medium"
-                hashMap["Low Priority"] = "low"
-                val updatedPriority: String? = hashMap[priorityspin?.text.toString()]
-                val presentUpdateToDoRequest = UpdateToDoRequest(updatedTitle,updatedDescription,updatedStatus,updatedPriority!!)
-                viewModel.updateToDo(idOfTask,presentUpdateToDoRequest)
-            }
-            else
-            {
-                val addTitle: String = titleTV?.text.toString()
-                val addDescription: String = descriptionTV?.text.toString()
-                val addStatus : String = "pending"
-                val hashMap : HashMap<String, String> = HashMap<String, String> ()
-                hashMap["High Priority"] = "high"
-                hashMap["Medium Priority"] = "medium"
-                hashMap["Low Priority"] = "low"
-                val addPriority: String? = hashMap[priorityspin?.text.toString()]
-                loadData()
-                val addUserEmail: String = addToDoUserEmail
-                val presentAddToDoRequest = AddToDoRequest(addUserEmail,addTitle,addDescription,addStatus,addPriority!!)
-                viewModel.addToDo(presentAddToDoRequest)
+            if(checkInput()) {
+                if (!addToDoFlag) {
+                    val updatedTitle: String = titleTV?.text.toString()
+                    val updatedDescription: String = descriptionTV?.text.toString()
+                    val updatedStatus: String = statusspin?.selectedItem.toString()
+                    val hashMap: HashMap<String, String> = HashMap<String, String>()
+                    hashMap["High Priority"] = "high"
+                    hashMap["Medium Priority"] = "medium"
+                    hashMap["Low Priority"] = "low"
+                    val updatedPriority: String? = hashMap[priorityspin?.text.toString()]
+                    val presentUpdateToDoRequest = UpdateToDoRequest(
+                        updatedTitle,
+                        updatedDescription,
+                        updatedStatus,
+                        updatedPriority!!
+                    )
+                    viewModel.updateToDo(idOfTask, presentUpdateToDoRequest)
+                } else {
+                    val addTitle: String = titleTV?.text.toString()
+                    val addDescription: String = descriptionTV?.text.toString()
+                    val addStatus: String = "pending"
+                    val hashMap: HashMap<String, String> = HashMap<String, String>()
+                    hashMap["High Priority"] = "high"
+                    hashMap["Medium Priority"] = "medium"
+                    hashMap["Low Priority"] = "low"
+                    val addPriority: String? = hashMap[priorityspin?.text.toString()]
+                    loadData()
+                    val addUserEmail: String = addToDoUserEmail
+                    val presentAddToDoRequest = AddToDoRequest(
+                        addUserEmail,
+                        addTitle,
+                        addDescription,
+                        addStatus,
+                        addPriority!!
+                    )
+                    viewModel.addToDo(presentAddToDoRequest)
+                }
             }
         }
 
@@ -217,13 +227,27 @@ class UpdateToDoFragment : DaggerFragment() {
             }
     }
 
-    private fun checkInput(view: View) {
-        if (titleTV?.text?.isBlank() == true) {
+    private fun checkInput():Boolean {
+
+        if(titleTV?.text?.isBlank() == true && descriptionTV?.text?.isBlank() == true)
+        {
+            Toast.makeText(context, getString(R.string.ntndce), Toast.LENGTH_SHORT)
+                .show()
+            return false
+        }
+        else if (titleTV?.text?.isBlank() == true) {
             Toast.makeText(context, getString(R.string.title_cant_be_empty), Toast.LENGTH_SHORT)
                 .show()
+            return false
         } else if (descriptionTV?.text?.isBlank() == true) {
             Toast.makeText(context, getString(R.string.description_cant_be_empty), Toast.LENGTH_SHORT).show()
+            return false
         }
+        else if(priorityspin?.text.toString().isBlank()){
+            Toast.makeText(context, getString(R.string.psootp), Toast.LENGTH_SHORT).show()
+            return false
+        }
+        return true
     }
 
     private fun parseStatus(status: String?): Int{

@@ -77,12 +77,12 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
              when(myList[position].status){
                 "completed"-> {
                     holder.binding.priorityIndicator.text = "Completed"
-                    holder.binding.priorityIndicator.setTextColor(ContextCompat.getColor(holder.itemView.context,R.color.lightblue))
+//                    holder.binding.priorityIndicator.setTextColor(ContextCompat.getColor(holder.itemView.context,R.color.lightblue))
 //                    holder.binding.priorityIndicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.green))
                 }
                 "pending"-> {
                     holder.binding.priorityIndicator.text = "Pending"
-                    holder.binding.priorityIndicator.setTextColor(ContextCompat.getColor(holder.itemView.context,R.color.blue))
+//                    holder.binding.priorityIndicator.setTextColor(ContextCompat.getColor(holder.itemView.context,R.color.blue))
 //                    holder.binding.priorityIndicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.Red))
                 }
              }
