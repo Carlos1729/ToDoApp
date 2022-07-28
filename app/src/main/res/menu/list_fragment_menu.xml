@@ -33,6 +33,16 @@
         app:showAsAction="never"/>
 
     <item
+        android:id="@+id/sort_priority_by_high"
+        android:title="@string/sort_by_priority_high"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/sort_priority_by_low"
+        android:title="@string/sort_by_priority_low"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/menu_sort_by_priority"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_filter"

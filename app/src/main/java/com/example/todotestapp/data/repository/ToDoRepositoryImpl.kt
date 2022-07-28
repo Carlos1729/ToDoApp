@@ -34,14 +34,17 @@ class ToDoRepositoryImpl : ToDoRepository {
         return RetrofitInstance.api.listToDo(id)
     }
 
+
     override suspend fun listToDoPagination(
         role: String,
         id: Int,
         pageNo: Int?,
         status: String?,
-        priority: String?
+        priority: String?,
+        orderBy: String?,
+        sort: String?
     ): Response<ListToDoPaginationResponse> {
-        return RetrofitInstance.api.listToDoPagination(role,id,pageNo,status,priority)
+        return RetrofitInstance.api.listToDoPagination(role,id,pageNo,status,priority,orderBy,sort)
     }
 
     override suspend fun updateToDo(id: Int?, requestBody: UpdateToDoRequest): Response<UpdateToDoResponse>

@@ -38,11 +38,11 @@ class ListViewModel @Inject constructor(toDoFetchUseCase : ListToDoUseCase
         }
     }
 
-    fun getAllTasksPagination(role:String,id:Int,pageNo:Int?,status: String?,priority:String?)
+    fun getAllTasksPagination(role:String,id:Int,pageNo:Int?,status: String?,priority:String?,orderBy:String?,sort:String?)
     {
         viewModelScope.launch {
             myToDoAllPaginationList.postLoading()
-            val response : Response<ListToDoPaginationResponse> = listToDoPagination.listToDoPaginationById(role, id, pageNo,status,priority)
+            val response : Response<ListToDoPaginationResponse> = listToDoPagination.listToDoPaginationById(role, id, pageNo,status,priority,orderBy,sort)
             if(response.isSuccessful)
             {
                 myToDoAllPaginationList.postSuccess(response)

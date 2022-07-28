@@ -52,7 +52,9 @@ interface ToDoApi {
         @Query("author_id") id:Int,
         @Query("page") pageNo:Int?,
         @Query("status") status: String?,
-        @Query("priority") priority: String?
+        @Query("priority") priority: String?,
+        @Query("orderBy") orderBy: String?,
+        @Query("sort") sort: String?
     ): Response<ListToDoPaginationResponse>
 
     @GET("tasks")

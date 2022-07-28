@@ -63,14 +63,12 @@ class ListToDoFragment : DaggerFragment() {
         viewModel = ViewModelProvider(this, viewModelFactory)[ListViewModel::class.java]
         checkForUserLocalData()
         observeLiveData()
-        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,null,null,null)
+        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null,null)
 //        viewModel.getAllTasks(listToDoUserId)
         return view
     }
 
     private fun observeLiveData() {
-//        observeLiveDataForComletedList()
-//        observeLiveDataByStatus()
         observeLiveDataPaginationList()
         observeDelete()
     }
@@ -107,33 +105,41 @@ class ListToDoFragment : DaggerFragment() {
                 // Handle the menu selection
                 return when (menuItem.itemId) {
                     R.id.menu_completed -> {
-                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"completed",null)
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"completed",null,null,null)
 //                        viewModel.getTasksByStatus(listToDoUserId, "completed")
                         timecount = 1
                         true
                     }
                     R.id.menu_pending -> {
-                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"pending",null)
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"pending",null,null,null)
 //                        viewModel.getTasksByStatus(listToDoUserId, "pending")
                         timecount = 2
                         true
                     }
                     R.id.menu_all -> {
-                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null)
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null,null)
 //                        viewModel.getAllTasks(listToDoUserId)
                         timecount = 3
                         true
                     }
                     R.id.high_priority -> {
-                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,"high")
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,"high",null,null)
                         true
                     }
                     R.id.medium_priority -> {
-                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,"medium")
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,"medium",null,null)
                         true
                     }
                     R.id.low_priority -> {
-                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,"low")
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,"low", null,null)
+                        true
+                    }
+                    R.id.sort_priority_by_high -> {
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null, "priority","DESC")
+                        true
+                    }
+                    R.id.sort_priority_by_low -> {
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null, "priority","ASC")
                         true
                     }
                     R.id.menu_sort_by_priority -> {
@@ -195,8 +201,7 @@ class ListToDoFragment : DaggerFragment() {
                 binding?.listProgressBar?.visibility = View.GONE
                 Log.v("TIMECOUNT", timecount.toString())
                 if (timecount == -1 || timecount == 3) {
-                    viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null)
-//                    viewModel.getAllTasks(listToDoUserId)
+                    viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null,null)
                 }
                 if (timecount == 1) {
                     viewModel.getTasksByStatus(listToDoUserId, "completed")
@@ -210,11 +215,6 @@ class ListToDoFragment : DaggerFragment() {
         }
     }
 
-//    private fun observeLiveDataForComletedList() {
-//        viewModel.myToDoAllList.observe(viewLifecycleOwner, Observer{
-//            handleResponseForAllList(it)
-//        })
-//    }
 
     private fun observeLiveDataPaginationList(){
         viewModel.myToDoAllPaginationList.observe(viewLifecycleOwner, Observer{
@@ -222,31 +222,6 @@ class ListToDoFragment : DaggerFragment() {
         })
     }
 
-//    private fun handleResponseForAllList(mlistr: StateData<Response<ListToDoResponse>>?) {
-//        when (mlistr?.status) {
-//            StateData.DataStatus.LOADING -> {
-//                binding?.listProgressBar?.visibility = View.VISIBLE
-//                binding?.loginNoResultsTv?.visibility = View.GONE
-//                binding?.emptyIcon?.visibility = View.GONE
-//            }
-//            StateData.DataStatus.SUCCESS -> {
-//                binding?.listProgressBar?.visibility = View.GONE
-//                if (mlistr.data?.body() != null) {
-//                    if ((mlistr.data?.body()!!.tasks?.size) == 0) {
-//                        binding?.loginNoResultsTv?.visibility = View.VISIBLE
-//                        binding?.emptyIcon?.visibility = View.VISIBLE
-//                        //Show Empty Icon
-//                    } else {
-//                        binding?.loginNoResultsTv?.visibility = View.GONE
-//                        binding?.emptyIcon?.visibility = View.GONE
-//                        mlistr.data?.body()
-//                            .let { myAdapter.setData(mlistr?.data?.body()!!).let { it } }
-//                    }
-//                }
-//            }
-//            else -> {}
-//        }
-//    }
 
     private fun handleResponseForAllPaginationList(allListToDoPaginationResponse: StateData<Response<ListToDoPaginationResponse>>?) {
             when(allListToDoPaginationResponse?.status) {
@@ -274,39 +249,6 @@ class ListToDoFragment : DaggerFragment() {
                 }
             }
     }
-
-//    private fun observeLiveDataByStatus(){
-//        viewModel.myToDoListByStatus.observe(viewLifecycleOwner,Observer{
-//            handleResponseStatus(it)
-//        })
-//    }
-
-//    private fun handleResponseStatus(mylbs: StateData<Response<ListToDoResponse>>?) {
-//        when (mylbs?.status) {
-//            StateData.DataStatus.LOADING -> {
-//                binding?.listProgressBar?.visibility = View.VISIBLE
-//            }
-//            StateData.DataStatus.SUCCESS -> {
-//                binding?.listProgressBar?.visibility = View.GONE
-//                if (mylbs.data?.body() != null) {
-//                    if ((mylbs.data?.body()!!.tasks?.size) == 0) {
-//                        binding?.loginNoResultsTv?.visibility = View.VISIBLE
-//                        binding?.emptyIcon?.visibility = View.VISIBLE
-//                        mylbs.data?.body()
-//                            .let { myAdapter.setData(mylbs?.data?.body()!!).let { it } }
-//
-//                    } else {
-//                        binding?.loginNoResultsTv?.visibility = View.GONE
-//                        binding?.emptyIcon?.visibility = View.GONE
-//                        mylbs.data?.body()
-//                            .let { myAdapter.setData(mylbs?.data?.body()!!).let { it } }
-//                    }
-//                }
-//
-//            }
-//            else -> {}
-//        }
-//    }
 
 
 
