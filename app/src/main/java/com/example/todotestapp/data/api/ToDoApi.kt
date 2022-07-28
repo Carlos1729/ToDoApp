@@ -39,10 +39,18 @@ interface ToDoApi {
         @Body requestBody: AddToDoRequest
     ): Response<AddToDoResponse>
 
+
     @GET("tasks")
     suspend fun listToDo(
         @Query("author_id") id:Int,
     ): Response<ListToDoResponse>
+
+    @GET("tasks")
+    suspend fun listToDoPagination(
+        @Query("role") role:String,
+        @Query("author_id") id:Int,
+        @Query("page") pageNo:Int
+    ): Response<ListToDoPaginationResponse>
 
     @GET("tasks")
     suspend fun listToDoCompleted(

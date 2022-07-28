@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.todotestapp.data.db.*
 import com.example.todotestapp.domain.usecase.DeleteToDoUseCase
 import com.example.todotestapp.domain.usecase.ListToDoByStatusUseCase
+import com.example.todotestapp.domain.usecase.ListToDoPaginationUseCase
 import com.example.todotestapp.domain.usecase.ListToDoUseCase
 import kotlinx.coroutines.launch
 import retrofit2.Response
@@ -12,15 +13,17 @@ import javax.inject.Inject
 
 class ListViewModel @Inject constructor(toDoFetchUseCase : ListToDoUseCase
                                         , toDoStatusFetchUseCase : ListToDoByStatusUseCase,
-                                        toDoDeleteUseCase : DeleteToDoUseCase ) : ViewModel() {
+                                        toDoDeleteUseCase : DeleteToDoUseCase, listToDoPaginationUseCase: ListToDoPaginationUseCase ) : ViewModel() {
 
     private val toDoFetch = toDoFetchUseCase
     private val toDoStatusFetch = toDoStatusFetchUseCase
     private val toDoDelete = toDoDeleteUseCase
+    private val listToDoPagination = listToDoPaginationUseCase
 
     val myToDoAllList: StateLiveData<Response<ListToDoResponse>> = StateLiveData()
     val myToDoListByStatus: StateLiveData<Response<ListToDoResponse>> = StateLiveData()
     val deleteToDoItemLiveData: StateLiveData<Response<BaseResponse>> = StateLiveData()
+    val myToDoAllPaginationList: StateLiveData<Response<ListToDoPaginationResponse>> = StateLiveData()
 
     fun getAllTasks(id: Int) {
         viewModelScope.launch {
@@ -31,6 +34,22 @@ class ListViewModel @Inject constructor(toDoFetchUseCase : ListToDoUseCase
             }
             else if(response.code() == 404) {
                 myToDoAllList.postSuccess(response)
+            }
+        }
+    }
+
+    fun getAllTasksPagination(role:String,id:Int,pageNo:Int)
+    {
+        viewModelScope.launch {
+            myToDoAllPaginationList.postLoading()
+            val response : Response<ListToDoPaginationResponse> = listToDoPagination.listToDoPaginationById(role, id, pageNo)
+            if(response.isSuccessful)
+            {
+                myToDoAllPaginationList.postSuccess(response)
+            }
+            else if(response.code() == 404)
+            {
+                myToDoAllPaginationList.postSuccess(response)
             }
         }
     }

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todotestapp.R
 import com.example.todotestapp.data.db.BaseListToDoResponse
-import com.example.todotestapp.data.db.ListToDoResponse
+import com.example.todotestapp.data.db.ListToDoPaginationResponse
 import com.example.todotestapp.databinding.LayoutRowBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -139,7 +139,7 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
         return position
     }
 
-    fun setData(newList: ListToDoResponse) {
+    fun setData(newList: ListToDoPaginationResponse) {
 
         val toDoDiffUtil = ToDoDiffUtil(myList,newList.tasks!!)
         val toDoDiffResult = DiffUtil.calculateDiff(toDoDiffUtil)

@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 data class BaseListToDoResponse(
     @SerializedName("author_id")
     val authorId: Int?,
-    @SerializedName("authorName")
+    @SerializedName("author_name")
     val authorName: String?,
     @SerializedName("content")
     val description: String?,
@@ -20,6 +20,8 @@ data class BaseListToDoResponse(
     val lastModificationTime: String?,
     @SerializedName("name")
     val title: String?,
+    @SerializedName("priority")
+    val priority: String?,
     @SerializedName("status")
     val status: String?,
 ): Parcelable

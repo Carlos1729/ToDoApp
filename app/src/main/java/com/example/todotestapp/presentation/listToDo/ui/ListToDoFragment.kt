@@ -18,9 +18,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todotestapp.R
 import com.example.todotestapp.data.db.BaseResponse
+import com.example.todotestapp.data.db.ListToDoPaginationResponse
 import com.example.todotestapp.data.db.ListToDoResponse
 import com.example.todotestapp.data.db.StateData
 import com.example.todotestapp.data.repository.Constants.ID
+import com.example.todotestapp.data.repository.Constants.ROLE
 import com.example.todotestapp.data.repository.Constants.SHARED_PREFERENCES
 import com.example.todotestapp.databinding.FragmentListTodoBinding
 import com.example.todotestapp.presentation.MainActivity
@@ -43,6 +45,7 @@ class ListToDoFragment : DaggerFragment() {
     private lateinit var viewModel: ListViewModel
     private  var binding: FragmentListTodoBinding ?= null
     private var listToDoUserId: Int = -1
+    private var listToDoUserRole: String = ""
     private var timecount: Int = -1
     private var addToDoButton : FloatingActionButton? =null
     private val myAdapter by lazy { ListToDoAdapter() }
@@ -59,12 +62,17 @@ class ListToDoFragment : DaggerFragment() {
         setUpClickListeners()
         viewModel = ViewModelProvider(this, viewModelFactory)[ListViewModel::class.java]
         checkForUserLocalData()
-        viewModel.getAllTasks(listToDoUserId)
-        observeLiveDataForComletedList()
-        observeLiveDataByStatus()
-        observeDelete()
+        observeLiveData()
+        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1)
+//        viewModel.getAllTasks(listToDoUserId)
         return view
+    }
 
+    private fun observeLiveData() {
+//        observeLiveDataForComletedList()
+//        observeLiveDataByStatus()
+        observeLiveDataPaginationList()
+        observeDelete()
     }
 
     private fun setUpClickListeners() {
@@ -109,7 +117,8 @@ class ListToDoFragment : DaggerFragment() {
                         true
                     }
                     R.id.menu_all -> {
-                        viewModel.getAllTasks(listToDoUserId)
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1)
+//                        viewModel.getAllTasks(listToDoUserId)
                         timecount = 3
                         true
                     }
@@ -140,6 +149,7 @@ class ListToDoFragment : DaggerFragment() {
         sharedPreferences.let {
             if (sharedPreferences.contains(ID)) {
                 listToDoUserId = sharedPreferences.getInt(ID,-1)
+                listToDoUserRole = sharedPreferences.getString(ROLE,"").toString()
             }
         }
     }
@@ -171,7 +181,8 @@ class ListToDoFragment : DaggerFragment() {
                 binding?.listProgressBar?.visibility = View.GONE
                 Log.v("TIMECOUNT", timecount.toString())
                 if (timecount == -1 || timecount == 3) {
-                    viewModel.getAllTasks(listToDoUserId)
+                    viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1)
+//                    viewModel.getAllTasks(listToDoUserId)
                 }
                 if (timecount == 1) {
                     viewModel.getTasksByStatus(listToDoUserId, "completed")
@@ -185,76 +196,106 @@ class ListToDoFragment : DaggerFragment() {
         }
     }
 
-    private fun observeLiveDataForComletedList() {
-        viewModel.myToDoAllList.observe(viewLifecycleOwner, Observer{
-            handleResponseForAllList(it)
-        })
-
-//        viewModel.deleteToDoItemLiveData.observe(viewLifecycleOwner,Observer{
-//            //when getting success
-//            viewModel.getTasks(listToDoUserId)
+//    private fun observeLiveDataForComletedList() {
+//        viewModel.myToDoAllList.observe(viewLifecycleOwner, Observer{
+//            handleResponseForAllList(it)
 //        })
-    }
+//    }
 
-    private fun observeLiveDataByStatus(){
-        viewModel.myToDoListByStatus.observe(viewLifecycleOwner,Observer{
-            handleResponseStatus(it)
+    private fun observeLiveDataPaginationList(){
+        viewModel.myToDoAllPaginationList.observe(viewLifecycleOwner, Observer{
+            handleResponseForAllPaginationList(it)
         })
     }
 
-    private fun handleResponseStatus(mylbs: StateData<Response<ListToDoResponse>>?) {
-        when (mylbs?.status) {
-            StateData.DataStatus.LOADING -> {
-                binding?.listProgressBar?.visibility = View.VISIBLE
-            }
-            StateData.DataStatus.SUCCESS -> {
-                binding?.listProgressBar?.visibility = View.GONE
-                if (mylbs.data?.body() != null) {
-                    if ((mylbs.data?.body()!!.tasks?.size) == 0) {
-                        binding?.loginNoResultsTv?.visibility = View.VISIBLE
-                        binding?.emptyIcon?.visibility = View.VISIBLE
-                        mylbs.data?.body()
-                            .let { myAdapter.setData(mylbs?.data?.body()!!).let { it } }
+//    private fun handleResponseForAllList(mlistr: StateData<Response<ListToDoResponse>>?) {
+//        when (mlistr?.status) {
+//            StateData.DataStatus.LOADING -> {
+//                binding?.listProgressBar?.visibility = View.VISIBLE
+//                binding?.loginNoResultsTv?.visibility = View.GONE
+//                binding?.emptyIcon?.visibility = View.GONE
+//            }
+//            StateData.DataStatus.SUCCESS -> {
+//                binding?.listProgressBar?.visibility = View.GONE
+//                if (mlistr.data?.body() != null) {
+//                    if ((mlistr.data?.body()!!.tasks?.size) == 0) {
+//                        binding?.loginNoResultsTv?.visibility = View.VISIBLE
+//                        binding?.emptyIcon?.visibility = View.VISIBLE
+//                        //Show Empty Icon
+//                    } else {
+//                        binding?.loginNoResultsTv?.visibility = View.GONE
+//                        binding?.emptyIcon?.visibility = View.GONE
+//                        mlistr.data?.body()
+//                            .let { myAdapter.setData(mlistr?.data?.body()!!).let { it } }
+//                    }
+//                }
+//            }
+//            else -> {}
+//        }
+//    }
 
-                    } else {
-                        binding?.loginNoResultsTv?.visibility = View.GONE
-                        binding?.emptyIcon?.visibility = View.GONE
-                        mylbs.data?.body()
-                            .let { myAdapter.setData(mylbs?.data?.body()!!).let { it } }
+    private fun handleResponseForAllPaginationList(allListToDoPaginationResponse: StateData<Response<ListToDoPaginationResponse>>?) {
+            when(allListToDoPaginationResponse?.status) {
+                StateData.DataStatus.LOADING -> {
+                    binding?.listProgressBar?.visibility = View.VISIBLE
+                    binding?.loginNoResultsTv?.visibility = View.GONE
+                    binding?.emptyIcon?.visibility = View.GONE
+                }
+                StateData.DataStatus.SUCCESS -> {
+                    binding?.listProgressBar?.visibility = View.GONE
+                    if(allListToDoPaginationResponse.data?.body() != null)
+                    {
+                        if((allListToDoPaginationResponse.data?.body()!!.tasks?.size) == 0)
+                        {
+                            binding?.loginNoResultsTv?.visibility = View.VISIBLE
+                            binding?.emptyIcon?.visibility = View.VISIBLE
+                        } else{
+                            binding?.loginNoResultsTv?.visibility = View.GONE
+                            binding?.emptyIcon?.visibility = View.GONE
+                            allListToDoPaginationResponse.data?.body().let {
+                                myAdapter.setData(allListToDoPaginationResponse.data?.body()!!).let { it }
+                            }
+                        }
                     }
                 }
-
             }
-            else -> {}
-        }
     }
 
+//    private fun observeLiveDataByStatus(){
+//        viewModel.myToDoListByStatus.observe(viewLifecycleOwner,Observer{
+//            handleResponseStatus(it)
+//        })
+//    }
 
-    private fun handleResponseForAllList(mlistr: StateData<Response<ListToDoResponse>>?) {
-        when (mlistr?.status) {
-            StateData.DataStatus.LOADING -> {
-                binding?.listProgressBar?.visibility = View.VISIBLE
-                binding?.loginNoResultsTv?.visibility = View.GONE
-                binding?.emptyIcon?.visibility = View.GONE
-            }
-            StateData.DataStatus.SUCCESS -> {
-                binding?.listProgressBar?.visibility = View.GONE
-                if (mlistr.data?.body() != null) {
-                    if ((mlistr.data?.body()!!.tasks?.size) == 0) {
-                        binding?.loginNoResultsTv?.visibility = View.VISIBLE
-                        binding?.emptyIcon?.visibility = View.VISIBLE
-                        //Show Empty Icon
-                    } else {
-                        binding?.loginNoResultsTv?.visibility = View.GONE
-                        binding?.emptyIcon?.visibility = View.GONE
-                        mlistr.data?.body()
-                            .let { myAdapter.setData(mlistr?.data?.body()!!).let { it } }
-                    }
-                }
-            }
-            else -> {}
-        }
-    }
+//    private fun handleResponseStatus(mylbs: StateData<Response<ListToDoResponse>>?) {
+//        when (mylbs?.status) {
+//            StateData.DataStatus.LOADING -> {
+//                binding?.listProgressBar?.visibility = View.VISIBLE
+//            }
+//            StateData.DataStatus.SUCCESS -> {
+//                binding?.listProgressBar?.visibility = View.GONE
+//                if (mylbs.data?.body() != null) {
+//                    if ((mylbs.data?.body()!!.tasks?.size) == 0) {
+//                        binding?.loginNoResultsTv?.visibility = View.VISIBLE
+//                        binding?.emptyIcon?.visibility = View.VISIBLE
+//                        mylbs.data?.body()
+//                            .let { myAdapter.setData(mylbs?.data?.body()!!).let { it } }
+//
+//                    } else {
+//                        binding?.loginNoResultsTv?.visibility = View.GONE
+//                        binding?.emptyIcon?.visibility = View.GONE
+//                        mylbs.data?.body()
+//                            .let { myAdapter.setData(mylbs?.data?.body()!!).let { it } }
+//                    }
+//                }
+//
+//            }
+//            else -> {}
+//        }
+//    }
+
+
+
 
 
     private fun setupRecyclerView() {
