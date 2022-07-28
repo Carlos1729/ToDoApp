@@ -2,7 +2,11 @@ package com.example.todotestapp.presentation.updateToDo.ui
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.*
+import android.text.Editable
+import android.text.SpannableStringBuilder
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -15,9 +19,9 @@ import com.example.todotestapp.presentation.MainActivity
 import com.example.todotestapp.presentation.updateToDo.viewmodel.UpdateToDoViewModel
 import com.example.todotestapp.presentation.updateToDo.viewmodel.UpdateToDoViewModelFactory
 import dagger.android.support.DaggerFragment
+import retrofit2.Response
 import javax.inject.Inject
 
-import retrofit2.Response
 
 class UpdateToDoFragment : DaggerFragment() {
 
@@ -90,10 +94,15 @@ class UpdateToDoFragment : DaggerFragment() {
         button?.setOnClickListener {
             checkInput(view)
             if(!addToDoFlag) {
-                var updatedTitle: String = titleTV?.text.toString()
-                var updatedDescription: String = descriptionTV?.text.toString()
-                var updatedStatus: String = statusspin?.selectedItem.toString()
-                var presentUpdateToDoRequest = UpdateToDoRequest(updatedTitle,updatedDescription,updatedStatus)
+                val updatedTitle: String = titleTV?.text.toString()
+                val updatedDescription: String = descriptionTV?.text.toString()
+                val updatedStatus: String = statusspin?.selectedItem.toString()
+                val hashMap : HashMap<String, String> = HashMap<String, String> ()
+                hashMap["High Priority"] = "high"
+                hashMap["Medium Priority"] = "medium"
+                hashMap["Low Priority"] = "low"
+                val updatedPriority: String? = hashMap[priorityspin?.text.toString()]
+                val presentUpdateToDoRequest = UpdateToDoRequest(updatedTitle,updatedDescription,updatedStatus,updatedPriority!!)
                 viewModel.updateToDo(idOfTask,presentUpdateToDoRequest)
             }
             else
@@ -101,7 +110,7 @@ class UpdateToDoFragment : DaggerFragment() {
                 val addTitle: String = titleTV?.text.toString()
                 val addDescription: String = descriptionTV?.text.toString()
                 val addStatus : String = "pending"
-                var hashMap : HashMap<String, String> = HashMap<String, String> ()
+                val hashMap : HashMap<String, String> = HashMap<String, String> ()
                 hashMap["High Priority"] = "high"
                 hashMap["Medium Priority"] = "medium"
                 hashMap["Low Priority"] = "low"
@@ -257,6 +266,12 @@ class UpdateToDoFragment : DaggerFragment() {
             description = it.description
             todostatus = it.status
             idOfTask = it.taskId
+            val hashMapReverse : HashMap<String, String> = HashMap<String, String> ()
+            hashMapReverse["high"] = "High Priority"
+            hashMapReverse["medium"] = "Medium Priority"
+            hashMapReverse["low"] = "Low Priority"
+            val editable: Editable = SpannableStringBuilder(hashMapReverse[it.priority])
+            priorityspin?.text = editable
         }
     }
 
