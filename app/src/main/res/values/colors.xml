@@ -14,4 +14,7 @@
     <color name="green">#3AD318</color>
     <color name="add_button">#FF000000</color>
     <color name="orange">#F35B2B</color>
+    <color name="yellow">#FAE106</color>
+    <color name="blue">#2644E6</color>
+    <color name="lightblue">#09DDF8</color>
 </resources>

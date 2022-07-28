@@ -1,5 +1,7 @@
 package com.example.todotestapp.presentation.listToDo.ui
 
+import android.graphics.Color
+import android.graphics.Color.blue
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -70,15 +72,37 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
                 holder.binding.modifitedAt.text = "Updated : " + thtime
             }
 
-        when(myList[position].status){
-                "completed"-> holder.binding.priorityIndicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.green))
-                "pending"-> holder.binding.priorityIndicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.Red))
+
+
+             when(myList[position].status){
+                "completed"-> {
+                    holder.binding.priorityIndicator.text = "Completed"
+                    holder.binding.priorityIndicator.setTextColor(ContextCompat.getColor(holder.itemView.context,R.color.lightblue))
+//                    holder.binding.priorityIndicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.green))
+                }
+                "pending"-> {
+                    holder.binding.priorityIndicator.text = "Pending"
+                    holder.binding.priorityIndicator.setTextColor(ContextCompat.getColor(holder.itemView.context,R.color.blue))
+//                    holder.binding.priorityIndicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.Red))
+                }
              }
 
-            holder.binding.rowBackground.setOnClickListener{
-                val action = ListToDoFragmentDirections.actionListTaskFragmentToUpdateTaskFragment(myList[position])
-                holder.itemView.findNavController().navigate(action)
-            }
+//        when(myList[position].status){
+//                "completed"-> holder.binding.priorityIndicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.green))
+//                "pending"-> holder.binding.priorityIndicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.Red))
+//             }
+
+        when(myList[position].priority)
+        {
+            "high"-> holder.binding.priorityIndicatorFinal.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.Red))
+            "medium" -> holder.binding.priorityIndicatorFinal.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.yellow))
+            "low" -> holder.binding.priorityIndicatorFinal.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.green))
+        }
+
+        holder.binding.rowBackground.setOnClickListener{
+            val action = ListToDoFragmentDirections.actionListTaskFragmentToUpdateTaskFragment(myList[position])
+            holder.itemView.findNavController().navigate(action)
+        }
 
     }
 

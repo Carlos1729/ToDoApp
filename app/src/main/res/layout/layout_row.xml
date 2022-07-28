@@ -20,15 +20,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+
         <androidx.cardview.widget.CardView
-            android:id="@+id/priority_indicator"
+            android:id="@+id/priority_indicator_final"
             android:layout_width="12dp"
             android:layout_height="12dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
-            app:cardBackgroundColor="@color/Red"
+            app:cardBackgroundColor="@color/green"
             app:cardCornerRadius="100dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/priority_indicator"
+            android:layout_width="60dp"
+            android:layout_height="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="5dp"
+            android:textColor="@color/blue"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/priority_indicator_final"
+            android:text="@string/completed"
+            android:textSize="11sp"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -40,7 +54,7 @@
             android:layout_marginEnd="30dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="My Title"
+            android:text="My Title My TitleMy TitleMy Title"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"
