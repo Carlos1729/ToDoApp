@@ -60,6 +60,9 @@
     <string name="sort_by_priority_high_string">Sort by Priority High</string>
     <string name="sort_by_priority_low_string">Sort By Priority Low</string>
     <string name="usus">User Signed Up Successfully</string>
+    <string name="high_priority">High Priority</string>
+    <string name="medium_priority">Medium Priority</string>
+    <string name="low_priority">Low Priority</string>
 
 
     <string-array name="statusoftask">

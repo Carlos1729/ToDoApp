@@ -107,12 +107,14 @@ class ListToDoFragment : DaggerFragment() {
                 // Handle the menu selection
                 return when (menuItem.itemId) {
                     R.id.menu_completed -> {
-                        viewModel.getTasksByStatus(listToDoUserId, "completed")
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"completed",null)
+//                        viewModel.getTasksByStatus(listToDoUserId, "completed")
                         timecount = 1
                         true
                     }
                     R.id.menu_pending -> {
-                        viewModel.getTasksByStatus(listToDoUserId, "pending")
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"pending",null)
+//                        viewModel.getTasksByStatus(listToDoUserId, "pending")
                         timecount = 2
                         true
                     }
@@ -120,6 +122,18 @@ class ListToDoFragment : DaggerFragment() {
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null)
 //                        viewModel.getAllTasks(listToDoUserId)
                         timecount = 3
+                        true
+                    }
+                    R.id.high_priority -> {
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,"high")
+                        true
+                    }
+                    R.id.medium_priority -> {
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,"medium")
+                        true
+                    }
+                    R.id.low_priority -> {
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,"low")
                         true
                     }
                     R.id.menu_sort_by_priority -> {
