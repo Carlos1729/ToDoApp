@@ -168,8 +168,6 @@ class LoginFragment : DaggerFragment() {
 
         })
 
-
-       
         binding?.loginButton?.setOnClickListener {
             val useremail = binding?.emailInputEditText?.text.toString()
             if (isValidEmail(useremail)) {
@@ -177,6 +175,13 @@ class LoginFragment : DaggerFragment() {
             } else {
                 binding?.emailInputLayout?.error = getString(R.string.invalid_email)
             }
+        }
+
+        binding?.textResendOTP?.setOnClickListener{
+            val useremail = binding?.emailInputEditText?.text.toString()
+            viewModel.loginUser(useremail)
+            disableNotReceivedOTPUI()
+            startTimer()
         }
     }
 
@@ -337,12 +342,6 @@ class LoginFragment : DaggerFragment() {
             override fun onFinish() {
                      showNotReceivedOTPUI()
                       binding?.otptimer?.visibility = View.GONE
-                      binding?.textResendOTP?.setOnClickListener{
-                          val useremail = binding?.emailInputEditText?.text.toString()
-                          viewModel.loginUser(useremail)
-                          disableNotReceivedOTPUI()
-                          startTimer()
-                      }
             }
         }
         binding?.otptimer?.visibility = View.VISIBLE
