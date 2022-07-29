@@ -172,6 +172,7 @@ class LoginFragment : DaggerFragment() {
             val useremail = binding?.emailInputEditText?.text.toString()
             if (isValidEmail(useremail)) {
                 viewModel.loginUser(useremail)
+                startTimer()
             } else {
                 binding?.emailInputLayout?.error = getString(R.string.invalid_email)
             }
@@ -183,6 +184,8 @@ class LoginFragment : DaggerFragment() {
             disableNotReceivedOTPUI()
             startTimer()
         }
+
+
     }
 
 
@@ -204,19 +207,6 @@ class LoginFragment : DaggerFragment() {
                 binding?.loginProgressBar?.visibility = View.GONE
                 if (mlr.data?.body() != null) {
                     showOTPUI()
-                    startTimer()
-                    binding?.verifyButton?.setOnClickListener {
-                        val currentOTP = binding?.otpInputEditText?.text.toString()
-                        if(!checkOTP(currentOTP)){
-                            binding?.otpInputLayout?.error = getString(R.string.fourdigit)
-                        }
-                        else{
-                            val currentUserEmail = binding?.emailInputEditText?.text.toString()
-                            val currentUserOTP = binding?.otpInputEditText?.text.toString()
-                            val currentLoginOTPRequest = LoginOTPRequest(currentUserEmail,currentUserOTP,false)
-                            viewModel.loginUserByOTP(currentLoginOTPRequest)
-                        }
-                    }
                 } else if (mlr.data?.code() == 404) {
                     if(!signUpFlag)
                     {
@@ -230,7 +220,6 @@ class LoginFragment : DaggerFragment() {
                     (activity as MainActivity).supportActionBar?.title = "Sign Up"
                     showSignUpUI()
                     showOTPUI()
-                    startTimer()
                     binding?.verifyButton?.setOnClickListener {
                         val currentUserEmail = binding?.emailInputEditText?.text.toString()
                         val currentUserName = binding?.usernameInputEditText?.text.toString()
