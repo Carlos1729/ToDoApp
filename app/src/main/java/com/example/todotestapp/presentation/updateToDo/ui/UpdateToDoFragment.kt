@@ -48,6 +48,7 @@ class UpdateToDoFragment : DaggerFragment() {
     private var deleteButton: Button? = null
     private lateinit var addToDoUserEmail :String
     private lateinit var viewModel: UpdateToDoViewModel
+    private var deleteflag = false
 
     override fun onResume() {
         super.onResume()
@@ -133,7 +134,22 @@ class UpdateToDoFragment : DaggerFragment() {
         }
 
         deleteButton?.setOnClickListener {
-            viewModel.deleteToDo(idOfTask)
+            val updatedTitle: String = titleTV?.text.toString()
+            val updatedDescription: String = descriptionTV?.text.toString()
+            val updatedStatus: String = "inactive"
+            val hashMap: HashMap<String, String> = HashMap<String, String>()
+            hashMap["High Priority"] = "high"
+            hashMap["Medium Priority"] = "medium"
+            hashMap["Low Priority"] = "low"
+            val updatedPriority: String? = hashMap[priorityspin?.text.toString()]
+            val presentUpdateToDoRequest = UpdateToDoRequest(
+                updatedTitle,
+                updatedDescription,
+                updatedStatus,
+                updatedPriority!!
+            )
+            viewModel.updateToDo(idOfTask, presentUpdateToDoRequest)
+            deleteflag = true
         }
     }
 
@@ -182,7 +198,14 @@ class UpdateToDoFragment : DaggerFragment() {
             StateData.DataStatus.SUCCESS -> {
                 binding?.updateProgressBar?.visibility = View.GONE
                 if (myutr.data?.body() != null) {
-                    Toast.makeText(context, getString(R.string.utds), Toast.LENGTH_SHORT).show()
+                    if(deleteflag)
+                    {
+                        Toast.makeText(context, getString(R.string.mtds), Toast.LENGTH_SHORT).show()
+                        deleteflag = false
+                    }
+                    else {
+                        Toast.makeText(context, getString(R.string.utds), Toast.LENGTH_SHORT).show()
+                    }
                     findNavController().navigate(R.id.action_updateTaskFragment_to_listTaskFragment)
                 } else if (myutr.data?.code() == 400) {
                     Toast.makeText(

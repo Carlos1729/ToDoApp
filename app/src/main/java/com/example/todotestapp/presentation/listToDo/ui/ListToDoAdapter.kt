@@ -1,20 +1,21 @@
 package com.example.todotestapp.presentation.listToDo.ui
 
 import android.graphics.Color
-import android.graphics.Color.blue
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.todotestapp.R
 import com.example.todotestapp.data.db.BaseListToDoResponse
 import com.example.todotestapp.data.db.ListToDoPaginationResponse
 import com.example.todotestapp.databinding.LayoutRowBinding
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
 
@@ -77,13 +78,11 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
              when(myList[position].status){
                 "completed"-> {
                     holder.binding.priorityIndicator.text = "Completed"
-//                    holder.binding.priorityIndicator.setTextColor(ContextCompat.getColor(holder.itemView.context,R.color.lightblue))
-//                    holder.binding.priorityIndicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.green))
+                    holder.binding.priorityIndicator.setBackgroundColor(ContextCompat.getColor(holder.itemView.context, com.example.todotestapp.R.color.darkGray))
                 }
                 "pending"-> {
                     holder.binding.priorityIndicator.text = "Pending"
-//                    holder.binding.priorityIndicator.setTextColor(ContextCompat.getColor(holder.itemView.context,R.color.blue))
-//                    holder.binding.priorityIndicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.Red))
+                    holder.binding.priorityIndicator.setBackgroundColor(ContextCompat.getColor(holder.itemView.context, com.example.todotestapp.R.color.black))
                 }
              }
 
@@ -94,9 +93,10 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
 
         when(myList[position].priority)
         {
-            "high"-> holder.binding.priorityIndicatorFinal.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.Red))
-            "medium" -> holder.binding.priorityIndicatorFinal.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.yellow))
-            "low" -> holder.binding.priorityIndicatorFinal.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.green))
+            "high"-> holder.binding.priorityIndicatorFinal.setColorFilter(ContextCompat.getColor(holder.itemView.context, com.example.todotestapp.R.color.Red))
+            "medium" -> holder.binding.priorityIndicatorFinal.setColorFilter(ContextCompat.getColor(holder.itemView.context, com.example.todotestapp.R.color.yellow))
+            "low" -> holder.binding.priorityIndicatorFinal.setColorFilter(ContextCompat.getColor(holder.itemView.context,
+                com.example.todotestapp.R.color.green))
         }
 
         holder.binding.rowBackground.setOnClickListener{
