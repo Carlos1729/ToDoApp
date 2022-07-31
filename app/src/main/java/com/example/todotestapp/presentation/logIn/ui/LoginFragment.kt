@@ -32,6 +32,7 @@ import com.google.gson.Gson
 import dagger.android.support.DaggerFragment
 import retrofit2.Response
 import javax.inject.Inject
+import kotlin.math.sign
 
 
 class LoginFragment : DaggerFragment() {
@@ -80,99 +81,11 @@ class LoginFragment : DaggerFragment() {
 
     private fun setUpClickListeners() {
 
-
-        var changed = false
-        binding?.emailInputEditText?.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                Log.v("changedemail", changed.toString())
-                val useremail = binding?.emailInputEditText?.text.toString()
-                if(isValidEmail(useremail))
-                {
-                    if(changed) {
-                        Log.v("changedemail", "valid")
-                        binding?.emailInputLayout?.helperText = " "
-                        changed = false
-                    }
-                }
-                else if(useremail.isEmpty())
-                {
-                    if(changed) {
-                        Log.v("changedemail", "required")
-                        binding?.emailInputLayout?.helperText = "Required*"
-                        changed = false
-                    }
-                }
-                else
-                {
-                    if(!changed) {
-                        Log.v("changedemail", "invalid")
-                        binding?.emailInputLayout?.helperText = "Invalid Email"
-                        changed = true
-                    }
-                }
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-
-            }
-
-        })
-
-        binding?.usernameInputEditText?.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//                Log.v("changedemail", changed.toString())
-                val username = binding?.usernameInputEditText?.text.toString()
-                if(checkInputs(username))
-                {
-                        binding?.userInputLayout?.helperText = " "
-                }
-                else if(username.trim().isEmpty())
-                {
-                        Log.v("changedemail", "required")
-                        binding?.userInputLayout?.helperText = "Required*"
-                }
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-
-            }
-
-        })
-
-        binding?.otpInputEditText?.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//                Log.v("changedemail", changed.toString())
-                val userotp= binding?.otpInputEditText?.text.toString()
-                if(userotp.trim().isEmpty())
-                {
-                    binding?.otpInputLayout?.helperText = "Required*"
-                }
-                else
-                {
-                    binding?.otpInputLayout?.helperText = " "
-                }
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-
-            }
-
-        })
-
         binding?.loginButton?.setOnClickListener {
             val useremail = binding?.emailInputEditText?.text.toString()
             if (isValidEmail(useremail)) {
                 viewModel.loginUser(useremail)
-                startTimer()
+//                startTimer()
             } else {
                 binding?.emailInputLayout?.error = getString(R.string.invalid_email)
             }
@@ -182,10 +95,87 @@ class LoginFragment : DaggerFragment() {
             val useremail = binding?.emailInputEditText?.text.toString()
             viewModel.loginUser(useremail)
             disableNotReceivedOTPUI()
-            startTimer()
+//            startTimer()
         }
 
+        binding?.verifyButtonLogin?.setOnClickListener {
+            val currentLoginUserEmail = binding?.emailInputEditText?.text.toString()
+            val currentLoginUserOTP = binding?.otpInputEditText?.text.toString()
+            if(loginInputCheck(currentLoginUserEmail,currentLoginUserOTP))
+            {
+                val currentLoginOTPRequest = LoginOTPRequest(currentLoginUserEmail,currentLoginUserOTP,false)
+                viewModel.loginUserByOTP(currentLoginOTPRequest)
+            }
+        }
 
+        binding?.verifyButton?.setOnClickListener {
+            val currentSignUpUserEmail = binding?.emailInputEditText?.text.toString()
+            val currentSignUpUserName = binding?.usernameInputEditText?.text.toString()
+            val currentSignUpUserOTP = binding?.otpInputEditText?.text.toString()
+            if(signUpInputCheck(currentSignUpUserEmail,currentSignUpUserName,currentSignUpUserOTP)) {
+                    val currentSignUpOTPRequest = SignUpOTPRequest(currentSignUpUserEmail,currentSignUpUserName,currentSignUpUserOTP,true)
+                    viewModel.signUpUserByOTP(currentSignUpOTPRequest)
+            }
+        }
+
+    }
+
+    private fun signUpInputCheck(currentSignUpUserEmail: String, currentSignUpUserName: String, currentSignUpUserOTP: String): Boolean {
+
+        var signUpInputCheckFlag = true
+        if(!isValidEmail(currentSignUpUserEmail))
+        {
+            binding?.emailInputLayout?.helperText = getString(R.string.inve)
+            signUpInputCheckFlag = false
+        }
+        else
+        {
+            binding?.emailInputLayout?.helperText = " "
+        }
+        if(!checkOTP(currentSignUpUserOTP))
+        {
+            binding?.otpInputLayout?.helperText = getString(R.string.fourdigit)
+            signUpInputCheckFlag = false
+        }
+        else
+        {
+            binding?.otpInputLayout?.helperText = " "
+        }
+        if(!checkOTP(currentSignUpUserName))
+        {
+            binding?.userInputLayout?.helperText = getString(R.string.invalid_username)
+            signUpInputCheckFlag = false
+        }
+        else
+        {
+            binding?.userInputLayout?.helperText = " "
+        }
+        return signUpInputCheckFlag
+    }
+
+    private fun loginInputCheck(currentLoginUserEmail: String, currentLoginUserOTP: String): Boolean {
+
+        var loginInputCheckFlag = true
+        if(!isValidEmail(currentLoginUserEmail))
+        {
+            binding?.emailInputLayout?.helperText = getString(R.string.inve)
+            loginInputCheckFlag = false
+        }
+        else
+        {
+            binding?.emailInputLayout?.helperText = " "
+        }
+        if(!checkOTP(currentLoginUserOTP))
+        {
+            binding?.otpInputLayout?.helperText = getString(R.string.fourdigit)
+            loginInputCheckFlag = false
+        }
+        else
+        {
+            binding?.otpInputLayout?.helperText = " "
+        }
+
+        return loginInputCheckFlag
     }
 
 
@@ -207,6 +197,11 @@ class LoginFragment : DaggerFragment() {
                 binding?.loginProgressBar?.visibility = View.GONE
                 if (mlr.data?.body() != null) {
                     showOTPUI()
+                    Toast.makeText(
+                        context,"An OTP has been Sent Please Check",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    startTimer()
                 } else if (mlr.data?.code() == 404) {
                     if(!signUpFlag)
                     {
@@ -218,30 +213,12 @@ class LoginFragment : DaggerFragment() {
                     }
                     signUpFlag = true
                     (activity as MainActivity).supportActionBar?.title = "Sign Up"
-                    showSignUpUI()
                     showOTPUI()
-                    binding?.verifyButton?.setOnClickListener {
-                        val currentUserEmail = binding?.emailInputEditText?.text.toString()
-                        val currentUserName = binding?.usernameInputEditText?.text.toString()
-                        val currentUserOTP = binding?.otpInputEditText?.text.toString()
-                        if (!isValidEmail((currentUserEmail)) && !checkInputs(currentUserName)) {
-                            binding?.emailInputLayout?.error = getString(R.string.invalid_email)
-                            binding?.userInputLayout?.error = getString(R.string.invalid_username)
-                        } else if (!isValidEmail((currentUserEmail))) {
-                            binding?.emailInputLayout?.error = getString(R.string.invalid_email)
-                        } else if (!checkInputs(currentUserName)) {
-                            binding?.userInputLayout?.error = getString(R.string.invalid_username)
-                        }
-                        else {
-                            val currentOTP = binding?.otpInputEditText?.text.toString()
-                            if (!checkOTP(currentOTP)) {
-                                binding?.otpInputLayout?.error = getString(R.string.fourdigit)
-                            } else {
-                                val currentSignUpOTPRequest = SignUpOTPRequest(currentUserEmail,currentUserName,currentUserOTP,true)
-                                viewModel.signUpUserByOTP(currentSignUpOTPRequest)
-                            }
-                        }
-                    }
+                    startTimer()
+                    Toast.makeText(
+                        context,"An OTP has been Sent Please Check",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             else -> {}
@@ -276,7 +253,6 @@ class LoginFragment : DaggerFragment() {
                     ).show()
                     findNavController().navigate(R.id.action_loginFragment_to_listTaskFragment)
                 } else if (otpResponse.data?.code() == 400) {
-//                    Log.v("Checkerror",mlotpr.data?.errorBody().toString())
                     val errorRes = Gson().fromJson(otpResponse.data?.errorBody()?.string(),LoginOTPErrorResponse::class.java)
                     Toast.makeText(context, errorRes.errorMessage,Toast.LENGTH_SHORT).show()
                 }
@@ -353,14 +329,20 @@ class LoginFragment : DaggerFragment() {
 
 
     //Set UP UI
-        private fun showSignUpUI() {
-            binding?.loginButton?.text = getString(R.string.sign_up)
-            binding?.userInputLayout?.visibility = View.VISIBLE
-        }
+
         private fun showOTPUI() {
             binding?.otpInputLayout?.visibility = View.VISIBLE
             binding?.loginButton?.visibility = View.GONE
-            binding?.verifyButton?.visibility = View.VISIBLE
+            if(signUpFlag) {
+                binding?.verifyButtonLogin?.visibility = View.GONE
+                binding?.verifyButton?.visibility = View.VISIBLE
+                binding?.userInputLayout?.visibility = View.VISIBLE
+                binding?.verifyButton?.text = "Verify & SignUp"
+            }
+            else {
+                binding?.verifyButton?.visibility = View.GONE
+                binding?.verifyButtonLogin?.visibility = View.VISIBLE
+            }
         }
         private fun showNotReceivedOTPUI() {
             binding?.notReceived?.visibility = View.VISIBLE
@@ -380,9 +362,7 @@ class LoginFragment : DaggerFragment() {
         return null
     }
     private fun checkOTP(otp: String): Boolean {
-//            Log.v("OTP Length",otp.length.toString())
-        if (otp.length < 2) {
-            binding?.otpInputLayout?.error = getString(R.string.fourdigit)
+        if (otp.length < 2 || otp.length > 7) {
             return false
         }
         return true
