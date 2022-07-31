@@ -28,6 +28,21 @@
         <action
             android:id="@+id/action_listTaskFragment_to_filterFragment"
             app:destination="@id/filterFragment" />
+        <argument
+            android:name="sortBySelected"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
+        <argument
+            android:name="statusSelected"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
+        <argument
+            android:name="prioritySelected"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
     </fragment>
     <fragment
         android:id="@+id/updateTaskFragment"

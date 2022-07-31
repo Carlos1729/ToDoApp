@@ -65,6 +65,23 @@ class ListToDoFragment : DaggerFragment() {
         checkForUserLocalData()
         observeLiveData()
         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null,null)
+        var order = ListToDoFragmentArgs.fromBundle(requireArguments()).sortBySelected.toString()
+        var selectedStatus = ListToDoFragmentArgs.fromBundle(requireArguments()).statusSelected.toString()
+        var selectedPriority = ListToDoFragmentArgs.fromBundle(requireArguments()).prioritySelected.toString()
+        Toast.makeText(context, order, Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, selectedStatus, Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, selectedPriority, Toast.LENGTH_SHORT).show()
+        if(order == "null")
+        {
+            Toast.makeText(context, "In This", Toast.LENGTH_SHORT).show()
+            viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,selectedStatus,selectedPriority,null,null)
+        }
+        else
+        {
+            Toast.makeText(context, "In That", Toast.LENGTH_SHORT).show()
+            viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,selectedStatus,selectedPriority,"priority",order)
+        }
+
         return view
     }
 
@@ -80,6 +97,23 @@ class ListToDoFragment : DaggerFragment() {
                 null
             )
         }
+        binding?.bottomNavigation?.setOnItemSelectedListener{item ->
+            when(item.itemId) {
+                R.id.page_1 -> {
+                    Toast.makeText(context, "SORT Selected", Toast.LENGTH_SHORT).show()
+                    // Respond to navigation item 1 click
+                    findNavController().navigate(R.id.action_listTaskFragment_to_filterFragment)
+                    true
+                }
+                R.id.page_2 -> {
+                    Toast.makeText(context, "FILTER Selected", Toast.LENGTH_SHORT).show()
+                    // Respond to navigation item 2 click
+                    true
+                }
+                else -> false
+            }
+        }
+
     }
 
     private fun setUpUI() {
@@ -139,11 +173,6 @@ class ListToDoFragment : DaggerFragment() {
                         timecount = 8
                         true
                     }
-                    R.id.menu_sort_by_priority -> {
-                        findNavController().navigate(R.id.action_listTaskFragment_to_filterFragment)
-                        timecount = 9
-                        true
-                    }
                     R.id.deleted_tasks -> {
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"inactive",null,null,null)
                         true
@@ -159,6 +188,8 @@ class ListToDoFragment : DaggerFragment() {
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
+
+
 
     private fun logoutUser() {
         val sharedPreferences = activity?.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
