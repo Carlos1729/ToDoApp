@@ -4,12 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.*
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
@@ -28,7 +24,6 @@ import com.example.todotestapp.databinding.FragmentListTodoBinding
 import com.example.todotestapp.presentation.MainActivity
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModel
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModelFactory
-import com.example.todotestapp.presentation.updateToDo.viewmodel.UpdateToDoViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.android.support.DaggerFragment
 import retrofit2.Response
@@ -90,11 +85,18 @@ class ListToDoFragment : DaggerFragment() {
 
     private fun setUpFilterMenu() {
         val menuHost: MenuHost = requireActivity()
+
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 // Add menu items here
                 menuInflater.inflate(R.menu.list_fragment_menu, menu)
             }
+
+            override fun onPrepareMenu(menu: Menu) {
+                val register = menu.findItem(R.id.menu_grant_permission)
+                register.isVisible = (listToDoUserRole == "admin")
+            }
+
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 // Handle the menu selection
@@ -139,8 +141,8 @@ class ListToDoFragment : DaggerFragment() {
                         timecount = 8
                         true
                     }
-                    R.id.menu_sort_by_priority -> {
-                        findNavController().navigate(R.id.action_listTaskFragment_to_filterFragment)
+                    R.id.menu_grant_permission -> {
+                        findNavController().navigate(R.id.action_listTaskFragment_to_grantPermissionsFragment)
                         timecount = 9
                         true
                     }
@@ -294,6 +296,7 @@ class ListToDoFragment : DaggerFragment() {
                         }
                     }
                 }
+                else -> {}
             }
     }
 

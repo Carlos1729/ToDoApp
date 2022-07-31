@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_listTaskFragment_to_filterFragment"
             app:destination="@id/filterFragment" />
+        <action
+            android:id="@+id/action_listTaskFragment_to_grantPermissionsFragment"
+            app:destination="@id/grantPermissionsFragment" />
     </fragment>
     <fragment
         android:id="@+id/updateTaskFragment"
@@ -57,4 +60,13 @@
             android:id="@+id/action_filterFragment_to_listTaskFragment"
             app:destination="@id/listTaskFragment" />
     </dialog>
+    <fragment
+        android:id="@+id/grantPermissionsFragment"
+        android:name="com.example.todotestapp.presentation.grantpermission.ui.GrantPermissionsFragment"
+        android:label="fragment_grant_permissions_list_dialog"
+        tools:layout="@layout/fragment_grant_permissions_list_dialog" >
+        <action
+            android:id="@+id/action_grantPermissionsFragment_to_listTaskFragment"
+            app:destination="@id/listTaskFragment" />
+    </fragment>
 </navigation>

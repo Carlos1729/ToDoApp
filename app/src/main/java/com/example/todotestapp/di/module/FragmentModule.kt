@@ -3,6 +3,8 @@ package com.example.todotestapp.di.module
 
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.example.todotestapp.domain.usecase.*
+import com.example.todotestapp.presentation.grantpermission.ui.GrantPermissionsFragment
+import com.example.todotestapp.presentation.grantpermission.viewmodel.GrantPermissionViewModelFactory
 import com.example.todotestapp.presentation.listToDo.ui.ListToDoFragment
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModelFactory
 import com.example.todotestapp.presentation.logIn.ui.LoginFragment
@@ -25,6 +27,9 @@ abstract class FragmentModule {
     @ContributesAndroidInjector
     abstract fun getUpdateFragment(): UpdateToDoFragment
 
+    @ContributesAndroidInjector
+    abstract fun getGrantPermissionsFragment() : GrantPermissionsFragment
+
 
     companion object {
 
@@ -40,6 +45,9 @@ abstract class FragmentModule {
         @Provides
         fun provideSignUpuserCache(toDoRepository: ToDoRepository) =
             SignUpUserUseCase(toDoRepository)
+
+        @Provides
+        fun providesAddAdminUseCase(toDoRepository: ToDoRepository) = AddAdminUseCase(toDoRepository)
 
         @Provides
         fun provideListToDoUseCase(toDoRepository: ToDoRepository) = ListToDoUseCase(toDoRepository)
@@ -69,6 +77,12 @@ abstract class FragmentModule {
             signUpUseCase: SignUpUserUseCase, loginUseCase: LoginUserUseCase,loginUserByOTPUseCase: LoginUserByOTPUseCase,signUpUserByOTPUseCase: SignUpUserByOTPUseCase
         ): LoginViewModelFactory {
             return LoginViewModelFactory(signUpUseCase, loginUseCase, loginUserByOTPUseCase,signUpUserByOTPUseCase)
+        }
+
+        @Provides
+        fun provideGrantPermissionViewModelFactory(addAdminUseCase: AddAdminUseCase
+            ): GrantPermissionViewModelFactory {
+            return GrantPermissionViewModelFactory(addAdminUseCase)
         }
 
         @Provides

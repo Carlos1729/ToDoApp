@@ -48,9 +48,10 @@
         app:showAsAction="never"/>
 
     <item
-        android:id="@+id/menu_sort_by_priority"
+        android:id="@+id/menu_grant_permission"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_filter"
+        android:visible="false"
+        android:icon="@drawable/icon_g_per"
         android:title="" />
 
     <item

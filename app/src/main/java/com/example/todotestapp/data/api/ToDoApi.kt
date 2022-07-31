@@ -75,6 +75,12 @@ interface ToDoApi {
         @Body requestBody: UpdateToDoRequest
     ):Response<UpdateToDoResponse>
 
+    @PATCH("authors/{id}/access-update")
+    suspend fun grantPermission(
+        @Path("id") id:Int?,
+        @Body requestBody:AddAdminRequest
+    ):Response<AddAdminResponse>
+
     @DELETE("tasks/{id}")
     suspend fun deleteToDo(
         @Path("id") id:Int?,
