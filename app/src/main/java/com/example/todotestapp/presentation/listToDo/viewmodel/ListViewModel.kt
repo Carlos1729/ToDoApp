@@ -3,25 +3,24 @@ package com.example.todotestapp.presentation.listToDo.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todotestapp.data.db.*
-import com.example.todotestapp.domain.usecase.DeleteToDoUseCase
-import com.example.todotestapp.domain.usecase.ListToDoByStatusUseCase
-import com.example.todotestapp.domain.usecase.ListToDoPaginationUseCase
-import com.example.todotestapp.domain.usecase.ListToDoUseCase
+import com.example.todotestapp.domain.usecase.*
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
 
 class ListViewModel @Inject constructor(toDoFetchUseCase : ListToDoUseCase
                                         , toDoStatusFetchUseCase : ListToDoByStatusUseCase,
-                                        toDoDeleteUseCase : DeleteToDoUseCase, listToDoPaginationUseCase: ListToDoPaginationUseCase ) : ViewModel() {
+                                        toDoDeleteUseCase : DeleteToDoUseCase, listToDoPaginationUseCase: ListToDoPaginationUseCase,updateToDoInListUseCase: UpdateToDoInListUseCase ) : ViewModel() {
 
     private val toDoFetch = toDoFetchUseCase
     private val toDoStatusFetch = toDoStatusFetchUseCase
     private val toDoDelete = toDoDeleteUseCase
     private val listToDoPagination = listToDoPaginationUseCase
+    private val updateToDoInList = updateToDoInListUseCase
 
     val myToDoAllList: StateLiveData<Response<ListToDoResponse>> = StateLiveData()
     val myToDoListByStatus: StateLiveData<Response<ListToDoResponse>> = StateLiveData()
+    val myUpdateToDoInListResponse : StateLiveData<Response<UpdateToDoResponse>> = StateLiveData()
     val deleteToDoItemLiveData: StateLiveData<Response<BaseResponse>> = StateLiveData()
     val myToDoAllPaginationList: StateLiveData<Response<ListToDoPaginationResponse>> = StateLiveData()
 
@@ -78,6 +77,22 @@ class ListViewModel @Inject constructor(toDoFetchUseCase : ListToDoUseCase
                 if(response.isSuccessful) {
                     deleteToDoItemLiveData.postSuccess(response)
                 }
+            }
+        }
+    }
+
+    fun updateToDoInList(id: Int,requestBody: UpdateToDoRequest)
+    {
+        viewModelScope.launch {
+            myUpdateToDoInListResponse.postLoading()
+            val response = updateToDoInList.updateToDoInListByRequest(id,requestBody)
+            if(response.isSuccessful)
+            {
+                myUpdateToDoInListResponse.postSuccess(response)
+            }
+            if(response.code() == 400)
+            {
+                myUpdateToDoInListResponse.postSuccess(response)
             }
         }
     }

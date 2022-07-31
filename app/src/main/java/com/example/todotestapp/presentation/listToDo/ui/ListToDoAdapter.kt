@@ -1,12 +1,12 @@
 package com.example.todotestapp.presentation.listToDo.ui
 
-import android.graphics.Color
+import android.R
+import android.graphics.PorterDuff
+import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -84,12 +84,12 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
                     holder.binding.priorityIndicator.text = "Pending"
                     holder.binding.priorityIndicator.setBackgroundColor(ContextCompat.getColor(holder.itemView.context, com.example.todotestapp.R.color.black))
                 }
+                 "inactive"-> {
+                     holder.binding.priorityIndicator.text = "Inactive"
+                     holder.binding.priorityIndicator.setBackgroundColor(ContextCompat.getColor(holder.itemView.context, com.example.todotestapp.R.color.blue))
+                 }
              }
 
-//        when(myList[position].status){
-//                "completed"-> holder.binding.priorityIndicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.green))
-//                "pending"-> holder.binding.priorityIndicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.Red))
-//             }
 
         when(myList[position].priority)
         {
@@ -171,3 +171,5 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
         toDoDiffResult.dispatchUpdatesTo(this)
     }
 }
+
+

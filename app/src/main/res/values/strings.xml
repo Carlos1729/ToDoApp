@@ -68,6 +68,7 @@
     <string name="ntndce">Neither Title Nor Description can be empty</string>
     <string name="psootp">Please select one of the priorities</string>
     <string name="inve">Invalid Email</string>
+    <string name="deleted_tasks">Deleted Tasks</string>
 
 
     <string-array name="statusoftask">

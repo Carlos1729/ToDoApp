@@ -43,6 +43,11 @@
         app:showAsAction="never"/>
 
     <item
+        android:id="@+id/deleted_tasks"
+        android:title="@string/deleted_tasks"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/menu_sort_by_priority"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_filter"

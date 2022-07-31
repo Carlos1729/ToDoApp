@@ -20,9 +20,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todotestapp.R
-import com.example.todotestapp.data.db.BaseResponse
-import com.example.todotestapp.data.db.ListToDoPaginationResponse
-import com.example.todotestapp.data.db.StateData
+import com.example.todotestapp.data.db.*
 import com.example.todotestapp.data.repository.Constants.ID
 import com.example.todotestapp.data.repository.Constants.ROLE
 import com.example.todotestapp.data.repository.Constants.SHARED_PREFERENCES
@@ -30,6 +28,7 @@ import com.example.todotestapp.databinding.FragmentListTodoBinding
 import com.example.todotestapp.presentation.MainActivity
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModel
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModelFactory
+import com.example.todotestapp.presentation.updateToDo.viewmodel.UpdateToDoViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.android.support.DaggerFragment
 import retrofit2.Response
@@ -71,7 +70,7 @@ class ListToDoFragment : DaggerFragment() {
 
     private fun observeLiveData() {
         observeLiveDataPaginationList()
-        observeDelete()
+        observeUpdateToDoInList()
     }
 
     private fun setUpClickListeners() {
@@ -89,11 +88,6 @@ class ListToDoFragment : DaggerFragment() {
         setUpFilterMenu()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding = null
-    }
-
     private fun setUpFilterMenu() {
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
@@ -106,46 +100,52 @@ class ListToDoFragment : DaggerFragment() {
                 // Handle the menu selection
                 return when (menuItem.itemId) {
                     R.id.menu_completed -> {
-
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"completed",null,null,null)
-//                        viewModel.getTasksByStatus(listToDoUserId, "completed")
                         timecount = 1
                         true
                     }
                     R.id.menu_pending -> {
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"pending",null,null,null)
-//                        viewModel.getTasksByStatus(listToDoUserId, "pending")
                         timecount = 2
                         true
                     }
                     R.id.menu_all -> {
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null,null)
-//                        viewModel.getAllTasks(listToDoUserId)
                         timecount = 3
                         true
                     }
                     R.id.high_priority -> {
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,"high",null,null)
+                        timecount = 4
                         true
                     }
                     R.id.medium_priority -> {
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,"medium",null,null)
+                        timecount = 5
                         true
                     }
                     R.id.low_priority -> {
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,"low", null,null)
+                        timecount = 6
                         true
                     }
                     R.id.sort_priority_by_high -> {
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null, "priority","DESC")
+                        timecount = 7
                         true
                     }
                     R.id.sort_priority_by_low -> {
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null, "priority","ASC")
+                        timecount = 8
                         true
                     }
                     R.id.menu_sort_by_priority -> {
                         findNavController().navigate(R.id.action_listTaskFragment_to_filterFragment)
+                        timecount = 9
+                        true
+                    }
+                    R.id.deleted_tasks -> {
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"inactive",null,null,null)
                         true
                     }
                     R.id.logout -> {
@@ -180,42 +180,84 @@ class ListToDoFragment : DaggerFragment() {
         val swipeToDeleteCallback = object : SwipeToDelete() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val itemToDelete = myAdapter.myList[viewHolder.adapterPosition]
-                viewModel.deleteToDo(itemToDelete.taskId)
-                Toast.makeText(context, "ToDo Deleted Successfully", Toast.LENGTH_SHORT).show()
+                val updatedTitle: String = itemToDelete.title.toString()
+                val updatedDescription: String = itemToDelete.description.toString()
+                val updatedStatus: String = "inactive"
+                val updatedPriority: String = itemToDelete.priority.toString()
+                val presentUpdateToDoRequest = UpdateToDoRequest(
+                    updatedTitle,
+                    updatedDescription,
+                    updatedStatus,
+                    updatedPriority
+                )
+                viewModel.updateToDoInList(itemToDelete.taskId!!, presentUpdateToDoRequest)
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
-    private fun observeDelete() {
-        viewModel.deleteToDoItemLiveData.observe(viewLifecycleOwner, Observer{
-                handleResponseDelete(it)
-        })
+
+
+
+
+
+    private fun observeUpdateToDoInList() {
+        viewModel.myUpdateToDoInListResponse.observe(viewLifecycleOwner){
+            handleResponseUpdateInList(it)
+        }
     }
 
-    private fun handleResponseDelete(mydlr: StateData<Response<BaseResponse>>?) {
-        when (mydlr?.status) {
+    private fun handleResponseUpdateInList(updateInListResponse: StateData<Response<UpdateToDoResponse>>?) {
+
+        when (updateInListResponse?.status) {
             StateData.DataStatus.LOADING -> {
                 binding?.listProgressBar?.visibility = View.VISIBLE
             }
             StateData.DataStatus.SUCCESS -> {
                 binding?.listProgressBar?.visibility = View.GONE
-                Log.v("TIMECOUNT", timecount.toString())
-                if (timecount == -1 || timecount == 3) {
-                    viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null,null)
+                if (updateInListResponse.data?.body() != null) {
+                        Toast.makeText(context, getString(R.string.mtds), Toast.LENGTH_SHORT).show()
+                    if (timecount == -1 || timecount == 3) {
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null,null)
+                    }
+                    if (timecount == 1) {
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"completed",null,null,null)
+                    }
+                    if (timecount == 2) {
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"pending",null,null,null)
+                    }
+                    if(timecount == 4){
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,"high",null,null)
+                    }
+                    if(timecount == 5){
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,"medium",null,null)
+                    }
+                    if(timecount == 6){
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,"low", null,null)
+                    }
+                    if(timecount == 7){
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null, "priority","DESC")
+                    }
+                    if(timecount == 8){
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null, "priority","ASC")
+                    }
+                    if(timecount == 9){
+
+                    }
                 }
-                if (timecount == 1) {
-                    viewModel.getTasksByStatus(listToDoUserId, "completed")
-                }
-                if (timecount == 2) {
-                    viewModel.getTasksByStatus(listToDoUserId, "pending")
+                else if (updateInListResponse.data?.code() == 400) {
+                    Toast.makeText(
+                        context,
+                        "Something Went Wrong Please Try Again",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
-
             else -> {}
         }
     }
+
 
 
     private fun observeLiveDataPaginationList(){
@@ -240,6 +282,9 @@ class ListToDoFragment : DaggerFragment() {
                         {
                             binding?.loginNoResultsTv?.visibility = View.VISIBLE
                             binding?.emptyIcon?.visibility = View.VISIBLE
+                            allListToDoPaginationResponse.data?.body().let {
+                                myAdapter.setData(allListToDoPaginationResponse.data?.body()!!).let { it }
+                            }
                         } else{
                             binding?.loginNoResultsTv?.visibility = View.GONE
                             binding?.emptyIcon?.visibility = View.GONE
@@ -251,6 +296,12 @@ class ListToDoFragment : DaggerFragment() {
                 }
             }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+
 
 
 

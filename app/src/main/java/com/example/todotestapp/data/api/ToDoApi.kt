@@ -69,6 +69,12 @@ interface ToDoApi {
         @Body requestBody: UpdateToDoRequest
     ):Response<UpdateToDoResponse>
 
+    @PATCH("tasks/{id}")
+    suspend fun updateToDoInList(
+        @Path("id") id:Int?,
+        @Body requestBody: UpdateToDoRequest
+    ):Response<UpdateToDoResponse>
+
     @DELETE("tasks/{id}")
     suspend fun deleteToDo(
         @Path("id") id:Int?,

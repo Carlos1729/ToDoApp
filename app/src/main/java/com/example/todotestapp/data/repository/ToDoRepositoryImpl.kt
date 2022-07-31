@@ -52,6 +52,13 @@ class ToDoRepositoryImpl : ToDoRepository {
         return RetrofitInstance.api.updateToDo(id,requestBody)
     }
 
+    override suspend fun updateToDoInList(
+        id: Int?,
+        requestBody: UpdateToDoRequest
+    ): Response<UpdateToDoResponse> {
+        return RetrofitInstance.api.updateToDoInList(id,requestBody)
+    }
+
     override suspend fun deleteToDo(id: Int?): Response<BaseResponse> {
         return RetrofitInstance.api.deleteToDo(id)
     }

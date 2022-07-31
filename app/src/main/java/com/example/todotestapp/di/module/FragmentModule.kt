@@ -61,6 +61,8 @@ abstract class FragmentModule {
         fun provideUpdateToDoUseCase(toDoRepository: ToDoRepository) =
             UpdateToDoUseCase(toDoRepository)
 
+        @Provides
+        fun provideUpdateToDoInListUseCase(toDoRepository: ToDoRepository) = UpdateToDoInListUseCase(toDoRepository)
 
         @Provides
         fun provideLoginViewModelFactory(
@@ -73,9 +75,9 @@ abstract class FragmentModule {
         fun provideListViewModelFactory(
             toDoListUseCase: ListToDoUseCase,
             toListByStatusUseCase: ListToDoByStatusUseCase,
-            deleteToDoUseCase: DeleteToDoUseCase, listToDoPaginationUseCase: ListToDoPaginationUseCase
+            deleteToDoUseCase: DeleteToDoUseCase, listToDoPaginationUseCase: ListToDoPaginationUseCase, updateToDoInListUseCase: UpdateToDoInListUseCase
         ): ListViewModelFactory {
-            return ListViewModelFactory(toDoListUseCase, toListByStatusUseCase, deleteToDoUseCase,listToDoPaginationUseCase)
+            return ListViewModelFactory(toDoListUseCase, toListByStatusUseCase, deleteToDoUseCase,listToDoPaginationUseCase,updateToDoInListUseCase)
         }
 
         @Provides
