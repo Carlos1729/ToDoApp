@@ -1,15 +1,17 @@
 package com.example.todotestapp.presentation.listToDo.ui
 
-import android.R
-import android.graphics.PorterDuff
+import android.content.Context
+import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.todotestapp.R
 import com.example.todotestapp.data.db.BaseListToDoResponse
 import com.example.todotestapp.data.db.ListToDoPaginationResponse
 import com.example.todotestapp.databinding.LayoutRowBinding
@@ -77,16 +79,25 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
 
              when(myList[position].status){
                 "completed"-> {
+                    holder.binding.priorityIndicator.setBackgroundResource(R.drawable.rounded_corner_completed)
+                    holder.binding.priorityIndicator.setTextColor(ContextCompat.getColor(holder.itemView.context, com.example.todotestapp.R.color.black))
                     holder.binding.priorityIndicator.text = "Completed"
-                    holder.binding.priorityIndicator.setBackgroundColor(ContextCompat.getColor(holder.itemView.context, com.example.todotestapp.R.color.darkGray))
+                    holder.binding.priorityIndicator.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+//                    holder.binding.priorityIndicator.setBackgroundColor(ContextCompat.getColor(holder.itemView.context, com.example.todotestapp.R.color.darkGray))
                 }
                 "pending"-> {
+                    holder.binding.priorityIndicator.setBackgroundResource(R.drawable.rounded_corner)
+                    holder.binding.priorityIndicator.setTextColor(ContextCompat.getColor(holder.itemView.context, com.example.todotestapp.R.color.white))
                     holder.binding.priorityIndicator.text = "Pending"
-                    holder.binding.priorityIndicator.setBackgroundColor(ContextCompat.getColor(holder.itemView.context, com.example.todotestapp.R.color.black))
+                    holder.binding.priorityIndicator.paintFlags = 0
+
+//                    holder.binding.priorityIndicator.setBackgroundColor(ContextCompat.getColor(holder.itemView.context, com.example.todotestapp.R.color.black))
                 }
                  "inactive"-> {
-                     holder.binding.priorityIndicator.text = "Inactive"
                      holder.binding.priorityIndicator.setBackgroundColor(ContextCompat.getColor(holder.itemView.context, com.example.todotestapp.R.color.blue))
+                     holder.binding.priorityIndicator.setTextColor(ContextCompat.getColor(holder.itemView.context, com.example.todotestapp.R.color.white))
+                     holder.binding.priorityIndicator.text = "Inactive"
+                     holder.binding.priorityIndicator.paintFlags = 0
                  }
              }
 
@@ -105,6 +116,8 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
         }
 
     }
+
+
 
     private fun timecheck(subSequence: String): String {
 

@@ -69,6 +69,8 @@
     <string name="psootp">Please select one of the priorities</string>
     <string name="inve">Invalid Email</string>
     <string name="deleted_tasks">Deleted Tasks</string>
+    <string name="completed_striked"><strike>Completed</strike></string>
+
 
 
     <string-array name="statusoftask">
