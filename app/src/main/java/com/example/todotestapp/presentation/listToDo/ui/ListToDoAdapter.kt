@@ -5,10 +5,12 @@ import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.navigation.findNavController
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todotestapp.R
@@ -19,8 +21,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
-
+class ListToDoAdapter : PagingDataAdapter<BaseListToDoResponse, ListToDoAdapter.MyListHolder>(DiffUtilCallBack()) {
+    
     var myList = emptyList<BaseListToDoResponse>()
     var sdf: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
     var output: SimpleDateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
@@ -168,21 +170,37 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
 //        return dataset.size
     }
 
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
-
     override fun getItemViewType(position: Int): Int {
         return position
     }
 
     fun setData(newList: ListToDoPaginationResponse) {
-
         val toDoDiffUtil = ToDoDiffUtil(myList,newList.tasks!!)
         val toDoDiffResult = DiffUtil.calculateDiff(toDoDiffUtil)
         myList = newList.tasks
         toDoDiffResult.dispatchUpdatesTo(this)
     }
+
+
 }
+
+class DiffUtilCallBack : DiffUtil.ItemCallback<BaseListToDoResponse>() {
+    override fun areItemsTheSame(
+        oldItem: BaseListToDoResponse,
+        newItem: BaseListToDoResponse
+    ): Boolean {
+        return oldItem.taskId == newItem.taskId
+    }
+
+    override fun areContentsTheSame(
+        oldItem: BaseListToDoResponse,
+        newItem: BaseListToDoResponse
+    ): Boolean {
+        return oldItem == newItem
+    }
+
+}
+
+
 
 
