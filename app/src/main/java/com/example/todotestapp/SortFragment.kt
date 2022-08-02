@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.navigation.fragment.findNavController
 import com.example.todotestapp.data.repository.Constants.IS_USER_LOGGED_IN
+import com.example.todotestapp.data.repository.Constants.ORDER_STRING
+import com.example.todotestapp.data.repository.Constants.PRIORITY_STRING
 import com.example.todotestapp.data.repository.Constants.SELECTED_SORT
 import com.example.todotestapp.data.repository.Constants.SHARED_PREFERENCES
 import com.example.todotestapp.databinding.FragmentSortListDialogBinding
@@ -22,6 +24,8 @@ class SortFragment : BottomSheetDialogFragment() {
     // onDestroyView.
     private val binding get() = _binding!!
     private var sortByStored: Int = -1
+    private var sortByString: String? = ""
+
 //    val sharedPreferences = activity?.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
 //    private val editor = sharedPreferences?.edit()
 
@@ -83,6 +87,7 @@ class SortFragment : BottomSheetDialogFragment() {
                     val sharedPreferences = activity?.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
                     val editor = sharedPreferences?.edit()
                     editor?.putInt(SELECTED_SORT,sortByStored)
+                    editor?.putString(ORDER_STRING,"DESC")
                     editor?.apply()
                 }
                 if (radioButton.text.toString() == "Priority Low To High") {
@@ -91,6 +96,7 @@ class SortFragment : BottomSheetDialogFragment() {
                     val sharedPreferences = activity?.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
                     val editor = sharedPreferences?.edit()
                     editor?.putInt(SELECTED_SORT,sortByStored)
+                    editor?.putString(ORDER_STRING,"ASC")
                     editor?.apply()
                 }
             }
@@ -100,6 +106,7 @@ class SortFragment : BottomSheetDialogFragment() {
                 val sharedPreferences = activity?.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
                 val editor = sharedPreferences?.edit()
                 editor?.putInt(SELECTED_SORT,sortByStored)
+                editor?.putString(ORDER_STRING,null)
                 editor?.apply()
             }
             findNavController().navigate(SortFragmentDirections.actionSortFragmentToListTaskFragment(sortBySelected = stringToPass))
@@ -113,7 +120,7 @@ class SortFragment : BottomSheetDialogFragment() {
             if (sharedPreferences != null) {
                 if (sharedPreferences.contains(SELECTED_SORT)) {
                     sortByStored = sharedPreferences.getInt(SELECTED_SORT,10)
-                    Log.v("sortByStored",sortByStored.toString())
+                    sortByString = sharedPreferences.getString(ORDER_STRING,"")
                 }
             }
         }

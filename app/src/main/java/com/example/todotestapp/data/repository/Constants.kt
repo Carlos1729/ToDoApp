@@ -16,4 +16,9 @@ object Constants {
         const val SELECTED_STATUS = "selected_status"
         const val SELECTED_PRIORITY = "selected_priority"
         const val SELECTED_SORT = "sort_by_priority"
+        const val STATUS_STRING = "status_string"
+        const val PRIORITY_STRING = "priority_string"
+        const val ORDER_STRING = "order_string"
+
+
 }

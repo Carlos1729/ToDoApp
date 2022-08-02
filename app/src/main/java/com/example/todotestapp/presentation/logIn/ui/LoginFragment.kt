@@ -16,11 +16,14 @@ import com.example.todotestapp.data.db.StateData.DataStatus
 import com.example.todotestapp.data.repository.Constants.EMAIL
 import com.example.todotestapp.data.repository.Constants.ID
 import com.example.todotestapp.data.repository.Constants.IS_USER_LOGGED_IN
+import com.example.todotestapp.data.repository.Constants.ORDER_STRING
+import com.example.todotestapp.data.repository.Constants.PRIORITY_STRING
 import com.example.todotestapp.data.repository.Constants.ROLE
 import com.example.todotestapp.data.repository.Constants.SELECTED_PRIORITY
 import com.example.todotestapp.data.repository.Constants.SELECTED_SORT
 import com.example.todotestapp.data.repository.Constants.SELECTED_STATUS
 import com.example.todotestapp.data.repository.Constants.SHARED_PREFERENCES
+import com.example.todotestapp.data.repository.Constants.STATUS_STRING
 import com.example.todotestapp.data.repository.Constants.USER_NAME
 import com.example.todotestapp.databinding.FragmentLoginBinding
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
@@ -324,6 +327,9 @@ class LoginFragment : DaggerFragment() {
             putInt(SELECTED_STATUS,0)
             putInt(SELECTED_PRIORITY,0)
             putInt(SELECTED_SORT,0)
+            putString(STATUS_STRING,null)
+            putString(PRIORITY_STRING,null)
+            putString(ORDER_STRING,null)
         }.apply()
     }
 

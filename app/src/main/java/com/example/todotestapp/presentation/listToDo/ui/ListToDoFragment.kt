@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todotestapp.R
 import com.example.todotestapp.data.db.*
+import com.example.todotestapp.data.repository.Constants
 import com.example.todotestapp.data.repository.Constants.ID
 import com.example.todotestapp.data.repository.Constants.ROLE
 import com.example.todotestapp.data.repository.Constants.SHARED_PREFERENCES
@@ -50,6 +51,7 @@ class ListToDoFragment : DaggerFragment() {
     private var timecount: Int = -1
     private var addToDoButton : FloatingActionButton? =null
     private val myAdapter by lazy { ListToDoAdapter() }
+    var order:String? = null
 
 
     override fun onCreateView(
@@ -65,7 +67,7 @@ class ListToDoFragment : DaggerFragment() {
         checkForUserLocalData()
         observeLiveData()
 //        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null,null)
-        var order = ListToDoFragmentArgs.fromBundle(requireArguments()).sortBySelected.toString()
+//        order = ListToDoFragmentArgs.fromBundle(requireArguments()).sortBySelected.toString()
         var selectedStatus: String? = ListToDoFragmentArgs.fromBundle(requireArguments()).statusSelected.toString()
         var selectedPriority : String? = ListToDoFragmentArgs.fromBundle(requireArguments()).prioritySelected.toString()
         if(selectedPriority == "null")
@@ -76,7 +78,7 @@ class ListToDoFragment : DaggerFragment() {
         {
             selectedStatus = null
         }
-        Toast.makeText(context, order, Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, order.toString(), Toast.LENGTH_SHORT).show()
         Toast.makeText(context, selectedStatus.toString(), Toast.LENGTH_SHORT).show()
         Toast.makeText(context, selectedPriority.toString(), Toast.LENGTH_SHORT).show()
         if(order == "null")
@@ -217,6 +219,7 @@ class ListToDoFragment : DaggerFragment() {
             if (sharedPreferences.contains(ID)) {
                 listToDoUserId = sharedPreferences.getInt(ID,-1)
                 listToDoUserRole = sharedPreferences.getString(ROLE,"").toString()
+                order = sharedPreferences.getString(Constants.ORDER_STRING,"")
             }
         }
     }
