@@ -3,15 +3,11 @@ package com.example.todotestapp.presentation.logIn.ui
 import android.content.Context
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todotestapp.R
@@ -21,6 +17,9 @@ import com.example.todotestapp.data.repository.Constants.EMAIL
 import com.example.todotestapp.data.repository.Constants.ID
 import com.example.todotestapp.data.repository.Constants.IS_USER_LOGGED_IN
 import com.example.todotestapp.data.repository.Constants.ROLE
+import com.example.todotestapp.data.repository.Constants.SELECTED_PRIORITY
+import com.example.todotestapp.data.repository.Constants.SELECTED_SORT
+import com.example.todotestapp.data.repository.Constants.SELECTED_STATUS
 import com.example.todotestapp.data.repository.Constants.SHARED_PREFERENCES
 import com.example.todotestapp.data.repository.Constants.USER_NAME
 import com.example.todotestapp.databinding.FragmentLoginBinding
@@ -32,7 +31,6 @@ import com.google.gson.Gson
 import dagger.android.support.DaggerFragment
 import retrofit2.Response
 import javax.inject.Inject
-import kotlin.math.sign
 
 
 class LoginFragment : DaggerFragment() {
@@ -323,6 +321,9 @@ class LoginFragment : DaggerFragment() {
             putInt(ID,userDetails.id)
             putString(ROLE,userDetails.role)
             putBoolean(IS_USER_LOGGED_IN, true)
+            putInt(SELECTED_STATUS,0)
+            putInt(SELECTED_PRIORITY,0)
+            putInt(SELECTED_SORT,0)
         }.apply()
     }
 
