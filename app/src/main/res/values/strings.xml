@@ -70,7 +70,8 @@
     <string name="inve">Invalid Email</string>
     <string name="deleted_tasks">Deleted Tasks</string>
     <string name="completed_striked"><strike>Completed</strike></string>
-
+    <string name="sort">SORT</string>
+    <string name="filter">FILTER</string>
 
 
     <string-array name="statusoftask">

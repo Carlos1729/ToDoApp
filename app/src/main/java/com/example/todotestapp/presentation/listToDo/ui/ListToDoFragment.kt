@@ -64,17 +64,25 @@ class ListToDoFragment : DaggerFragment() {
         viewModel = ViewModelProvider(this, viewModelFactory)[ListViewModel::class.java]
         checkForUserLocalData()
         observeLiveData()
-        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null,null)
+//        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null,null)
         var order = ListToDoFragmentArgs.fromBundle(requireArguments()).sortBySelected.toString()
-        var selectedStatus = ListToDoFragmentArgs.fromBundle(requireArguments()).statusSelected.toString()
-        var selectedPriority = ListToDoFragmentArgs.fromBundle(requireArguments()).prioritySelected.toString()
+        var selectedStatus: String? = ListToDoFragmentArgs.fromBundle(requireArguments()).statusSelected.toString()
+        var selectedPriority : String? = ListToDoFragmentArgs.fromBundle(requireArguments()).prioritySelected.toString()
+        if(selectedPriority == "null")
+        {
+            selectedPriority = null
+        }
+        if(selectedStatus == "null")
+        {
+            selectedStatus = null
+        }
         Toast.makeText(context, order, Toast.LENGTH_SHORT).show()
-        Toast.makeText(context, selectedStatus, Toast.LENGTH_SHORT).show()
-        Toast.makeText(context, selectedPriority, Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, selectedStatus.toString(), Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, selectedPriority.toString(), Toast.LENGTH_SHORT).show()
         if(order == "null")
         {
             Toast.makeText(context, "In This", Toast.LENGTH_SHORT).show()
-            viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,selectedStatus,selectedPriority,null,null)
+            viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,selectedStatus, selectedPriority,null,null)
         }
         else
         {
@@ -97,17 +105,23 @@ class ListToDoFragment : DaggerFragment() {
                 null
             )
         }
+        binding?.bottomNavigation?.menu?.getItem(0)?.isCheckable = false
         binding?.bottomNavigation?.setOnItemSelectedListener{item ->
             when(item.itemId) {
                 R.id.page_1 -> {
-                    Toast.makeText(context, "SORT Selected", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Filter Selected", Toast.LENGTH_SHORT).show()
                     // Respond to navigation item 1 click
+                    binding?.bottomNavigation?.menu?.getItem(1)?.isCheckable = false
+                    binding?.bottomNavigation?.menu?.getItem(0)?.isCheckable = true
                     findNavController().navigate(R.id.action_listTaskFragment_to_filterFragment)
                     true
                 }
                 R.id.page_2 -> {
-                    Toast.makeText(context, "FILTER Selected", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Sort Selected", Toast.LENGTH_SHORT).show()
                     // Respond to navigation item 2 click
+                    binding?.bottomNavigation?.menu?.getItem(0)?.isCheckable = false
+                    binding?.bottomNavigation?.menu?.getItem(1)?.isCheckable = true
+                    findNavController().navigate(R.id.action_listTaskFragment_to_sortFragment)
                     true
                 }
                 else -> false

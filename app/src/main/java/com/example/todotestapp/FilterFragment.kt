@@ -32,15 +32,15 @@ class FilterFragment : BottomSheetDialogFragment() {
     private fun setUpClickListeners() {
 
             binding.selectedFilterButton.setOnClickListener{
-                var stringToPass:String? = null
-                val checkedSortId = binding.sortRadio.checkedRadioButtonId
-                if(checkedSortId != View.NO_ID) {
-                    val radioButton: RadioButton = binding.root.findViewById(checkedSortId)
-                    if (radioButton.text.toString() == "Priority High To Low")
-                        stringToPass = "DESC"
-                    if (radioButton.text.toString() == "Priority Low To High")
-                        stringToPass = "ASC"
-                }
+//                var stringToPass:String? = null
+//                val checkedSortId = binding.sortRadio.checkedRadioButtonId
+//                if(checkedSortId != View.NO_ID) {
+//                    val radioButton: RadioButton = binding.root.findViewById(checkedSortId)
+//                    if (radioButton.text.toString() == "Priority High To Low")
+//                        stringToPass = "DESC"
+//                    if (radioButton.text.toString() == "Priority Low To High")
+//                        stringToPass = "ASC"
+//                }
                 var stringToPassStatus:String? = null
                 val checkedStatusId = binding.statusRadio.checkedRadioButtonId
                 if(checkedStatusId != View.NO_ID)
@@ -73,7 +73,7 @@ class FilterFragment : BottomSheetDialogFragment() {
                         stringToPassPriority = "medium"
                     }
                 }
-                findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToListTaskFragment(sortBySelected = stringToPass, statusSelected = stringToPassStatus, prioritySelected = stringToPassPriority))
+                findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToListTaskFragment(statusSelected = stringToPassStatus, prioritySelected = stringToPassPriority))
             }
     }
 

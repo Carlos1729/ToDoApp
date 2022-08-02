@@ -3,11 +3,11 @@
     <item
         android:id="@+id/page_1"
         android:enabled="true"
-        android:icon="@drawable/ic_sort_icon"
-        android:title="SORT"/>
+        android:icon="@drawable/ic_icon_filter"
+        android:title="@string/filter"/>
     <item
         android:id="@+id/page_2"
         android:enabled="true"
-        android:icon="@drawable/ic_icon_filter"
-        android:title="FILTER"/>
+        android:icon="@drawable/ic_sort_icon"
+        android:title="@string/sort"/>
 </menu>
