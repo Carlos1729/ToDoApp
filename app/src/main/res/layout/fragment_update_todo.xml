@@ -29,7 +29,7 @@
         android:ems="10"
         android:hint="Title Goes Here"
         android:inputType="textPersonName"
-        android:maxLength="25"
+        android:maxLength="35"
         android:paddingStart="15dp"
         android:paddingTop="10dp"
         android:paddingEnd="15dp"

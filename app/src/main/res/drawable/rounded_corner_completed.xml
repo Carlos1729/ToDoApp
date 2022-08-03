@@ -7,7 +7,7 @@
         android:color="@color/lightGray"
         />
 
-    <solid app:color="@color/lightGray" />
+    <solid android:color="@color/lightGray" />
 
     <padding
         android:left="1dp"

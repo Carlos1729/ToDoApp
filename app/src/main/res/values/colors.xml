@@ -9,6 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="card_grey">@color/white</color>
     <color name="lightGray">#FFD3D3D3</color>
+    <color name="mediumGray">#B6B5B5</color>
     <color name="darkGray">#6E6B6B</color>
     <color name="Red"> #FFFF0000</color>
     <color name="green">#3AD318</color>
