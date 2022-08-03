@@ -177,6 +177,10 @@ class ListToDoFragment : DaggerFragment() {
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"inactive",null,null,null)
                         true
                     }
+                    R.id.menu_grant_permission -> {
+                        findNavController().navigate(R.id.action_listTaskFragment_to_grantPermissionsFragment)
+                        true
+                    }
                     R.id.logout -> {
                         GlobalVariable.INACTIVEFLAG = false
                         logoutUser()

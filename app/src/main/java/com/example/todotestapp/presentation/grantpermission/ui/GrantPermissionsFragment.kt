@@ -71,10 +71,10 @@ class GrantPermissionsFragment : DaggerFragment() {
                 val addAdminRequest = AddAdminRequest(currentGrantPermissionEmail,true)
                 revokeFlag = false
                 viewModel.addAdminFun(grantPermissionUserId,addAdminRequest)
-                Toast.makeText(
-                    context,"Email is Valid",
-                    Toast.LENGTH_SHORT
-                ).show()
+//                Toast.makeText(
+//                    context,"Email is Valid",
+//                    Toast.LENGTH_SHORT
+//                ).show()
             }
         }
 
@@ -85,10 +85,10 @@ class GrantPermissionsFragment : DaggerFragment() {
                 val addAdminRequest = AddAdminRequest(currentGrantPermissionEmail,false)
                 revokeFlag = true
                 viewModel.addAdminFun(grantPermissionUserId,addAdminRequest)
-                Toast.makeText(
-                    context,"Email is Valid",
-                    Toast.LENGTH_SHORT
-                ).show()
+//                Toast.makeText(
+//                    context,"Email is Valid",
+//                    Toast.LENGTH_SHORT
+//                ).show()
             }
         }
     }

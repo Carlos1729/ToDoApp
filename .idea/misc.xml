@@ -39,9 +39,9 @@
         <entry key="app/src/main/res/layout/fragment_sort_list_dialog_item.xml" value="0.11865942028985507" />
         <entry key="app/src/main/res/layout/fragment_update.xml" value="0.125" />
         <entry key="app/src/main/res/layout/fragment_update_task.xml" value="0.2028985507246377" />
-        <entry key="app/src/main/res/layout/fragment_update_todo.xml" value="0.3333333333333333" />
+        <entry key="app/src/main/res/layout/fragment_update_todo.xml" value="0.27044025157232704" />
         <entry key="app/src/main/res/layout/layout_menu.xml" value="0.16983695652173914" />
-        <entry key="app/src/main/res/layout/layout_row.xml" value="0.4893203883495146" />
+        <entry key="app/src/main/res/layout/layout_row.xml" value="0.4087301587301587" />
         <entry key="app/src/main/res/layout/list_fragment_menu.xml" value="0.15364583333333334" />
         <entry key="app/src/main/res/menu/add_task_fragment_menu.xml" value="0.25" />
         <entry key="app/src/main/res/menu/list_fragment_menu.xml" value="0.25" />
