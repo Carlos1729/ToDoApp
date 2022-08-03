@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todotestapp.R
 import com.example.todotestapp.data.db.BaseListToDoResponse
 import com.example.todotestapp.data.db.ListToDoPaginationResponse
+import com.example.todotestapp.data.repository.GlobalVariable
 import com.example.todotestapp.databinding.LayoutRowBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -111,8 +112,11 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
         }
 
         holder.binding.rowBackground.setOnClickListener{
-            val action = ListToDoFragmentDirections.actionListTaskFragmentToUpdateTaskFragment(myList[position])
-            holder.itemView.findNavController().navigate(action)
+            if(!GlobalVariable.INACTIVEFLAG) {
+                val action =
+                    ListToDoFragmentDirections.actionListTaskFragmentToUpdateTaskFragment(myList[position])
+                holder.itemView.findNavController().navigate(action)
+            }
         }
 
     }

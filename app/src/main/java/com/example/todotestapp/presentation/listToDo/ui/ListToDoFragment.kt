@@ -68,6 +68,7 @@ class ListToDoFragment : DaggerFragment() {
         setUpClickListeners()
         checkForUserLocalData()
         observeLiveData()
+        GlobalVariable.INACTIVEFLAG = false
 //        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null,null)
 //        order = ListToDoFragmentArgs.fromBundle(requireArguments()).sortBySelected.toString()
         val hashMapOrder : HashMap<Int?, String?> = HashMap<Int?, String?> ()
@@ -112,6 +113,7 @@ class ListToDoFragment : DaggerFragment() {
     }
 
     private fun setUpClickListeners() {
+
         addToDoButton?.setOnClickListener {
             findNavController().navigate(
                 R.id.action_listTaskFragment_to_updateTaskFragment,
@@ -122,7 +124,7 @@ class ListToDoFragment : DaggerFragment() {
         binding?.bottomNavigation?.setOnItemSelectedListener{item ->
             when(item.itemId) {
                 R.id.page_1 -> {
-                    Toast.makeText(context, "Filter Selected", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(context, "Filter Selected", Toast.LENGTH_SHORT).show()
                     // Respond to navigation item 1 click
                     binding?.bottomNavigation?.menu?.getItem(1)?.isCheckable = false
                     binding?.bottomNavigation?.menu?.getItem(0)?.isCheckable = true
@@ -130,7 +132,7 @@ class ListToDoFragment : DaggerFragment() {
                     true
                 }
                 R.id.page_2 -> {
-                    Toast.makeText(context, "Sort Selected", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(context, "Sort Selected", Toast.LENGTH_SHORT).show()
                     // Respond to navigation item 2 click
                     binding?.bottomNavigation?.menu?.getItem(0)?.isCheckable = false
                     binding?.bottomNavigation?.menu?.getItem(1)?.isCheckable = true
@@ -161,6 +163,7 @@ class ListToDoFragment : DaggerFragment() {
                 // Handle the menu selection
                 return when (menuItem.itemId) {
                     R.id.menu_all -> {
+                        GlobalVariable.INACTIVEFLAG = false
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null,null)
                         viewModel.setStatusFromFrag(0)
                         viewModel.setPriorityFromFrag(0)
@@ -169,11 +172,12 @@ class ListToDoFragment : DaggerFragment() {
                         true
                     }
                     R.id.deleted_tasks -> {
-//                        GlobalVariable.INACTIVEFLAG = true
+                        GlobalVariable.INACTIVEFLAG = true
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"inactive",null,null,null)
                         true
                     }
                     R.id.logout -> {
+                        GlobalVariable.INACTIVEFLAG = false
                         logoutUser()
                         activity?.finish()
                         startActivity(Intent(context, MainActivity::class.java))
