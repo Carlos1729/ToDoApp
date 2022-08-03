@@ -1,5 +1,7 @@
 package com.example.todotestapp.presentation.listToDo.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todotestapp.data.db.*
@@ -95,6 +97,28 @@ class ListViewModel @Inject constructor(toDoFetchUseCase : ListToDoUseCase
                 myUpdateToDoInListResponse.postSuccess(response)
             }
         }
+    }
+
+
+    private val _sortByStored: MutableLiveData<Int> = MutableLiveData()
+    val sortByStored: LiveData<Int> = _sortByStored
+    fun setSortByStoredFromFrag(value : Int = 0)
+    {
+        _sortByStored.postValue(value)
+    }
+
+    private val _statusStored : MutableLiveData<Int> = MutableLiveData()
+    val statusStored: LiveData<Int> = _statusStored
+    fun setStatusFromFrag(value : Int = 0)
+    {
+        _statusStored.postValue(value)
+    }
+
+    private val _priorityStored : MutableLiveData<Int> = MutableLiveData()
+    val priorityStored: LiveData<Int> = _priorityStored
+    fun setPriorityFromFrag(value : Int = 0)
+    {
+        _priorityStored.postValue(value)
     }
 
 }

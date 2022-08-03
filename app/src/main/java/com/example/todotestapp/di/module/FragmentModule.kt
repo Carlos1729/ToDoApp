@@ -1,6 +1,8 @@
 package com.example.todotestapp.di.module
 
 
+import com.example.todotestapp.FilterFragment
+import com.example.todotestapp.SortFragment
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.example.todotestapp.domain.usecase.*
 import com.example.todotestapp.presentation.listToDo.ui.ListToDoFragment
@@ -24,6 +26,14 @@ abstract class FragmentModule {
 
     @ContributesAndroidInjector
     abstract fun getUpdateFragment(): UpdateToDoFragment
+
+    @ContributesAndroidInjector
+    abstract fun getSortFragment(): SortFragment
+
+    @ContributesAndroidInjector
+    abstract fun getFilterFragment(): FilterFragment
+
+
 
 
     companion object {

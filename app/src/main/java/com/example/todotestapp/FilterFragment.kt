@@ -7,15 +7,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.todotestapp.data.repository.Constants
 import com.example.todotestapp.databinding.FragmentFilterListDialogBinding
+import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModel
+import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
 
-class FilterFragment : BottomSheetDialogFragment() {
+class FilterFragment : DaggerFragment() {
+
+
+    @Inject
+    lateinit var viewModelFactory: ListViewModelFactory
 
     private var _binding: FragmentFilterListDialogBinding? = null
+
+    private val viewModel: ListViewModel by activityViewModels {
+        viewModelFactory
+    }
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -30,8 +43,8 @@ class FilterFragment : BottomSheetDialogFragment() {
     ): View? {
 
         _binding = FragmentFilterListDialogBinding.inflate(inflater, container, false)
-        checkForUserLocalData()
-        when (statusStored) {
+//        checkForUserLocalData()
+        when (viewModel.statusStored.value) {
             1 -> {
                 val radioButtonSafe1: RadioButton = binding.root.findViewById(R.id.status_pending)
                 radioButtonSafe1.isChecked = false
@@ -66,7 +79,7 @@ class FilterFragment : BottomSheetDialogFragment() {
 
             }
         }
-        when (priorityStored) {
+        when (viewModel.priorityStored.value) {
             1 -> {
                 val radioButtonSafe1: RadioButton = binding.root.findViewById(R.id.priority_medium)
                 radioButtonSafe1.isChecked = false
@@ -105,23 +118,6 @@ class FilterFragment : BottomSheetDialogFragment() {
 
     }
 
-    private fun checkForUserLocalData() {
-        val sharedPreferences = activity?.getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE)
-        val editor = sharedPreferences?.edit()
-        sharedPreferences.let {
-            if (sharedPreferences != null) {
-                if (sharedPreferences.contains(Constants.SELECTED_STATUS)) {
-                    statusStored = sharedPreferences.getInt(Constants.SELECTED_STATUS,10)
-                    Log.v("sortByStored",statusStored.toString())
-                }
-                if (sharedPreferences.contains(Constants.SELECTED_PRIORITY)) {
-                    priorityStored = sharedPreferences.getInt(Constants.SELECTED_PRIORITY,10)
-                    Log.v("sortByStored",priorityStored.toString())
-                }
-            }
-        }
-    }
-
     private fun setUpClickListeners() {
 
             binding.clearAllPriority.setOnClickListener{
@@ -133,75 +129,36 @@ class FilterFragment : BottomSheetDialogFragment() {
 
             binding.selectedFilterButton.setOnClickListener{
                 var stringToPassStatus:String? = null
-                val checkedStatusId = binding.statusRadio.checkedRadioButtonId
-                if(checkedStatusId != View.NO_ID)
-                {
-                    val radioButton: RadioButton = binding.root.findViewById(checkedStatusId)
-                    if(radioButton.text.toString() == "Completed")
-                    {
+                when (binding.statusRadio.checkedRadioButtonId) {
+                    R.id.status_completed ->{
                         stringToPassStatus = "completed"
-                        statusStored = 1
-                        val sharedPreferences = activity?.getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE)
-                        val editor = sharedPreferences?.edit()
-                        editor?.putInt(Constants.SELECTED_STATUS,statusStored)
-                        editor?.apply()
+                        viewModel.setStatusFromFrag(1)
                     }
-                    if(radioButton.text.toString() == "Pending")
-                    {
+                    R.id.status_pending -> {
                         stringToPassStatus = "pending"
-                        statusStored = 2
-                        val sharedPreferences = activity?.getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE)
-                        val editor = sharedPreferences?.edit()
-                        editor?.putInt(Constants.SELECTED_STATUS,statusStored)
-                        editor?.apply()
+                        viewModel.setStatusFromFrag(2)
                     }
-                }
-                else{
-                    statusStored = 0
-                    val sharedPreferences = activity?.getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE)
-                    val editor = sharedPreferences?.edit()
-                    editor?.putInt(Constants.SELECTED_STATUS,statusStored)
-                    editor?.apply()
+                    else -> {
+                        viewModel.setStatusFromFrag(0)
+                    }
                 }
                 var stringToPassPriority:String? = null
-                val checkedPriorityId = binding.priorityRadio.checkedRadioButtonId
-                if(checkedPriorityId != View.NO_ID)
-                {
-                    val radioButton: RadioButton = binding.root.findViewById(checkedPriorityId)
-                    if(radioButton.text.toString() == "High Priority")
-                    {
+                when (binding.priorityRadio.checkedRadioButtonId) {
+                    R.id.priority_high ->{
                         stringToPassPriority = "high"
-                        priorityStored = 1
-                        val sharedPreferences = activity?.getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE)
-                        val editor = sharedPreferences?.edit()
-                        editor?.putInt(Constants.SELECTED_PRIORITY,priorityStored)
-                        editor?.apply()
+                        viewModel.setPriorityFromFrag(1)
                     }
-                    if(radioButton.text.toString() == "Low Priority")
-                    {
-                        stringToPassPriority = "low"
-                        priorityStored = 3
-                        val sharedPreferences = activity?.getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE)
-                        val editor = sharedPreferences?.edit()
-                        editor?.putInt(Constants.SELECTED_PRIORITY,priorityStored)
-                        editor?.apply()
-                    }
-                    if(radioButton.text.toString() == "Medium Priority")
-                    {
+                    R.id.priority_medium -> {
                         stringToPassPriority = "medium"
-                        priorityStored = 2
-                        val sharedPreferences = activity?.getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE)
-                        val editor = sharedPreferences?.edit()
-                        editor?.putInt(Constants.SELECTED_PRIORITY,priorityStored)
-                        editor?.apply()
+                        viewModel.setPriorityFromFrag(2)
                     }
-                }
-                else{
-                    priorityStored = 0
-                    val sharedPreferences = activity?.getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE)
-                    val editor = sharedPreferences?.edit()
-                    editor?.putInt(Constants.SELECTED_PRIORITY,priorityStored)
-                    editor?.apply()
+                    R.id.low_priority -> {
+                        stringToPassPriority = "low"
+                        viewModel.setPriorityFromFrag(3)
+                    }
+                    else -> {
+                        viewModel.setPriorityFromFrag(0)
+                    }
                 }
                 findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToListTaskFragment(statusSelected = stringToPassStatus, prioritySelected = stringToPassPriority))
             }

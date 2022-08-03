@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -44,7 +45,9 @@ class ListToDoFragment : DaggerFragment() {
     @Inject
     lateinit var sharedPreferences : SharedPreferences
 
-    private lateinit var viewModel: ListViewModel
+    private val viewModel: ListViewModel by activityViewModels {
+        viewModelFactory
+    }
     private  var binding: FragmentListTodoBinding ?= null
     private var listToDoUserId: Int = -1
     private var listToDoUserRole: String = ""
@@ -63,33 +66,41 @@ class ListToDoFragment : DaggerFragment() {
         (activity as MainActivity).supportActionBar?.title = "ToDo's"
         setUpUI()
         setUpClickListeners()
-        viewModel = ViewModelProvider(this, viewModelFactory)[ListViewModel::class.java]
         checkForUserLocalData()
         observeLiveData()
 //        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null,null)
 //        order = ListToDoFragmentArgs.fromBundle(requireArguments()).sortBySelected.toString()
-        var selectedStatus: String? = ListToDoFragmentArgs.fromBundle(requireArguments()).statusSelected.toString()
-        var selectedPriority : String? = ListToDoFragmentArgs.fromBundle(requireArguments()).prioritySelected.toString()
-        if(selectedPriority == "null")
+        val hashMapOrder : HashMap<Int?, String?> = HashMap<Int?, String?> ()
+        hashMapOrder[1] = "DESC"
+        hashMapOrder[2] = "ASC"
+        hashMapOrder[null] = null
+        hashMapOrder[0] = null
+        val hashMapStatus : HashMap<Int?, String?> = HashMap<Int?, String?> ()
+        hashMapStatus[1] = "completed"
+        hashMapStatus[2] = "pending"
+        hashMapStatus[null] = null
+        hashMapStatus[0] = null
+        val hashMapPriority : HashMap<Int?, String?> = HashMap<Int?, String?> ()
+        hashMapPriority[1] = "high"
+        hashMapPriority[2] = "medium"
+        hashMapPriority[3] = "low"
+        hashMapPriority[null] = null
+        hashMapPriority[0] = null
+        val order = viewModel.sortByStored.value
+        val selectedStatus = viewModel.statusStored.value
+        val selectedPriority = viewModel.priorityStored.value
+//        Toast.makeText(context, order.toString(), Toast.LENGTH_SHORT).show()
+//        Toast.makeText(context, selectedStatus.toString(), Toast.LENGTH_SHORT).show()
+//        Toast.makeText(context, selectedPriority.toString(), Toast.LENGTH_SHORT).show()
+        if(order == null || order == 0)
         {
-            selectedPriority = null
-        }
-        if(selectedStatus == "null")
-        {
-            selectedStatus = null
-        }
-        Toast.makeText(context, order.toString(), Toast.LENGTH_SHORT).show()
-        Toast.makeText(context, selectedStatus.toString(), Toast.LENGTH_SHORT).show()
-        Toast.makeText(context, selectedPriority.toString(), Toast.LENGTH_SHORT).show()
-        if(order == "null")
-        {
-            Toast.makeText(context, "In This", Toast.LENGTH_SHORT).show()
-            viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,selectedStatus, selectedPriority,null,null)
+//            Toast.makeText(context, "In This", Toast.LENGTH_SHORT).show()//change this after getting status and priority thing
+            viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,hashMapStatus[selectedStatus], hashMapPriority[selectedPriority],null,null)
         }
         else
         {
-            Toast.makeText(context, "In That", Toast.LENGTH_SHORT).show()
-            viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,selectedStatus,selectedPriority,"priority",order)
+//            Toast.makeText(context, "In That", Toast.LENGTH_SHORT).show()//change this after getting status and priority thing
+            viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,hashMapStatus[selectedStatus],hashMapPriority[selectedPriority],"priority",hashMapOrder[order])
         }
 
         return view
