@@ -26,6 +26,7 @@ import com.example.todotestapp.data.repository.Constants
 import com.example.todotestapp.data.repository.Constants.ID
 import com.example.todotestapp.data.repository.Constants.ROLE
 import com.example.todotestapp.data.repository.Constants.SHARED_PREFERENCES
+import com.example.todotestapp.data.repository.GlobalVariable
 import com.example.todotestapp.databinding.FragmentListTodoBinding
 import com.example.todotestapp.presentation.MainActivity
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModel
@@ -54,7 +55,6 @@ class ListToDoFragment : DaggerFragment() {
     private var timecount: Int = -1
     private var addToDoButton : FloatingActionButton? =null
     private val myAdapter by lazy { ListToDoAdapter() }
-    var order:String? = null
 
 
     override fun onCreateView(
@@ -160,47 +160,16 @@ class ListToDoFragment : DaggerFragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 // Handle the menu selection
                 return when (menuItem.itemId) {
-                    R.id.menu_completed -> {
-                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"completed",null,null,null)
-                        timecount = 1
-                        true
-                    }
-                    R.id.menu_pending -> {
-                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"pending",null,null,null)
-                        timecount = 2
-                        true
-                    }
                     R.id.menu_all -> {
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null,null)
+                        viewModel.setStatusFromFrag(0)
+                        viewModel.setPriorityFromFrag(0)
+                        viewModel.setSortByStoredFromFrag(0)
                         timecount = 3
                         true
                     }
-                    R.id.high_priority -> {
-                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,"high",null,null)
-                        timecount = 4
-                        true
-                    }
-                    R.id.medium_priority -> {
-                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,"medium",null,null)
-                        timecount = 5
-                        true
-                    }
-                    R.id.low_priority -> {
-                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,"low", null,null)
-                        timecount = 6
-                        true
-                    }
-                    R.id.sort_priority_by_high -> {
-                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null, "priority","DESC")
-                        timecount = 7
-                        true
-                    }
-                    R.id.sort_priority_by_low -> {
-                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null, "priority","ASC")
-                        timecount = 8
-                        true
-                    }
                     R.id.deleted_tasks -> {
+//                        GlobalVariable.INACTIVEFLAG = true
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"inactive",null,null,null)
                         true
                     }
@@ -230,7 +199,6 @@ class ListToDoFragment : DaggerFragment() {
             if (sharedPreferences.contains(ID)) {
                 listToDoUserId = sharedPreferences.getInt(ID,-1)
                 listToDoUserRole = sharedPreferences.getString(ROLE,"").toString()
-                order = sharedPreferences.getString(Constants.ORDER_STRING,"")
             }
         }
     }
@@ -276,33 +244,44 @@ class ListToDoFragment : DaggerFragment() {
             StateData.DataStatus.SUCCESS -> {
                 binding?.listProgressBar?.visibility = View.GONE
                 if (updateInListResponse.data?.body() != null) {
-                        Toast.makeText(context, getString(R.string.mtds), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getString(R.string.mtds), Toast.LENGTH_SHORT).show()
+                    val hashMapOrder : HashMap<Int?, String?> = HashMap<Int?, String?> ()
+                    hashMapOrder[1] = "DESC"
+                    hashMapOrder[2] = "ASC"
+                    hashMapOrder[null] = null
+                    hashMapOrder[0] = null
+                    val hashMapStatus : HashMap<Int?, String?> = HashMap<Int?, String?> ()
+                    hashMapStatus[1] = "completed"
+                    hashMapStatus[2] = "pending"
+                    hashMapStatus[null] = null
+                    hashMapStatus[0] = null
+                    val hashMapPriority : HashMap<Int?, String?> = HashMap<Int?, String?> ()
+                    hashMapPriority[1] = "high"
+                    hashMapPriority[2] = "medium"
+                    hashMapPriority[3] = "low"
+                    hashMapPriority[null] = null
+                    hashMapPriority[0] = null
+                    val order = viewModel.sortByStored.value
+                    val selectedStatus = viewModel.statusStored.value
+                    val selectedPriority = viewModel.priorityStored.value
+                    if(order != null || selectedStatus != null || selectedPriority != null)
+                    {
+                        timecount = 0
+                    }
+                    Log.v("checkingValues",timecount.toString())
                     if (timecount == -1 || timecount == 3) {
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null,null)
                     }
-                    if (timecount == 1) {
-                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"completed",null,null,null)
-                    }
-                    if (timecount == 2) {
-                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"pending",null,null,null)
-                    }
-                    if(timecount == 4){
-                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,"high",null,null)
-                    }
-                    if(timecount == 5){
-                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,"medium",null,null)
-                    }
-                    if(timecount == 6){
-                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,"low", null,null)
-                    }
-                    if(timecount == 7){
-                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null, "priority","DESC")
-                    }
-                    if(timecount == 8){
-                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null, "priority","ASC")
-                    }
-                    if(timecount == 9){
-
+                    else
+                    {
+                        if(order == null || order == 0)
+                        {
+                            viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,hashMapStatus[selectedStatus], hashMapPriority[selectedPriority],null,null)
+                        }
+                        else
+                        {
+                            viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,hashMapStatus[selectedStatus],hashMapPriority[selectedPriority],"priority",hashMapOrder[order])
+                        }
                     }
                 }
                 else if (updateInListResponse.data?.code() == 400) {

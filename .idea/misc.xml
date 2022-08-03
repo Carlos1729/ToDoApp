@@ -44,7 +44,7 @@
         <entry key="app/src/main/res/layout/layout_row.xml" value="0.4893203883495146" />
         <entry key="app/src/main/res/layout/list_fragment_menu.xml" value="0.15364583333333334" />
         <entry key="app/src/main/res/menu/add_task_fragment_menu.xml" value="0.25" />
-        <entry key="app/src/main/res/menu/list_fragment_menu.xml" value="0.375" />
+        <entry key="app/src/main/res/menu/list_fragment_menu.xml" value="0.25" />
         <entry key="app/src/main/res/menu/update_task_fragment_menu.xml" value="0.25" />
       </map>
     </option>

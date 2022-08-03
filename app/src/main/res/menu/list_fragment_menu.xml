@@ -2,15 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/menu_completed"
-        android:title="@string/completed"
-        app:showAsAction="never"/>
 
-    <item
-        android:id="@+id/menu_pending"
-        android:title="@string/pending"
-        app:showAsAction="never"/>
 
     <item
         android:id="@+id/menu_all"
@@ -18,40 +10,9 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/high_priority"
-        android:title="@string/high_priority"
-        app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/medium_priority"
-        android:title="@string/medium_priority"
-        app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/low_priority"
-        android:title="@string/low_priority"
-        app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/sort_priority_by_high"
-        android:title="@string/sort_by_priority_high"
-        app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/sort_priority_by_low"
-        android:title="@string/sort_by_priority_low"
-        app:showAsAction="never"/>
-
-    <item
         android:id="@+id/deleted_tasks"
         android:title="@string/deleted_tasks"
         app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/menu_sort_by_priority"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_filter"
-        android:title="" />
 
     <item
         android:id="@+id/logout"

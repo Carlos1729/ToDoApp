@@ -152,7 +152,7 @@ class FilterFragment : DaggerFragment() {
                         stringToPassPriority = "medium"
                         viewModel.setPriorityFromFrag(2)
                     }
-                    R.id.low_priority -> {
+                    R.id.priority_low -> {
                         stringToPassPriority = "low"
                         viewModel.setPriorityFromFrag(3)
                     }
