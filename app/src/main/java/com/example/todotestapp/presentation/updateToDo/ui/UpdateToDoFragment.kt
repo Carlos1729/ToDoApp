@@ -40,8 +40,8 @@ class UpdateToDoFragment : DaggerFragment() {
     private var addToDoFlag:  Boolean = false
     private  var binding: FragmentUpdateTodoBinding ?= null
     private var descriptionTV: TextView? = null
-    private var statusspin: Spinner? = null
     private var priorityspin: AutoCompleteTextView? = null
+    private var statusspin: AutoCompleteTextView? = null
     private var todostatus: String? = null
     private var idOfTask: Int? = null
     private var button: Button? = null
@@ -55,6 +55,9 @@ class UpdateToDoFragment : DaggerFragment() {
         val priorities = resources.getStringArray(R.array.priorities)
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, priorities)
         binding?.priorityDropdownEdittext?.setAdapter(arrayAdapter)
+        val statuses = resources.getStringArray(R.array.statusoftask)
+        val arrayAdapterPriority = ArrayAdapter(requireContext(), R.layout.dropdown_item, statuses)
+        binding?.statusDropdownEdittext?.setAdapter(arrayAdapterPriority)
     }
 
     override fun onCreateView(
@@ -63,9 +66,9 @@ class UpdateToDoFragment : DaggerFragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentUpdateTodoBinding.inflate(inflater)
-        binding?.statusSpinner?.visibility = View.GONE
+        binding?.statusDropdown?.visibility = View.GONE
         binding?.deleteTaskButton?.visibility = View.GONE
-        binding?.statusHeading?.visibility = View.GONE
+        binding?.statusDropdown?.visibility = View.GONE
 
         val view = binding?.root
 
@@ -97,12 +100,14 @@ class UpdateToDoFragment : DaggerFragment() {
                 if (!addToDoFlag) {
                     val updatedTitle: String = titleTV?.text.toString()
                     val updatedDescription: String = descriptionTV?.text.toString()
-                    val updatedStatus: String = statusspin?.selectedItem.toString()
                     val hashMap: HashMap<String, String> = HashMap<String, String>()
                     hashMap["High Priority"] = "high"
                     hashMap["Medium Priority"] = "medium"
                     hashMap["Low Priority"] = "low"
+                    hashMap["Completed"] = "completed"
+                    hashMap["Pending"] = "pending"
                     val updatedPriority: String? = hashMap[priorityspin?.text.toString()]
+                    val updatedStatus : String? = hashMap[statusspin?.text.toString()]
                     val presentUpdateToDoRequest = UpdateToDoRequest(
                         updatedTitle,
                         updatedDescription,
@@ -292,11 +297,9 @@ class UpdateToDoFragment : DaggerFragment() {
 
         if (title != null || description != null) {
             button?.text = getString(R.string.update_button)
-            binding?.statusSpinner?.visibility = View.VISIBLE
 //            binding?.statusSpinner?.onItemSelectedListener
             binding?.deleteTaskButton?.visibility = View.VISIBLE
-            binding?.statusHeading?.visibility = View.VISIBLE
-            statusspin?.setSelection(parseStatus(todostatus))
+            binding?.statusDropdown?.visibility = View.VISIBLE
             (activity as MainActivity).supportActionBar?.title = "Update Item"
 
         } else {
@@ -311,14 +314,17 @@ class UpdateToDoFragment : DaggerFragment() {
         todoItem?.let {
             title = it.title
             description = it.description
-            todostatus = it.status
             idOfTask = it.taskId
             val hashMapReverse : HashMap<String, String> = HashMap<String, String> ()
             hashMapReverse["high"] = "High Priority"
             hashMapReverse["medium"] = "Medium Priority"
             hashMapReverse["low"] = "Low Priority"
+            hashMapReverse["completed"] = "Completed"
+            hashMapReverse["pending"] = "Pending"
             val editable: Editable = SpannableStringBuilder(hashMapReverse[it.priority])
             priorityspin?.text = editable
+            val editableStatus = SpannableStringBuilder(hashMapReverse[it.status])
+            statusspin?.text = editableStatus
         }
     }
 
@@ -326,7 +332,7 @@ class UpdateToDoFragment : DaggerFragment() {
         titleTV = binding?.updateTitle
         descriptionTV = binding?.updateDescription
         button = binding?.updateTaskbutton
-        statusspin = binding?.statusSpinner
+        statusspin = binding?.statusDropdownEdittext
         priorityspin = binding?.priorityDropdownEdittext
         deleteButton = binding?.deleteTaskButton
     }

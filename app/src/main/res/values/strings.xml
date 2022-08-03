@@ -72,11 +72,12 @@
     <string name="completed_striked"><strike>Completed</strike></string>
     <string name="sort">SORT</string>
     <string name="filter">FILTER</string>
+    <string name="status">Status</string>
 
 
     <string-array name="statusoftask">
-        <item>pending</item>
-        <item>completed</item>
+        <item>Completed</item>
+        <item>Pending</item>
     </string-array>
 
     <string-array name="priorities">
