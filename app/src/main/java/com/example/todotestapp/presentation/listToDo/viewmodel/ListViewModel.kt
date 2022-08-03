@@ -1,11 +1,14 @@
 package com.example.todotestapp.presentation.listToDo.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import com.example.todotestapp.data.db.*
 import com.example.todotestapp.domain.usecase.*
 import kotlinx.coroutines.launch
 import retrofit2.Response
+import java.util.concurrent.Flow
 import javax.inject.Inject
 
 class ListViewModel @Inject constructor(toDoFetchUseCase : ListToDoUseCase
@@ -37,12 +40,11 @@ class ListViewModel @Inject constructor(toDoFetchUseCase : ListToDoUseCase
         }
     }
 
-    fun getAllTasksPagination(role:String,id:Int,pageNo:Int?,status: String?,priority:String?,orderBy:String?,sort:String?)
-    {
+    fun getAllTasksPagination(role:String,id:Int,pageNo:Int?,status: String?,priority:String?,orderBy:String?,sort:String?) {
         viewModelScope.launch {
             myToDoAllPaginationList.postLoading()
-            val response : Response<ListToDoPaginationResponse> = listToDoPagination.listToDoPaginationById(role, id, pageNo,status,priority,orderBy,sort)
-            if(response.isSuccessful)
+            val response : Flow<PagingData<Response<>>> = listToDoPagination.listToDoPaginationById(role, id, pageNo,status,priority,orderBy,sort)
+            if(response.)
             {
                 myToDoAllPaginationList.postSuccess(response)
             }

@@ -59,7 +59,7 @@ class LoginViewModel @Inject constructor(signUpUseCase : SignUpUserUseCase , log
             {
                 myLoginUserByOTPResponse.postSuccess(response)
             }
-            else if(response.code() == 400) {
+            else if(response.code() == 400)
                 myLoginUserByOTPResponse.postSuccess(response)
             }
         }
