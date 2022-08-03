@@ -4,12 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.*
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
@@ -31,7 +27,6 @@ import com.example.todotestapp.databinding.FragmentListTodoBinding
 import com.example.todotestapp.presentation.MainActivity
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModel
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModelFactory
-import com.example.todotestapp.presentation.updateToDo.viewmodel.UpdateToDoViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.android.support.DaggerFragment
 import retrofit2.Response
@@ -113,7 +108,6 @@ class ListToDoFragment : DaggerFragment() {
     }
 
     private fun setUpClickListeners() {
-
         addToDoButton?.setOnClickListener {
             findNavController().navigate(
                 R.id.action_listTaskFragment_to_updateTaskFragment,
@@ -159,6 +153,12 @@ class ListToDoFragment : DaggerFragment() {
                 menuInflater.inflate(R.menu.list_fragment_menu, menu)
             }
 
+            override fun onPrepareMenu(menu: Menu) {
+                val register = menu.findItem(R.id.menu_grant_permission)
+                register.isVisible = (listToDoUserRole == "admin")
+            }
+
+
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 // Handle the menu selection
                 return when (menuItem.itemId) {
@@ -188,8 +188,6 @@ class ListToDoFragment : DaggerFragment() {
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
-
-
 
     private fun logoutUser() {
         val sharedPreferences = activity?.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
@@ -336,6 +334,7 @@ class ListToDoFragment : DaggerFragment() {
                         }
                     }
                 }
+                else -> {}
             }
     }
 

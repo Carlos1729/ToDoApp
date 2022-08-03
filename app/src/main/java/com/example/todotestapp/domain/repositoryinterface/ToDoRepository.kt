@@ -9,6 +9,7 @@ interface ToDoRepository {
     suspend fun loginUserByOTP(requestBody: LoginOTPRequest): Response<LoginOTPResponse>
     suspend fun signUpUser(requestBody: SignUpUserRequest): Response<SignUpUserResponse>
     suspend fun signUpUserByOTP(requestBody: SignUpOTPRequest): Response<SignUpOTPResponse>
+    suspend fun grantPermission(id:Int?,requestBody: AddAdminRequest): Response<AddAdminResponse>
     suspend fun addToDo(requestBody: AddToDoRequest): Response<AddToDoResponse>
     suspend fun listToDo(id: Int): Response<ListToDoResponse>
     suspend fun listToDoPagination(role: String,id: Int,pageNo: Int?,status: String?, priority:String?,orderBy:String?,sort:String?): Response<ListToDoPaginationResponse>

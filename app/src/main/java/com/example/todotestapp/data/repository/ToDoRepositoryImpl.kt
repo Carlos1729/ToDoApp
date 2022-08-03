@@ -59,6 +59,13 @@ class ToDoRepositoryImpl : ToDoRepository {
         return RetrofitInstance.api.updateToDoInList(id,requestBody)
     }
 
+    override suspend fun grantPermission(
+        id: Int?,
+        requestBody: AddAdminRequest
+    ): Response<AddAdminResponse> {
+        return RetrofitInstance.api.grantPermission(id,requestBody)
+    }
+
     override suspend fun deleteToDo(id: Int?): Response<BaseResponse> {
         return RetrofitInstance.api.deleteToDo(id)
     }

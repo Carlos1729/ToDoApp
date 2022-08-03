@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.example.todotestapp.domain.usecase.LoginUserUseCase
 import com.example.todotestapp.domain.usecase.SignUpUserUseCase
+import com.example.todotestapp.presentation.grantpermission.viewmodel.GrantPermissionViewModel
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModel
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModelFactory
 import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModel
@@ -33,6 +34,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ListViewModel::class)
     abstract fun bindListViewModel(listViewModel : ListViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(GrantPermissionViewModel::class)
+    abstract fun bindGrantPermissionViewModel(grantPermissionViewModel: GrantPermissionViewModel) : ViewModel
 
     companion object{
     }

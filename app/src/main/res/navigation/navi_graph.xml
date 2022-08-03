@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_listTaskFragment_to_filterFragment"
             app:destination="@id/filterFragment" />
+        <action
+            android:id="@+id/action_listTaskFragment_to_grantPermissionsFragment"
+            app:destination="@id/grantPermissionsFragment" />
         <argument
             android:name="sortBySelected"
             app:argType="string"
