@@ -126,16 +126,16 @@ class ListToDoFragment : DaggerFragment() {
                 R.id.page_1 -> {
 //                    Toast.makeText(context, "Filter Selected", Toast.LENGTH_SHORT).show()
                     // Respond to navigation item 1 click
-                    binding?.bottomNavigation?.menu?.getItem(1)?.isCheckable = false
-                    binding?.bottomNavigation?.menu?.getItem(0)?.isCheckable = true
+//                    binding?.bottomNavigation?.menu?.getItem(1)?.isCheckable = false
+//                    binding?.bottomNavigation?.menu?.getItem(0)?.isCheckable = true
                     findNavController().navigate(R.id.action_listTaskFragment_to_filterFragment)
                     true
                 }
                 R.id.page_2 -> {
 //                    Toast.makeText(context, "Sort Selected", Toast.LENGTH_SHORT).show()
                     // Respond to navigation item 2 click
-                    binding?.bottomNavigation?.menu?.getItem(0)?.isCheckable = false
-                    binding?.bottomNavigation?.menu?.getItem(1)?.isCheckable = true
+//                    binding?.bottomNavigation?.menu?.getItem(0)?.isCheckable = false
+//                    binding?.bottomNavigation?.menu?.getItem(1)?.isCheckable = true
                     findNavController().navigate(R.id.action_listTaskFragment_to_sortFragment)
                     true
                 }
