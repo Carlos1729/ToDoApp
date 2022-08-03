@@ -160,7 +160,7 @@ class FilterFragment : DaggerFragment() {
                         viewModel.setPriorityFromFrag(0)
                     }
                 }
-                findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToListTaskFragment(statusSelected = stringToPassStatus, prioritySelected = stringToPassPriority))
+                findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToListTaskFragment())
             }
     }
 
