@@ -22,17 +22,21 @@ import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
 import com.example.todotestapp.domain.usecase.ListToDoUseCase
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModel
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModelFactory
+import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-class SortFragment : DaggerFragment() {
+class SortFragment : BottomSheetDialogFragment() {
 
 
 
       @Inject
       lateinit var viewModelFactory: ListViewModelFactory
 
-
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        AndroidSupportInjection.inject(this)
+    }
 
 
      private var _binding: FragmentSortListDialogBinding? = null

@@ -71,7 +71,7 @@
             app:nullable="true" />
 
     </fragment>
-    <fragment
+    <dialog
         android:id="@+id/filterFragment"
         android:name="com.example.todotestapp.FilterFragment"
         android:label="fragment_filter_list_dialog"
@@ -79,8 +79,8 @@
         <action
             android:id="@+id/action_filterFragment_to_listTaskFragment"
             app:destination="@id/listTaskFragment" />
-    </fragment>
-    <fragment
+    </dialog>
+    <dialog
         android:id="@+id/sortFragment"
         android:name="com.example.todotestapp.SortFragment"
         android:label="fragment_sort_list_dialog"
@@ -88,9 +88,9 @@
         <action
             android:id="@+id/action_sortFragment_to_listTaskFragment"
             app:destination="@id/listTaskFragment" />
-    </fragment>
+    </dialog>
 
-    <fragment
+    <dialog
         android:id="@+id/grantPermissionsFragment"
         android:name="com.example.todotestapp.presentation.grantpermission.ui.GrantPermissionsFragment"
         android:label="fragment_grant_permissions_list_dialog"
@@ -98,5 +98,5 @@
         <action
             android:id="@+id/action_grantPermissionsFragment_to_listTaskFragment"
             app:destination="@id/listTaskFragment" />
-    </fragment>
+    </dialog>
 </navigation>

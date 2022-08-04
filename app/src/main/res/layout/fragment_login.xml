@@ -98,8 +98,7 @@
         android:id="@+id/otptimer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="20dp"
         android:text="Timer"
         android:textColor="@color/Red"
         android:textSize="14sp"
@@ -108,7 +107,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/verify_button"
         app:layout_constraintTop_toBottomOf="@id/otpInputLayout" />
 
     <TextView
@@ -116,7 +114,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:text="@string/didn_t_receive_the_otp"
         android:textSize="14sp"
         android:visibility="gone"
@@ -129,7 +127,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="48dp"
         android:text="@string/resend_otp"
         android:textColor="@color/orange"
@@ -148,20 +146,20 @@
         android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:backgroundTint="@color/purple_500"
         android:text="@string/login"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/otpInputLayout" />
+        app:layout_constraintTop_toBottomOf="@id/emailInputLayout"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <Button
         android:id="@+id/verify_button_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="60dp"
         android:backgroundTint="@color/purple_500"
         android:text="VERIFY"
         android:visibility="gone"
@@ -174,7 +172,7 @@
         android:id="@+id/verify_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="60dp"
         android:backgroundTint="@color/purple_500"
         android:text="VERIFY"
         android:visibility="gone"

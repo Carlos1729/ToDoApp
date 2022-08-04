@@ -14,15 +14,22 @@ import com.example.todotestapp.databinding.FragmentFilterListDialogBinding
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModel
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
 
-class FilterFragment : DaggerFragment() {
+class FilterFragment : BottomSheetDialogFragment() {
 
 
     @Inject
     lateinit var viewModelFactory: ListViewModelFactory
+
+
+    override fun onAttach(context: Context) {
+                super.onAttach(context)
+                AndroidSupportInjection.inject(this)
+    }
 
     private var _binding: FragmentFilterListDialogBinding? = null
 

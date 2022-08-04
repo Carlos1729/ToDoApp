@@ -116,6 +116,7 @@ class ListToDoFragment : DaggerFragment() {
             )
         }
         binding?.bottomNavigation?.menu?.getItem(0)?.isCheckable = false
+        binding?.bottomNavigation?.menu?.getItem(1)?.isCheckable = false
         binding?.bottomNavigation?.setOnItemSelectedListener{item ->
             when(item.itemId) {
                 R.id.page_1 -> {
