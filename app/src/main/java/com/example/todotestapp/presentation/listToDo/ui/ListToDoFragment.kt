@@ -9,6 +9,7 @@ import android.view.*
 import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.forEach
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
@@ -24,6 +25,9 @@ import com.example.todotestapp.data.repository.Constants.ID
 import com.example.todotestapp.data.repository.Constants.ROLE
 import com.example.todotestapp.data.repository.Constants.SHARED_PREFERENCES
 import com.example.todotestapp.data.repository.GlobalVariable
+import com.example.todotestapp.data.repository.GlobalVariable.hashMapOrder
+import com.example.todotestapp.data.repository.GlobalVariable.hashMapPriority
+import com.example.todotestapp.data.repository.GlobalVariable.hashMapStatus
 import com.example.todotestapp.databinding.FragmentListTodoBinding
 import com.example.todotestapp.presentation.MainActivity
 import com.example.todotestapp.presentation.listToDo.viewmodel.ListViewModel
@@ -61,28 +65,13 @@ class ListToDoFragment : DaggerFragment() {
         val view = binding?.root
         (activity as MainActivity).supportActionBar?.title = "ToDo's"
         setUpUI()
+        binding?.bottomNavigation?.menu?.forEach { it.isEnabled = true}
         setUpClickListeners()
         checkForUserLocalData()
         observeLiveData()
         GlobalVariable.INACTIVEFLAG = false
 //        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null,null)
 //        order = ListToDoFragmentArgs.fromBundle(requireArguments()).sortBySelected.toString()
-        val hashMapOrder : HashMap<Int?, String?> = HashMap<Int?, String?> ()
-        hashMapOrder[1] = "DESC"
-        hashMapOrder[2] = "ASC"
-        hashMapOrder[null] = null
-        hashMapOrder[0] = null
-        val hashMapStatus : HashMap<Int?, String?> = HashMap<Int?, String?> ()
-        hashMapStatus[1] = "completed"
-        hashMapStatus[2] = "pending"
-        hashMapStatus[null] = null
-        hashMapStatus[0] = null
-        val hashMapPriority : HashMap<Int?, String?> = HashMap<Int?, String?> ()
-        hashMapPriority[1] = "high"
-        hashMapPriority[2] = "medium"
-        hashMapPriority[3] = "low"
-        hashMapPriority[null] = null
-        hashMapPriority[0] = null
         val order = viewModel.sortByStored.value
         val selectedStatus = viewModel.statusStored.value
         val selectedPriority = viewModel.priorityStored.value
@@ -166,6 +155,7 @@ class ListToDoFragment : DaggerFragment() {
                 return when (menuItem.itemId) {
                     R.id.menu_all -> {
                         GlobalVariable.INACTIVEFLAG = false
+                        binding?.bottomNavigation?.menu?.forEach { it.isEnabled = true}
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null,null)
                         viewModel.setStatusFromFrag(0)
                         viewModel.setPriorityFromFrag(0)
@@ -175,14 +165,17 @@ class ListToDoFragment : DaggerFragment() {
                     }
                     R.id.deleted_tasks -> {
                         GlobalVariable.INACTIVEFLAG = true
+                        binding?.bottomNavigation?.menu?.forEach { it.isEnabled = false }
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"inactive",null,null,null)
                         true
                     }
                     R.id.menu_grant_permission -> {
+                        binding?.bottomNavigation?.menu?.forEach { it.isEnabled = true }
                         findNavController().navigate(R.id.action_listTaskFragment_to_grantPermissionsFragment)
                         true
                     }
                     R.id.logout -> {
+                        binding?.bottomNavigation?.menu?.forEach { it.isEnabled = true}
                         GlobalVariable.INACTIVEFLAG = false
                         logoutUser()
                         activity?.finish()
@@ -253,22 +246,6 @@ class ListToDoFragment : DaggerFragment() {
                 binding?.listProgressBar?.visibility = View.GONE
                 if (updateInListResponse.data?.body() != null) {
                     Toast.makeText(context, getString(R.string.mtds), Toast.LENGTH_SHORT).show()
-                    val hashMapOrder : HashMap<Int?, String?> = HashMap<Int?, String?> ()
-                    hashMapOrder[1] = "DESC"
-                    hashMapOrder[2] = "ASC"
-                    hashMapOrder[null] = null
-                    hashMapOrder[0] = null
-                    val hashMapStatus : HashMap<Int?, String?> = HashMap<Int?, String?> ()
-                    hashMapStatus[1] = "completed"
-                    hashMapStatus[2] = "pending"
-                    hashMapStatus[null] = null
-                    hashMapStatus[0] = null
-                    val hashMapPriority : HashMap<Int?, String?> = HashMap<Int?, String?> ()
-                    hashMapPriority[1] = "high"
-                    hashMapPriority[2] = "medium"
-                    hashMapPriority[3] = "low"
-                    hashMapPriority[null] = null
-                    hashMapPriority[0] = null
                     val order = viewModel.sortByStored.value
                     val selectedStatus = viewModel.statusStored.value
                     val selectedPriority = viewModel.priorityStored.value

@@ -97,7 +97,7 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
                  "inactive"-> {
                      holder.binding.priorityIndicator.setBackgroundResource(R.drawable.rounded_corner_inactive)
                      holder.binding.priorityIndicator.setTextColor(ContextCompat.getColor(holder.itemView.context, com.example.todotestapp.R.color.white))
-                     holder.binding.priorityIndicator.text = "Inactive"
+                     holder.binding.priorityIndicator.text = "Deleted"
                      holder.binding.priorityIndicator.paintFlags = 0
                  }
              }

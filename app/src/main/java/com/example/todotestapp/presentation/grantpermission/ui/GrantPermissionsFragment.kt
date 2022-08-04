@@ -3,29 +3,24 @@ package com.example.todotestapp.presentation.grantpermission.ui
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todotestapp.R
 import com.example.todotestapp.data.db.AddAdminRequest
 import com.example.todotestapp.data.db.AddAdminResponse
-import com.example.todotestapp.data.db.LoginOTPErrorResponse
 import com.example.todotestapp.data.db.StateData
 import com.example.todotestapp.data.repository.Constants
 import com.example.todotestapp.databinding.FragmentGrantPermissionsListDialogBinding
 import com.example.todotestapp.domain.repositoryinterface.ToDoRepository
-import com.example.todotestapp.presentation.MainActivity
 import com.example.todotestapp.presentation.grantpermission.viewmodel.GrantPermissionViewModel
 import com.example.todotestapp.presentation.grantpermission.viewmodel.GrantPermissionViewModelFactory
-import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModel
-import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModelFactory
-import com.google.gson.Gson
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.android.support.AndroidSupportInjection
-import dagger.android.support.DaggerFragment
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -62,7 +57,7 @@ class GrantPermissionsFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+//        dialog!!.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         _binding = FragmentGrantPermissionsListDialogBinding.inflate(inflater, container, false)
         return binding.root
 

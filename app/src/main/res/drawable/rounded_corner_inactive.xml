@@ -4,9 +4,9 @@
     android:id = "@+id/rounded_corner_inactive">
     <stroke
         android:width="10dp"
-        android:color="@color/blue" />
+        android:color="#964B00" />
 
-    <solid app:color="@color/blue" />
+    <solid app:color="#964B00" />
 
     <padding
         android:left="1dp"

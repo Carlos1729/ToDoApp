@@ -79,8 +79,8 @@
         android:text="STATUS"
         android:textStyle="bold"
         android:textSize="20sp"
-        android:layout_marginTop="11dp"
-        android:layout_marginLeft="14dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="20dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
@@ -92,7 +92,7 @@
         android:layout_height="2dp"
         android:background="@color/darkGray"
         app:layout_constraintTop_toBottomOf="@id/status_bottom_sheet"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="5dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="2dp"
@@ -102,6 +102,7 @@
     <RadioGroup
         android:layout_width="match_parent"
         android:id = "@+id/status_radio"
+        app:layout_constraintStart_toStartOf="@id/status_bottom_sheet"
         app:layout_constraintTop_toBottomOf="@id/line_status"
         android:layout_height="wrap_content">
 
@@ -174,7 +175,7 @@
         android:textStyle="bold"
         android:textSize="20sp"
         android:layout_marginTop="11dp"
-        android:layout_marginLeft="14dp"
+        android:layout_marginLeft="20dp"
         app:layout_constraintTop_toBottomOf="@id/clear_all_status"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
@@ -187,7 +188,7 @@
         android:layout_height="2dp"
         android:background="@color/darkGray"
         app:layout_constraintTop_toBottomOf="@id/priority_bottom_sheet"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="5dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="2dp"
@@ -197,6 +198,7 @@
     <RadioGroup
         android:layout_width="match_parent"
         android:id = "@+id/priority_radio"
+        app:layout_constraintStart_toStartOf="@id/priority_bottom_sheet"
         app:layout_constraintTop_toBottomOf="@id/line_priority"
         android:layout_height="wrap_content">
 
@@ -267,7 +269,8 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/purple_500"
         android:textColor="@color/white"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         app:layout_constraintTop_toBottomOf="@id/clear_all_priority"
