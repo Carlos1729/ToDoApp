@@ -24,12 +24,13 @@ import com.example.todotestapp.presentation.grantpermission.viewmodel.GrantPermi
 import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModel
 import com.example.todotestapp.presentation.logIn.viewmodel.LoginViewModelFactory
 import com.google.gson.Gson
+import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.DaggerFragment
 import retrofit2.Response
 import javax.inject.Inject
 
 
-class GrantPermissionsFragment : DaggerFragment() {
+class GrantPermissionsFragment : BottomSheetDialogFragment() {
 
 
     @Inject
@@ -60,6 +61,11 @@ class GrantPermissionsFragment : DaggerFragment() {
         _binding = FragmentGrantPermissionsListDialogBinding.inflate(inflater, container, false)
         return binding.root
 
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        AndroidSupportInjection.inject(this)
     }
 
 
