@@ -3,24 +3,28 @@ package com.example.todotestapp.presentation.listToDo.ui
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
+import android.icu.lang.UCharacter.GraphemeClusterBreak.V
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.forEach
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todotestapp.R
 import com.example.todotestapp.data.db.*
-import com.example.todotestapp.data.repository.Constants
 import com.example.todotestapp.data.repository.Constants.ID
 import com.example.todotestapp.data.repository.Constants.ROLE
 import com.example.todotestapp.data.repository.Constants.SHARED_PREFERENCES
@@ -78,9 +82,29 @@ class ListToDoFragment : DaggerFragment() {
 //        Toast.makeText(context, order.toString(), Toast.LENGTH_SHORT).show()
 //        Toast.makeText(context, selectedStatus.toString(), Toast.LENGTH_SHORT).show()
 //        Toast.makeText(context, selectedPriority.toString(), Toast.LENGTH_SHORT).show()
+//        if(selectedStatus != null || selectedPriority != null)
+//        {
+////            val unwrappedDrawable = AppCompatResources.getDrawable(
+////                context!!, R.drawable.ic_icon_filter
+////            )
+////            val wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable!!)
+////            DrawableCompat.setTint(wrappedDrawable, R.color.purple_400)
+////            DrawableCompat.setTint(AppCompatResources.getDrawable(context!!,R.drawable.ic_icon_filter)!!,R.color.purple_400)
+//        }
         if(order == null || order == 0)
         {
 //            Toast.makeText(context, "In This", Toast.LENGTH_SHORT).show()//change this after getting status and priority thing
+            binding?.sortSelectedCard?.visibility = View.GONE
+            if((selectedPriority == null && selectedStatus == null) || (selectedPriority == 0 && selectedStatus == 0) || (selectedPriority == null && selectedStatus == 0) || (selectedPriority == 0 && selectedStatus == null))
+            {
+//                Log.v("test123", selectedPriority.toString())
+//                Log.v("test123", selectedStatus.toString())
+                binding?.filtersSelectedCard?.visibility = View.GONE
+            }
+            else
+            {
+                binding?.filtersSelectedCard?.visibility = View.VISIBLE
+            }
             if(GlobalVariable.ADMINOWNTASKS)
             {
                 viewModel.getAllTasksPagination("author",listToDoUserId,1,hashMapStatus[selectedStatus], hashMapPriority[selectedPriority],null,null)
@@ -92,6 +116,18 @@ class ListToDoFragment : DaggerFragment() {
         else
         {
 //            Toast.makeText(context, "In That", Toast.LENGTH_SHORT).show()//change this after getting status and priority thing
+//            binding?.bottomNavigation?.menu?.getItem(0)?.isChecked = true
+            binding?.sortSelectedCard?.visibility = View.VISIBLE
+            if((selectedPriority == null && selectedStatus == null) || (selectedPriority == 0 && selectedStatus == 0) || (selectedPriority == null && selectedStatus == 0) || (selectedPriority == 0 && selectedStatus == null))
+            {
+//                Log.v("test123", selectedPriority.toString())
+//                Log.v("test123", selectedStatus.toString())
+                binding?.filtersSelectedCard?.visibility = View.GONE
+            }
+            else
+            {
+                binding?.filtersSelectedCard?.visibility = View.VISIBLE
+            }
             if(GlobalVariable.ADMINOWNTASKS)
             {
                 viewModel.getAllTasksPagination("author",listToDoUserId,1,hashMapStatus[selectedStatus],hashMapPriority[selectedPriority],"priority",hashMapOrder[order])
@@ -303,6 +339,17 @@ class ListToDoFragment : DaggerFragment() {
                         if(order == null || order == 0)
                         {
 //            Toast.makeText(context, "In This", Toast.LENGTH_SHORT).show()//change this after getting status and priority thing
+                            binding?.sortSelectedCard?.visibility = View.GONE
+                            if((selectedPriority == null && selectedStatus == null) || (selectedPriority == 0 && selectedStatus == 0) || (selectedPriority == null && selectedStatus == 0) || (selectedPriority == 0 && selectedStatus == null))
+                            {
+//                Log.v("test123", selectedPriority.toString())
+//                Log.v("test123", selectedStatus.toString())
+                                binding?.filtersSelectedCard?.visibility = View.GONE
+                            }
+                            else
+                            {
+                                binding?.filtersSelectedCard?.visibility = View.VISIBLE
+                            }
                             if(GlobalVariable.ADMINOWNTASKS)
                             {
                                 viewModel.getAllTasksPagination("author",listToDoUserId,1,hashMapStatus[selectedStatus], hashMapPriority[selectedPriority],null,null)
@@ -314,6 +361,18 @@ class ListToDoFragment : DaggerFragment() {
                         else
                         {
 //            Toast.makeText(context, "In That", Toast.LENGTH_SHORT).show()//change this after getting status and priority thing
+//            binding?.bottomNavigation?.menu?.getItem(0)?.isChecked = true
+                            binding?.sortSelectedCard?.visibility = View.VISIBLE
+                            if((selectedPriority == null && selectedStatus == null) || (selectedPriority == 0 && selectedStatus == 0) || (selectedPriority == null && selectedStatus == 0) || (selectedPriority == 0 && selectedStatus == null))
+                            {
+//                Log.v("test123", selectedPriority.toString())
+//                Log.v("test123", selectedStatus.toString())
+                                binding?.filtersSelectedCard?.visibility = View.GONE
+                            }
+                            else
+                            {
+                                binding?.filtersSelectedCard?.visibility = View.VISIBLE
+                            }
                             if(GlobalVariable.ADMINOWNTASKS)
                             {
                                 viewModel.getAllTasksPagination("author",listToDoUserId,1,hashMapStatus[selectedStatus],hashMapPriority[selectedPriority],"priority",hashMapOrder[order])

@@ -16,6 +16,7 @@
         <entry key="app/src/main/res/drawable/ic_baseline_insert_drive_file_24.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_check.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_filter.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_icon_filter.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_lock.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_person.xml" value="0.1" />
@@ -45,7 +46,7 @@
         <entry key="app/src/main/res/layout/fragment_grant_permissions_list_dialog.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_grant_permissions_list_dialog_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_list_task.xml" value="0.2028985507246377" />
-        <entry key="app/src/main/res/layout/fragment_list_todo.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/fragment_list_todo.xml" value="0.45" />
         <entry key="app/src/main/res/layout/fragment_lists.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_sort_list_dialog.xml" value="0.15447154471544716" />
@@ -57,6 +58,7 @@
         <entry key="app/src/main/res/layout/layout_row.xml" value="0.5" />
         <entry key="app/src/main/res/layout/list_fragment_menu.xml" value="0.15364583333333334" />
         <entry key="app/src/main/res/menu/add_task_fragment_menu.xml" value="0.25" />
+        <entry key="app/src/main/res/menu/bottom_navigation_menu.xml" value="0.25925925925925924" />
         <entry key="app/src/main/res/menu/list_fragment_menu.xml" value="0.25" />
         <entry key="app/src/main/res/menu/update_task_fragment_menu.xml" value="0.25" />
       </map>
