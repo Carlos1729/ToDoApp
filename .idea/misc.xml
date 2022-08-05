@@ -46,7 +46,7 @@
         <entry key="app/src/main/res/layout/fragment_grant_permissions_list_dialog.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_grant_permissions_list_dialog_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_list_task.xml" value="0.2028985507246377" />
-        <entry key="app/src/main/res/layout/fragment_list_todo.xml" value="0.45" />
+        <entry key="app/src/main/res/layout/fragment_list_todo.xml" value="0.24074074074074073" />
         <entry key="app/src/main/res/layout/fragment_lists.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_sort_list_dialog.xml" value="0.15447154471544716" />
