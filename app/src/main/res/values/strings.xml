@@ -73,6 +73,9 @@
     <string name="sort">SORT</string>
     <string name="filter">FILTER</string>
     <string name="status">Status</string>
+    <string name="view_your_tasks">View Your Tasks</string>
+    <string name="grant_permission">Grant Permission</string>
+    <string name="view_your_deleted_tasks">View Your Deleted Tasks</string>
 
 
     <string-array name="statusoftask">

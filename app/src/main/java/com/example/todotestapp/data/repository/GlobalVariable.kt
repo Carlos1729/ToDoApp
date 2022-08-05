@@ -2,6 +2,7 @@ package com.example.todotestapp.data.repository
 
 object GlobalVariable {
     var INACTIVEFLAG  = false
+    var ADMINOWNTASKS = false
     val hashMapOrder: HashMap<Int?, String?> = HashMap<Int?, String?>()
     val hashMapStatus: HashMap<Int?, String?> = HashMap<Int?, String?>()
     val hashMapPriority: HashMap<Int?, String?> = HashMap<Int?, String?>()

@@ -81,12 +81,24 @@ class ListToDoFragment : DaggerFragment() {
         if(order == null || order == 0)
         {
 //            Toast.makeText(context, "In This", Toast.LENGTH_SHORT).show()//change this after getting status and priority thing
-            viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,hashMapStatus[selectedStatus], hashMapPriority[selectedPriority],null,null)
+            if(GlobalVariable.ADMINOWNTASKS)
+            {
+                viewModel.getAllTasksPagination("author",listToDoUserId,1,hashMapStatus[selectedStatus], hashMapPriority[selectedPriority],null,null)
+            }
+            else {
+                viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,hashMapStatus[selectedStatus], hashMapPriority[selectedPriority],null,null)
+            }
         }
         else
         {
 //            Toast.makeText(context, "In That", Toast.LENGTH_SHORT).show()//change this after getting status and priority thing
-            viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,hashMapStatus[selectedStatus],hashMapPriority[selectedPriority],"priority",hashMapOrder[order])
+            if(GlobalVariable.ADMINOWNTASKS)
+            {
+                viewModel.getAllTasksPagination("author",listToDoUserId,1,hashMapStatus[selectedStatus],hashMapPriority[selectedPriority],"priority",hashMapOrder[order])
+            }
+            else{
+                viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,hashMapStatus[selectedStatus],hashMapPriority[selectedPriority],"priority",hashMapOrder[order])
+            }
         }
 
         return view
@@ -147,6 +159,10 @@ class ListToDoFragment : DaggerFragment() {
             override fun onPrepareMenu(menu: Menu) {
                 val register = menu.findItem(R.id.menu_grant_permission)
                 register.isVisible = (listToDoUserRole == "admin")
+                val viewAdminOwnTasks = menu.findItem(R.id.menu_view_your_tasks)
+                viewAdminOwnTasks.isVisible = (listToDoUserRole == "admin")
+                val viewAdminDeletedTasks = menu.findItem(R.id.menu_view_your_deleted_tasks)
+                viewAdminDeletedTasks.isVisible = (listToDoUserRole == "admin")
             }
 
 
@@ -155,6 +171,7 @@ class ListToDoFragment : DaggerFragment() {
                 return when (menuItem.itemId) {
                     R.id.menu_all -> {
                         GlobalVariable.INACTIVEFLAG = false
+                        GlobalVariable.ADMINOWNTASKS = false
                         binding?.bottomNavigation?.menu?.forEach { it.isEnabled = true}
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null,null)
                         viewModel.setStatusFromFrag(0)
@@ -163,13 +180,36 @@ class ListToDoFragment : DaggerFragment() {
                         timecount = 3
                         true
                     }
+                    R.id.menu_view_your_tasks -> {
+                        GlobalVariable.INACTIVEFLAG = false
+                        binding?.bottomNavigation?.menu?.forEach { it.isEnabled = true }
+                        GlobalVariable.ADMINOWNTASKS = true
+                        viewModel.getAllTasksPagination(
+                            "author",
+                            listToDoUserId,
+                            1,
+                            null,
+                            null,
+                            null,
+                            null
+                        )
+                        true
+                    }
                     R.id.deleted_tasks -> {
                         GlobalVariable.INACTIVEFLAG = true
                         binding?.bottomNavigation?.menu?.forEach { it.isEnabled = false }
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"inactive",null,null,null)
                         true
                     }
+                    R.id.menu_view_your_deleted_tasks -> {
+                        GlobalVariable.INACTIVEFLAG = true
+                        binding?.bottomNavigation?.menu?.forEach { it.isEnabled = false }
+                        viewModel.getAllTasksPagination("author",listToDoUserId,1,"inactive",null,null,null)
+                        true
+                    }
                     R.id.menu_grant_permission -> {
+                        GlobalVariable.INACTIVEFLAG = false
+                        GlobalVariable.ADMINOWNTASKS = false
                         binding?.bottomNavigation?.menu?.forEach { it.isEnabled = true }
                         findNavController().navigate(R.id.action_listTaskFragment_to_grantPermissionsFragment)
                         true
@@ -177,6 +217,7 @@ class ListToDoFragment : DaggerFragment() {
                     R.id.logout -> {
                         binding?.bottomNavigation?.menu?.forEach { it.isEnabled = true}
                         GlobalVariable.INACTIVEFLAG = false
+                        GlobalVariable.ADMINOWNTASKS = false
                         logoutUser()
                         activity?.finish()
                         startActivity(Intent(context, MainActivity::class.java))
@@ -261,11 +302,25 @@ class ListToDoFragment : DaggerFragment() {
                     {
                         if(order == null || order == 0)
                         {
-                            viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,hashMapStatus[selectedStatus], hashMapPriority[selectedPriority],null,null)
+//            Toast.makeText(context, "In This", Toast.LENGTH_SHORT).show()//change this after getting status and priority thing
+                            if(GlobalVariable.ADMINOWNTASKS)
+                            {
+                                viewModel.getAllTasksPagination("author",listToDoUserId,1,hashMapStatus[selectedStatus], hashMapPriority[selectedPriority],null,null)
+                            }
+                            else {
+                                viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,hashMapStatus[selectedStatus], hashMapPriority[selectedPriority],null,null)
+                            }
                         }
                         else
                         {
-                            viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,hashMapStatus[selectedStatus],hashMapPriority[selectedPriority],"priority",hashMapOrder[order])
+//            Toast.makeText(context, "In That", Toast.LENGTH_SHORT).show()//change this after getting status and priority thing
+                            if(GlobalVariable.ADMINOWNTASKS)
+                            {
+                                viewModel.getAllTasksPagination("author",listToDoUserId,1,hashMapStatus[selectedStatus],hashMapPriority[selectedPriority],"priority",hashMapOrder[order])
+                            }
+                            else{
+                                viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,hashMapStatus[selectedStatus],hashMapPriority[selectedPriority],"priority",hashMapOrder[order])
+                            }
                         }
                     }
                 }
