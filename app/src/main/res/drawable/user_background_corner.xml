@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id = "@+id/rounded_corner">
+    android:id = "@+id/user_background_corner">
     <stroke
         android:width="10dp"
         android:color="@color/black" />
 
-    <solid app:color="@color/black"/>
+    <solid android:color="#00B8D4"/>
 
     <padding
-        android:left="1dp"
-        android:right="1dp"
-        android:bottom="1dp"
-        android:top="1dp" />
+        android:left="2dp"
+        android:right="2dp"
+        android:bottom="2dp"
+        android:top="2dp" />
 
-    <corners android:radius="20dp" />
+    <corners android:radius="10dp" />
 </shape>

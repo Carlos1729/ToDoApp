@@ -34,6 +34,7 @@
         <entry key="app/src/main/res/drawable/status_icon_dropdown.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/status_icon_final.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/status_icon_update.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/user_background_corner.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/vie_bg.xml" value="0.11" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
         <entry key="app/src/main/res/layout/bottomsheetfrag.xml" value="0.14175724637681159" />
@@ -55,7 +56,7 @@
         <entry key="app/src/main/res/layout/fragment_update_task.xml" value="0.2028985507246377" />
         <entry key="app/src/main/res/layout/fragment_update_todo.xml" value="0.16101694915254236" />
         <entry key="app/src/main/res/layout/layout_menu.xml" value="0.16983695652173914" />
-        <entry key="app/src/main/res/layout/layout_row.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/layout_row.xml" value="0.25" />
         <entry key="app/src/main/res/layout/list_fragment_menu.xml" value="0.15364583333333334" />
         <entry key="app/src/main/res/menu/add_task_fragment_menu.xml" value="0.25" />
         <entry key="app/src/main/res/menu/bottom_navigation_menu.xml" value="0.25925925925925924" />

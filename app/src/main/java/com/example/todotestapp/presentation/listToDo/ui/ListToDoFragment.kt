@@ -233,6 +233,7 @@ class ListToDoFragment : DaggerFragment() {
                     }
                     R.id.deleted_tasks -> {
                         GlobalVariable.INACTIVEFLAG = true
+                        GlobalVariable.ADMINOWNTASKS = false
                         binding?.bottomNavigation?.menu?.forEach { it.isEnabled = false }
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"inactive",null,null,null)
                         true
@@ -277,6 +278,7 @@ class ListToDoFragment : DaggerFragment() {
             if (sharedPreferences.contains(ID)) {
                 listToDoUserId = sharedPreferences.getInt(ID,-1)
                 listToDoUserRole = sharedPreferences.getString(ROLE,"").toString()
+                GlobalVariable.ROLEOFUSER = listToDoUserRole
             }
         }
     }
