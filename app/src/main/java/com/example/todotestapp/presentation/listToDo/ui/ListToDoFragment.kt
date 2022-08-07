@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todotestapp.R
 import com.example.todotestapp.data.db.*
+import com.example.todotestapp.data.repository.Constants.EMAIL
 import com.example.todotestapp.data.repository.Constants.ID
 import com.example.todotestapp.data.repository.Constants.ROLE
 import com.example.todotestapp.data.repository.Constants.SHARED_PREFERENCES
@@ -57,6 +58,7 @@ class ListToDoFragment : DaggerFragment() {
     private  var binding: FragmentListTodoBinding ?= null
     private var listToDoUserId: Int = -1
     private var listToDoUserRole: String = ""
+    private var listToDoUserEmail: String = ""
     private var timecount: Int = -1
     private var addToDoButton : FloatingActionButton? =null
     private val myAdapter by lazy { ListToDoAdapter() }
@@ -217,7 +219,7 @@ class ListToDoFragment : DaggerFragment() {
                     R.id.menu_all -> {
                         GlobalVariable.INACTIVEFLAG = false
                         GlobalVariable.ADMINOWNTASKS = false
-                        binding?.sortSelectedCard?.visibility = View.GONE
+                        binding?.filtersSelectedCard?.visibility = View.GONE
                         binding?.sortSelectedCard?.visibility = View.GONE
                         binding?.bottomNavigation?.menu?.forEach { it.isEnabled = true}
                         myAdapter.clearData()
@@ -300,35 +302,41 @@ class ListToDoFragment : DaggerFragment() {
             if (sharedPreferences.contains(ID)) {
                 listToDoUserId = sharedPreferences.getInt(ID,-1)
                 listToDoUserRole = sharedPreferences.getString(ROLE,"").toString()
+                listToDoUserEmail = sharedPreferences.getString(EMAIL,"").toString()
                 GlobalVariable.ROLEOFUSER = listToDoUserRole
             }
         }
     }
 
     private fun swipeToDelete(recyclerView: RecyclerView?) {
-        val swipeToDeleteCallback = object : SwipeToDelete() {
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                if (viewModel.status != "inactive") {
+        if(GlobalVariable.INACTIVEFLAG == false) {
+            val swipeToDeleteCallback = object : SwipeToDelete() {
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     val itemToDelete = myAdapter.myList[viewHolder.adapterPosition]
+                    val updatedEmail = listToDoUserEmail
                     val updatedTitle: String = itemToDelete.title.toString()
                     val updatedDescription: String = itemToDelete.description.toString()
                     val updatedStatus: String = "inactive"
                     val updatedPriority: String = itemToDelete.priority.toString()
                     val presentUpdateToDoRequest = UpdateToDoRequest(
+                        listToDoUserEmail,
                         updatedTitle,
                         updatedDescription,
                         updatedStatus,
                         updatedPriority
                     )
-                    viewModel.updateToDoInList(itemToDelete.taskId!!, presentUpdateToDoRequest)
-                } else {
-                    Toast.makeText(context, getString(R.string.cannot_delete), Toast.LENGTH_SHORT)
-                        .show()
+                    if(itemToDelete.status != "inactive") {
+                        viewModel.updateToDoInList(itemToDelete.taskId!!, presentUpdateToDoRequest)
+                    }
+                    else
+                    {
+                        Toast.makeText(context,"Can't delete a already deleted task",Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
+            val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
+            itemTouchHelper.attachToRecyclerView(recyclerView)
         }
-        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
-        itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
     private fun observeUpdateToDoInList() {
@@ -346,7 +354,6 @@ class ListToDoFragment : DaggerFragment() {
             StateData.DataStatus.SUCCESS -> {
                 binding?.listProgressBar?.visibility = View.GONE
                 if (updateInListResponse.data?.body() != null) {
-                    myAdapter.clearData()
                     Toast.makeText(context, getString(R.string.mtds), Toast.LENGTH_SHORT).show()
                     val order = viewModel.sortByStored.value
                     val selectedStatus = viewModel.statusStored.value
@@ -355,7 +362,6 @@ class ListToDoFragment : DaggerFragment() {
                     {
                         timecount = 0
                     }
-                    Log.v("checkingValues",timecount.toString())
                     if (timecount == -1 || timecount == 3) {
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null)
                     }
@@ -440,6 +446,7 @@ class ListToDoFragment : DaggerFragment() {
                     binding?.listProgressBar?.visibility = View.GONE
                     if(allListToDoPaginationResponse.data?.body() != null)
                     {
+                        myAdapter.clearData()
                         if((allListToDoPaginationResponse.data?.body()!!.tasks?.size) == 0)
                         {
                             binding?.loginNoResultsTv?.visibility = View.VISIBLE

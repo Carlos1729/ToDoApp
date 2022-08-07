@@ -161,8 +161,12 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
         {
             Meridien = "PM"
         }
-            if(hh != 12)
+
+        if(hh == 0)
+            hh = 12
+        else if(hh != 12)
                 hh %= 12
+
 
             timth += hh.toString()
             // Printing minutes and seconds

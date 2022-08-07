@@ -95,6 +95,7 @@ class UpdateToDoFragment : DaggerFragment() {
     }
 
     private fun setUpClickListeners(view :  View) {
+        loadData()
         button?.setOnClickListener {
             if(checkInput()) {
                 if (!addToDoFlag) {
@@ -109,6 +110,7 @@ class UpdateToDoFragment : DaggerFragment() {
                     val updatedPriority: String? = hashMap[priorityspin?.text.toString()]
                     val updatedStatus : String? = hashMap[statusspin?.text.toString()]
                     val presentUpdateToDoRequest = UpdateToDoRequest(
+                        addToDoUserEmail,
                         updatedTitle,
                         updatedDescription,
                         updatedStatus,
@@ -124,7 +126,6 @@ class UpdateToDoFragment : DaggerFragment() {
                     hashMap["Medium Priority"] = "medium"
                     hashMap["Low Priority"] = "low"
                     val addPriority: String? = hashMap[priorityspin?.text.toString()]
-                    loadData()
                     val addUserEmail: String = addToDoUserEmail
                     val presentAddToDoRequest = AddToDoRequest(
                         addUserEmail,
@@ -148,6 +149,7 @@ class UpdateToDoFragment : DaggerFragment() {
             hashMap["Low Priority"] = "low"
             val updatedPriority: String? = hashMap[priorityspin?.text.toString()]
             val presentUpdateToDoRequest = UpdateToDoRequest(
+                addToDoUserEmail,
                 updatedTitle,
                 updatedDescription,
                 updatedStatus,
