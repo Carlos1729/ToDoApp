@@ -5,6 +5,7 @@ import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -42,6 +43,20 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
 
             holder.binding.titleTxt.text = myList[position].title
             holder.binding.descriptionTxt.text = myList[position].description
+
+            if(GlobalVariable.ROLEOFUSER == "admin")
+            {
+                holder.binding.userFieldRowLayout.visibility = View.VISIBLE
+                holder.binding.userFieldRowLayout.text = myList[position].authorName
+                if(GlobalVariable.ADMINOWNTASKS)
+                {
+                    holder.binding.userFieldRowLayout.visibility = View.GONE
+                }
+            }
+            else
+            {
+                holder.binding.userFieldRowLayout.visibility = View.GONE
+            }
 
            val time1: String = getDateTime(myList[position].creationTime).toString()
            val time2: String = getDateTime(myList[position].lastModificationTime).toString()
@@ -146,8 +161,8 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
         {
             Meridien = "PM"
         }
-
-            hh %= 12
+            if(hh != 12)
+                hh %= 12
 
             timth += hh.toString()
             // Printing minutes and seconds

@@ -216,6 +216,8 @@ class ListToDoFragment : DaggerFragment() {
                     R.id.menu_all -> {
                         GlobalVariable.INACTIVEFLAG = false
                         GlobalVariable.ADMINOWNTASKS = false
+                        binding?.sortSelectedCard?.visibility = View.GONE
+                        binding?.sortSelectedCard?.visibility = View.GONE
                         binding?.bottomNavigation?.menu?.forEach { it.isEnabled = true}
                         myAdapter.clearData()
                         pageNumber = 1
@@ -246,6 +248,7 @@ class ListToDoFragment : DaggerFragment() {
                     }
                     R.id.deleted_tasks -> {
                         GlobalVariable.INACTIVEFLAG = true
+                        GlobalVariable.ADMINOWNTASKS = false
                         binding?.bottomNavigation?.menu?.forEach { it.isEnabled = false }
                         myAdapter.clearData()
                         pageNumber = 1
@@ -255,6 +258,7 @@ class ListToDoFragment : DaggerFragment() {
                     }
                     R.id.menu_view_your_deleted_tasks -> {
                         GlobalVariable.INACTIVEFLAG = true
+                        GlobalVariable.ADMINOWNTASKS = true
                         binding?.bottomNavigation?.menu?.forEach { it.isEnabled = false }
                         myAdapter.clearData()
                         viewModel.status = "inactive"
@@ -295,6 +299,7 @@ class ListToDoFragment : DaggerFragment() {
             if (sharedPreferences.contains(ID)) {
                 listToDoUserId = sharedPreferences.getInt(ID,-1)
                 listToDoUserRole = sharedPreferences.getString(ROLE,"").toString()
+                GlobalVariable.ROLEOFUSER = listToDoUserRole
             }
         }
     }
