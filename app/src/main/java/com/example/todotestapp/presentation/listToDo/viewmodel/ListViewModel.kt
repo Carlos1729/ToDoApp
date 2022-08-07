@@ -26,6 +26,8 @@ class ListViewModel @Inject constructor(toDoFetchUseCase : ListToDoUseCase
     val deleteToDoItemLiveData: StateLiveData<Response<BaseResponse>> = StateLiveData()
     val myToDoAllPaginationList: StateLiveData<Response<ListToDoPaginationResponse>> = StateLiveData()
 
+    private var totalPages : Int = 1
+
     fun getAllTasks(id: Int) {
         viewModelScope.launch {
             myToDoAllList.postLoading()
@@ -39,18 +41,27 @@ class ListViewModel @Inject constructor(toDoFetchUseCase : ListToDoUseCase
         }
     }
 
-    fun getAllTasksPagination(role:String,id:Int,pageNo:Int?,status: String?,priority:String?,orderBy:String?,sort:String?)
+    fun getAllTasksPagination(role:String,id:Int,pageNo:Int,status: String?,priority:String?,orderBy:String?,sort:String?)
     {
         viewModelScope.launch {
-            myToDoAllPaginationList.postLoading()
-            val response : Response<ListToDoPaginationResponse> = listToDoPagination.listToDoPaginationById(role, id, pageNo,status,priority,orderBy,sort)
-            if(response.isSuccessful)
-            {
-                myToDoAllPaginationList.postSuccess(response)
-            }
-            else if(response.code() == 404)
-            {
-                myToDoAllPaginationList.postSuccess(response)
+            if (pageNo <= totalPages) {
+                myToDoAllPaginationList.postLoading()
+                val response: Response<ListToDoPaginationResponse> =
+                    listToDoPagination.listToDoPaginationById(
+                        role,
+                        id,
+                        pageNo,
+                        status,
+                        priority,
+                        orderBy,
+                        sort
+                    )
+                if (response.isSuccessful) {
+                    totalPages = response.body()?.totalPage ?: 1
+                    myToDoAllPaginationList.postSuccess(response)
+                } else if (response.code() == 404) {
+                    myToDoAllPaginationList.postSuccess(response)
+                }
             }
         }
     }

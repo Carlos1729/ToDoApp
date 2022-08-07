@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.*
 import android.widget.Toast
@@ -13,14 +14,12 @@ import androidx.core.view.forEach
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todotestapp.R
 import com.example.todotestapp.data.db.*
-import com.example.todotestapp.data.repository.Constants
 import com.example.todotestapp.data.repository.Constants.ID
 import com.example.todotestapp.data.repository.Constants.ROLE
 import com.example.todotestapp.data.repository.Constants.SHARED_PREFERENCES
@@ -55,6 +54,13 @@ class ListToDoFragment : DaggerFragment() {
     private var timecount: Int = -1
     private var addToDoButton : FloatingActionButton? =null
     private val myAdapter by lazy { ListToDoAdapter() }
+
+    private var loading = true
+    private var pastVisibleItems: Int = 0
+    private var visibleItemCount: Int = 0
+    private var totalItemCount: Int = 0
+
+    private var pageNumber = 1
 
 
     override fun onCreateView(
@@ -281,10 +287,9 @@ class ListToDoFragment : DaggerFragment() {
         }
     }
 
-
-
     private fun observeLiveDataPaginationList(){
         viewModel.myToDoAllPaginationList.observe(viewLifecycleOwner, Observer{
+           totalItemCount = it?.data?.body()?.totalPage ?: 0
             handleResponseForAllPaginationList(it)
         })
     }
@@ -319,6 +324,9 @@ class ListToDoFragment : DaggerFragment() {
                 }
                 else -> {}
             }
+        Handler().postDelayed({
+            loading = true
+        },1000)
     }
 
     override fun onDestroyView() {
@@ -329,13 +337,36 @@ class ListToDoFragment : DaggerFragment() {
 
 
 
-
-
     private fun setupRecyclerView() {
         val recyclerView = binding?.recyclerViewId
         recyclerView?.adapter = myAdapter
         recyclerView?.layoutManager = LinearLayoutManager(requireActivity())
         swipeToDelete(recyclerView)
+
+        recyclerView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 0) { //check for scroll down
+                    totalItemCount = recyclerView.childCount
+                    visibleItemCount = recyclerView.layoutManager?.childCount ?: 0
+                    pastVisibleItems =
+                        (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                    if (loading) {
+                        if (visibleItemCount + pastVisibleItems >= recyclerView.childCount) {
+                            loading = false
+                            viewModel.getAllTasksPagination(
+                                listToDoUserRole,
+                                listToDoUserId,
+                                pageNumber++,
+                                hashMapStatus[viewModel.statusStored.value],
+                                hashMapPriority[viewModel.priorityStored.value],
+                                "priority",
+                                hashMapOrder[viewModel.sortByStored.value]
+                            )
+                        }
+                    }
+                }
+            }
+        })
     }
 
 

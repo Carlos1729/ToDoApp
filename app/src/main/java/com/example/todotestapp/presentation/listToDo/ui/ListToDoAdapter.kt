@@ -181,11 +181,11 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
     }
 
     fun setData(newList: ListToDoPaginationResponse) {
-
         val toDoDiffUtil = ToDoDiffUtil(myList,newList.tasks!!)
         val toDoDiffResult = DiffUtil.calculateDiff(toDoDiffUtil)
-        myList = newList.tasks
-        toDoDiffResult.dispatchUpdatesTo(this)
+        myList = myList + newList.tasks
+        notifyItemRangeInserted(itemCount,newList.tasks.size)
+      //  toDoDiffResult.dispatchUpdatesTo(this)
     }
 }
 
