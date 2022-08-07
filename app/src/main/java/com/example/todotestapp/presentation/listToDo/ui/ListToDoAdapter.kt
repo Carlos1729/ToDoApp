@@ -214,6 +214,7 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
 
     fun clearData(){
         myList = emptyList()
+        notifyDataSetChanged()
     }
 }
 

@@ -62,11 +62,11 @@ class ListToDoFragment : DaggerFragment() {
     private val myAdapter by lazy { ListToDoAdapter() }
 
     private var loading = true
-    private var pastVisibleItems: Int = 0
+    private var firstVisibleItemPosition: Int = 0
     private var visibleItemCount: Int = 0
     private var totalItemCount: Int = 0
 
-    private var pageNumber = 1
+    private var pageNumber = 0
 
 
     override fun onCreateView(
@@ -115,10 +115,10 @@ class ListToDoFragment : DaggerFragment() {
             }
             if(GlobalVariable.ADMINOWNTASKS)
             {
-                viewModel.getAllTasksPagination("author",listToDoUserId,1,hashMapStatus[selectedStatus], hashMapPriority[selectedPriority],null,null)
+                viewModel.getAllTasksPagination("author",listToDoUserId,1, hashMapPriority[selectedPriority],null,null)
             }
             else {
-                viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,hashMapStatus[selectedStatus], hashMapPriority[selectedPriority],null,null)
+                viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1, hashMapPriority[selectedPriority],null,null)
             }
         }
         else
@@ -138,10 +138,10 @@ class ListToDoFragment : DaggerFragment() {
             }
             if(GlobalVariable.ADMINOWNTASKS)
             {
-                viewModel.getAllTasksPagination("author",listToDoUserId,1,hashMapStatus[selectedStatus],hashMapPriority[selectedPriority],"priority",hashMapOrder[order])
+                viewModel.getAllTasksPagination("author",listToDoUserId,1,hashMapPriority[selectedPriority],"priority",hashMapOrder[order])
             }
             else{
-                viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,hashMapStatus[selectedStatus],hashMapPriority[selectedPriority],"priority",hashMapOrder[order])
+                viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,hashMapPriority[selectedPriority],"priority",hashMapOrder[order])
             }
         }
 
@@ -218,9 +218,9 @@ class ListToDoFragment : DaggerFragment() {
                         GlobalVariable.ADMINOWNTASKS = false
                         binding?.bottomNavigation?.menu?.forEach { it.isEnabled = true}
                         myAdapter.clearData()
-                        loading = true
-                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null,null)
-                        binding?.recyclerViewId?.smoothScrollToPosition(0)
+                        pageNumber = 0
+                        viewModel.status = null
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null)
                         viewModel.setStatusFromFrag(0)
                         viewModel.setPriorityFromFrag(0)
                         viewModel.setSortByStoredFromFrag(0)
@@ -232,34 +232,33 @@ class ListToDoFragment : DaggerFragment() {
                         binding?.bottomNavigation?.menu?.forEach { it.isEnabled = true }
                         GlobalVariable.ADMINOWNTASKS = true
                         myAdapter.clearData()
-                        loading = true
+                        pageNumber = 0
+                        viewModel.status = null
                         viewModel.getAllTasksPagination(
                             "author",
                             listToDoUserId,
                             1,
                             null,
                             null,
-                            null,
                             null
                         )
-                        binding?.recyclerViewId?.smoothScrollToPosition(0)
                         true
                     }
                     R.id.deleted_tasks -> {
                         GlobalVariable.INACTIVEFLAG = true
                         binding?.bottomNavigation?.menu?.forEach { it.isEnabled = false }
                         myAdapter.clearData()
-                        loading = true
-                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"inactive",null,null,null)
-                        binding?.recyclerViewId?.smoothScrollToPosition(0)
+                        pageNumber = 0
+                        viewModel.status = "inactive"
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null)
                         true
                     }
                     R.id.menu_view_your_deleted_tasks -> {
                         GlobalVariable.INACTIVEFLAG = true
                         binding?.bottomNavigation?.menu?.forEach { it.isEnabled = false }
                         myAdapter.clearData()
-                        viewModel.getAllTasksPagination("author",listToDoUserId,1,"inactive",null,null,null)
-                        binding?.recyclerViewId?.smoothScrollToPosition(0)
+                        viewModel.status = "inactive"
+                        viewModel.getAllTasksPagination("author",listToDoUserId,1,null,null,null)
                         true
                     }
                     R.id.menu_grant_permission -> {
@@ -351,7 +350,7 @@ class ListToDoFragment : DaggerFragment() {
                     }
                     Log.v("checkingValues",timecount.toString())
                     if (timecount == -1 || timecount == 3) {
-                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null,null)
+                        viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null)
                     }
                     else
                     {
@@ -371,10 +370,10 @@ class ListToDoFragment : DaggerFragment() {
                             }
                             if(GlobalVariable.ADMINOWNTASKS)
                             {
-                                viewModel.getAllTasksPagination("author",listToDoUserId,1,hashMapStatus[selectedStatus], hashMapPriority[selectedPriority],null,null)
+                                viewModel.getAllTasksPagination("author",listToDoUserId,1, hashMapPriority[selectedPriority],null,null)
                             }
                             else {
-                                viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,hashMapStatus[selectedStatus], hashMapPriority[selectedPriority],null,null)
+                                viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1, hashMapPriority[selectedPriority],null,null)
                             }
                         }
                         else
@@ -394,10 +393,10 @@ class ListToDoFragment : DaggerFragment() {
                             }
                             if(GlobalVariable.ADMINOWNTASKS)
                             {
-                                viewModel.getAllTasksPagination("author",listToDoUserId,1,hashMapStatus[selectedStatus],hashMapPriority[selectedPriority],"priority",hashMapOrder[order])
+                                viewModel.getAllTasksPagination("author",listToDoUserId,1,hashMapPriority[selectedPriority],"priority",hashMapOrder[order])
                             }
                             else{
-                                viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,hashMapStatus[selectedStatus],hashMapPriority[selectedPriority],"priority",hashMapOrder[order])
+                                viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,hashMapPriority[selectedPriority],"priority",hashMapOrder[order])
                             }
                         }
                     }
@@ -473,18 +472,17 @@ class ListToDoFragment : DaggerFragment() {
         recyclerView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (dy > 0) { //check for scroll down
-                    totalItemCount = recyclerView.childCount
-                    visibleItemCount = recyclerView.layoutManager?.childCount ?: 0
-                    pastVisibleItems =
+                    totalItemCount = recyclerView.layoutManager?.itemCount ?:0
+                    visibleItemCount = recyclerView.layoutManager?.childCount ?:0
+                    firstVisibleItemPosition =
                         (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
                     if (loading) {
-                        if (visibleItemCount + pastVisibleItems >= recyclerView.childCount) {
+                        if (visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
                             loading = false
                             viewModel.getAllTasksPagination(
                                 listToDoUserRole,
                                 listToDoUserId,
                                 pageNumber++,
-                                hashMapStatus[viewModel.statusStored.value],
                                 hashMapPriority[viewModel.priorityStored.value],
                                 "priority",
                                 hashMapOrder[viewModel.sortByStored.value]

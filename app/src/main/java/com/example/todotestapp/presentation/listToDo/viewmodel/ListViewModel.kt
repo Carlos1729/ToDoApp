@@ -19,6 +19,7 @@ class ListViewModel @Inject constructor(toDoFetchUseCase : ListToDoUseCase
     private val toDoDelete = toDoDeleteUseCase
     private val listToDoPagination = listToDoPaginationUseCase
     private val updateToDoInList = updateToDoInListUseCase
+     var status : String? = null
 
     val myToDoAllList: StateLiveData<Response<ListToDoResponse>> = StateLiveData()
     val myToDoListByStatus: StateLiveData<Response<ListToDoResponse>> = StateLiveData()
@@ -41,7 +42,7 @@ class ListViewModel @Inject constructor(toDoFetchUseCase : ListToDoUseCase
         }
     }
 
-    fun getAllTasksPagination(role:String,id:Int,pageNo:Int,status: String?,priority:String?,orderBy:String?,sort:String?)
+    fun getAllTasksPagination(role:String,id:Int,pageNo:Int,priority:String?,orderBy:String?,sort:String?)
     {
         viewModelScope.launch {
             if (pageNo <= totalPages) {

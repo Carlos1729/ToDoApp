@@ -139,13 +139,16 @@ class FilterFragment : BottomSheetDialogFragment() {
                 when (binding.statusRadio.checkedRadioButtonId) {
                     R.id.status_completed ->{
                         stringToPassStatus = "completed"
+                        viewModel.status = "completed"
                         viewModel.setStatusFromFrag(1)
                     }
                     R.id.status_pending -> {
                         stringToPassStatus = "pending"
+                        viewModel.status = "pending"
                         viewModel.setStatusFromFrag(2)
                     }
                     else -> {
+                        viewModel.status = null
                         viewModel.setStatusFromFrag(0)
                     }
                 }
