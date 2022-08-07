@@ -55,32 +55,18 @@ class FilterFragment : BottomSheetDialogFragment() {
             1 -> {
                 val radioButtonSafe1: RadioButton = binding.root.findViewById(R.id.status_pending)
                 radioButtonSafe1.isChecked = false
-                val radioButtonSafe2: RadioButton = binding.root.findViewById(R.id.status_inactive)
-                radioButtonSafe2.isChecked = false
                 val radioButton: RadioButton = binding.root.findViewById(R.id.status_completed)
                 radioButton.isChecked = true
             }
             2 -> {
                 val radioButtonSafe1: RadioButton = binding.root.findViewById(R.id.status_completed)
                 radioButtonSafe1.isChecked = false
-                val radioButtonSafe2: RadioButton = binding.root.findViewById(R.id.status_inactive)
-                radioButtonSafe2.isChecked = false
                 val radioButton: RadioButton = binding.root.findViewById(R.id.status_pending)
-                radioButton.isChecked = true
-            }
-            3 -> {
-                val radioButtonSafe1: RadioButton = binding.root.findViewById(R.id.status_completed)
-                radioButtonSafe1.isChecked = false
-                val radioButtonSafe2: RadioButton = binding.root.findViewById(R.id.status_pending)
-                radioButtonSafe2.isChecked = false
-                val radioButton: RadioButton = binding.root.findViewById(R.id.status_inactive)
                 radioButton.isChecked = true
             }
             else -> {
                     val radioButtonSafe1: RadioButton = binding.root.findViewById(R.id.status_completed)
                     radioButtonSafe1.isChecked = false
-                    val radioButtonSafe2: RadioButton = binding.root.findViewById(R.id.status_inactive)
-                    radioButtonSafe2.isChecked = false
                     val radioButton: RadioButton = binding.root.findViewById(R.id.status_pending)
                     radioButton.isChecked = false
 

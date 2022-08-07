@@ -208,6 +208,8 @@ class ListToDoFragment : DaggerFragment() {
                     R.id.menu_all -> {
                         GlobalVariable.INACTIVEFLAG = false
                         GlobalVariable.ADMINOWNTASKS = false
+                        binding?.sortSelectedCard?.visibility = View.GONE
+                        binding?.filtersSelectedCard?.visibility = View.GONE
                         binding?.bottomNavigation?.menu?.forEach { it.isEnabled = true}
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null,null)
                         viewModel.setStatusFromFrag(0)
@@ -240,6 +242,7 @@ class ListToDoFragment : DaggerFragment() {
                     }
                     R.id.menu_view_your_deleted_tasks -> {
                         GlobalVariable.INACTIVEFLAG = true
+                        GlobalVariable.ADMINOWNTASKS = true
                         binding?.bottomNavigation?.menu?.forEach { it.isEnabled = false }
                         viewModel.getAllTasksPagination("author",listToDoUserId,1,"inactive",null,null,null)
                         true

@@ -4,7 +4,7 @@ import com.example.todotestapp.data.repository.RetrofitInstance.api
 
 object Constants {
 
-        const val BASE_URL = "https://d5fc-103-119-165-53.in.ngrok.io/api/v0/"
+        const val BASE_URL = "https://ade1-139-5-223-164.in.ngrok.io/api/v0/"
         const val LOGIN_FRAGMENT_TAG = "LoginFragment"
 
 
