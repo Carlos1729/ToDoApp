@@ -66,7 +66,7 @@ class ListToDoFragment : DaggerFragment() {
     private var visibleItemCount: Int = 0
     private var totalItemCount: Int = 0
 
-    private var pageNumber = 0
+    private var pageNumber = 1
 
 
     override fun onCreateView(
@@ -218,7 +218,7 @@ class ListToDoFragment : DaggerFragment() {
                         GlobalVariable.ADMINOWNTASKS = false
                         binding?.bottomNavigation?.menu?.forEach { it.isEnabled = true}
                         myAdapter.clearData()
-                        pageNumber = 0
+                        pageNumber = 1
                         viewModel.status = null
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null)
                         viewModel.setStatusFromFrag(0)
@@ -232,7 +232,7 @@ class ListToDoFragment : DaggerFragment() {
                         binding?.bottomNavigation?.menu?.forEach { it.isEnabled = true }
                         GlobalVariable.ADMINOWNTASKS = true
                         myAdapter.clearData()
-                        pageNumber = 0
+                        pageNumber = 1
                         viewModel.status = null
                         viewModel.getAllTasksPagination(
                             "author",
@@ -248,7 +248,7 @@ class ListToDoFragment : DaggerFragment() {
                         GlobalVariable.INACTIVEFLAG = true
                         binding?.bottomNavigation?.menu?.forEach { it.isEnabled = false }
                         myAdapter.clearData()
-                        pageNumber = 0
+                        pageNumber = 1
                         viewModel.status = "inactive"
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null)
                         true
@@ -429,6 +429,7 @@ class ListToDoFragment : DaggerFragment() {
                     binding?.emptyIcon?.visibility = View.GONE
                 }
                 StateData.DataStatus.SUCCESS -> {
+                    pageNumber++
                     binding?.listProgressBar?.visibility = View.GONE
                     if(allListToDoPaginationResponse.data?.body() != null)
                     {
@@ -472,22 +473,20 @@ class ListToDoFragment : DaggerFragment() {
         recyclerView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (dy > 0) { //check for scroll down
-                    totalItemCount = recyclerView.layoutManager?.itemCount ?:0
-                    visibleItemCount = recyclerView.layoutManager?.childCount ?:0
+                    totalItemCount = recyclerView.layoutManager?.itemCount ?: 0
+                    visibleItemCount = recyclerView.layoutManager?.childCount ?: 0
                     firstVisibleItemPosition =
                         (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                    if (loading) {
-                        if (visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
-                            loading = false
-                            viewModel.getAllTasksPagination(
-                                listToDoUserRole,
-                                listToDoUserId,
-                                pageNumber++,
-                                hashMapPriority[viewModel.priorityStored.value],
-                                "priority",
-                                hashMapOrder[viewModel.sortByStored.value]
-                            )
-                        }
+                    if (visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
+                        loading = false
+                        viewModel.getAllTasksPagination(
+                            listToDoUserRole,
+                            listToDoUserId,
+                            pageNumber,
+                            hashMapPriority[viewModel.priorityStored.value],
+                            "priority",
+                            hashMapOrder[viewModel.sortByStored.value]
+                        )
                     }
                 }
             }
