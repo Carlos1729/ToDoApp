@@ -209,7 +209,7 @@ class ListToDoFragment : DaggerFragment() {
                         GlobalVariable.INACTIVEFLAG = false
                         GlobalVariable.ADMINOWNTASKS = false
                         binding?.sortSelectedCard?.visibility = View.GONE
-                        binding?.filtersSelectedCard?.visibility = View.GONE
+                        binding?.sortSelectedCard?.visibility = View.GONE
                         binding?.bottomNavigation?.menu?.forEach { it.isEnabled = true}
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null,null)
                         viewModel.setStatusFromFrag(0)
