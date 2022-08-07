@@ -14,7 +14,7 @@ class ToDoDiffUtil( private val oldList:List<BaseListToDoResponse>,  private val
     }
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition] === newList[newItemPosition]
+        return oldList[oldItemPosition].taskId === newList[newItemPosition].taskId
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {

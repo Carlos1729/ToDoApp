@@ -217,7 +217,10 @@ class ListToDoFragment : DaggerFragment() {
                         GlobalVariable.INACTIVEFLAG = false
                         GlobalVariable.ADMINOWNTASKS = false
                         binding?.bottomNavigation?.menu?.forEach { it.isEnabled = true}
+                        myAdapter.clearData()
+                        loading = true
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,null,null,null,null)
+                        binding?.recyclerViewId?.smoothScrollToPosition(0)
                         viewModel.setStatusFromFrag(0)
                         viewModel.setPriorityFromFrag(0)
                         viewModel.setSortByStoredFromFrag(0)
@@ -228,6 +231,8 @@ class ListToDoFragment : DaggerFragment() {
                         GlobalVariable.INACTIVEFLAG = false
                         binding?.bottomNavigation?.menu?.forEach { it.isEnabled = true }
                         GlobalVariable.ADMINOWNTASKS = true
+                        myAdapter.clearData()
+                        loading = true
                         viewModel.getAllTasksPagination(
                             "author",
                             listToDoUserId,
@@ -237,18 +242,24 @@ class ListToDoFragment : DaggerFragment() {
                             null,
                             null
                         )
+                        binding?.recyclerViewId?.smoothScrollToPosition(0)
                         true
                     }
                     R.id.deleted_tasks -> {
                         GlobalVariable.INACTIVEFLAG = true
                         binding?.bottomNavigation?.menu?.forEach { it.isEnabled = false }
+                        myAdapter.clearData()
+                        loading = true
                         viewModel.getAllTasksPagination(listToDoUserRole,listToDoUserId,1,"inactive",null,null,null)
+                        binding?.recyclerViewId?.smoothScrollToPosition(0)
                         true
                     }
                     R.id.menu_view_your_deleted_tasks -> {
                         GlobalVariable.INACTIVEFLAG = true
                         binding?.bottomNavigation?.menu?.forEach { it.isEnabled = false }
+                        myAdapter.clearData()
                         viewModel.getAllTasksPagination("author",listToDoUserId,1,"inactive",null,null,null)
+                        binding?.recyclerViewId?.smoothScrollToPosition(0)
                         true
                     }
                     R.id.menu_grant_permission -> {

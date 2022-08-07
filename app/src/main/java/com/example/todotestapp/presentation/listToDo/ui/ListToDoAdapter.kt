@@ -181,11 +181,39 @@ class ListToDoAdapter : RecyclerView.Adapter<ListToDoAdapter.MyListHolder>() {
     }
 
     fun setData(newList: ListToDoPaginationResponse) {
-        val toDoDiffUtil = ToDoDiffUtil(myList,newList.tasks!!)
-        val toDoDiffResult = DiffUtil.calculateDiff(toDoDiffUtil)
-        myList = myList + newList.tasks
-        notifyItemRangeInserted(itemCount,newList.tasks.size)
-      //  toDoDiffResult.dispatchUpdatesTo(this)
+        val uniqueList = arrayListOf<BaseListToDoResponse>()
+        val newListSize = newList.tasks?.size ?: 0
+        val myListSize = myList.size
+        if(newListSize>0 && myListSize>0) {
+            for ( newListItem in newList.tasks!!) {
+                var localUniqueItem : BaseListToDoResponse? = null
+                var isLocalItemUnique = true
+                for (myListItem in myList) {
+                 localUniqueItem = newListItem
+                    if (newListItem.taskId == myListItem.taskId) {
+                        isLocalItemUnique = false
+                        break
+                    }
+                }
+                if(isLocalItemUnique){
+                    if (localUniqueItem!=null) {
+                        uniqueList.add(localUniqueItem)
+                    }
+                }
+            }
+            myList = myList + uniqueList
+            notifyItemRangeInserted(itemCount, myList.size)
+        }
+        else{
+            newList.tasks?.let {
+                myList = it
+                notifyDataSetChanged()
+            }
+        }
+    }
+
+    fun clearData(){
+        myList = emptyList()
     }
 }
 
