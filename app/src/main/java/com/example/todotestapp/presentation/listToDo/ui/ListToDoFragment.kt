@@ -149,6 +149,7 @@ class ListToDoFragment : DaggerFragment() {
     }
 
     private fun observeLiveData() {
+        viewModel.clearLiveData()
         observeLiveDataPaginationList()
         observeUpdateToDoInList()
     }
@@ -307,28 +308,28 @@ class ListToDoFragment : DaggerFragment() {
     private fun swipeToDelete(recyclerView: RecyclerView?) {
         val swipeToDeleteCallback = object : SwipeToDelete() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val itemToDelete = myAdapter.myList[viewHolder.adapterPosition]
-                val updatedTitle: String = itemToDelete.title.toString()
-                val updatedDescription: String = itemToDelete.description.toString()
-                val updatedStatus: String = "inactive"
-                val updatedPriority: String = itemToDelete.priority.toString()
-                val presentUpdateToDoRequest = UpdateToDoRequest(
-                    updatedTitle,
-                    updatedDescription,
-                    updatedStatus,
-                    updatedPriority
-                )
-                viewModel.updateToDoInList(itemToDelete.taskId!!, presentUpdateToDoRequest)
+                if (viewModel.status != "inactive") {
+                    val itemToDelete = myAdapter.myList[viewHolder.adapterPosition]
+                    val updatedTitle: String = itemToDelete.title.toString()
+                    val updatedDescription: String = itemToDelete.description.toString()
+                    val updatedStatus: String = "inactive"
+                    val updatedPriority: String = itemToDelete.priority.toString()
+                    val presentUpdateToDoRequest = UpdateToDoRequest(
+                        updatedTitle,
+                        updatedDescription,
+                        updatedStatus,
+                        updatedPriority
+                    )
+                    viewModel.updateToDoInList(itemToDelete.taskId!!, presentUpdateToDoRequest)
+                } else {
+                    Toast.makeText(context, getString(R.string.cannot_delete), Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
     }
-
-
-
-
-
 
     private fun observeUpdateToDoInList() {
         viewModel.myUpdateToDoInListResponse.observe(viewLifecycleOwner){
@@ -345,6 +346,7 @@ class ListToDoFragment : DaggerFragment() {
             StateData.DataStatus.SUCCESS -> {
                 binding?.listProgressBar?.visibility = View.GONE
                 if (updateInListResponse.data?.body() != null) {
+                    myAdapter.clearData()
                     Toast.makeText(context, getString(R.string.mtds), Toast.LENGTH_SHORT).show()
                     val order = viewModel.sortByStored.value
                     val selectedStatus = viewModel.statusStored.value

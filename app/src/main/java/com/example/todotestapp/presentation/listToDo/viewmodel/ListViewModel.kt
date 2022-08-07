@@ -25,7 +25,7 @@ class ListViewModel @Inject constructor(toDoFetchUseCase : ListToDoUseCase
     val myToDoListByStatus: StateLiveData<Response<ListToDoResponse>> = StateLiveData()
     val myUpdateToDoInListResponse : StateLiveData<Response<UpdateToDoResponse>> = StateLiveData()
     val deleteToDoItemLiveData: StateLiveData<Response<BaseResponse>> = StateLiveData()
-    val myToDoAllPaginationList: StateLiveData<Response<ListToDoPaginationResponse>> = StateLiveData()
+    var myToDoAllPaginationList: StateLiveData<Response<ListToDoPaginationResponse>> = StateLiveData()
 
     private var totalPages : Int = 1
 
@@ -131,6 +131,10 @@ class ListViewModel @Inject constructor(toDoFetchUseCase : ListToDoUseCase
     fun setPriorityFromFrag(value : Int = 0)
     {
         _priorityStored.postValue(value)
+    }
+
+    fun clearLiveData() {
+        myToDoAllPaginationList = StateLiveData()
     }
 
 }

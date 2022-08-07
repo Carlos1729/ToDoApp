@@ -76,6 +76,7 @@
     <string name="view_your_tasks">View Your Tasks</string>
     <string name="grant_permission">Grant Permission</string>
     <string name="view_your_deleted_tasks">View Your Deleted Tasks</string>
+    <string name="cannot_delete">Cannot delete deleted task</string>
 
 
     <string-array name="statusoftask">
