@@ -20,7 +20,19 @@
         app:showAsAction="never"
         android:visible="false"
         android:icon="@drawable/icon_g_per"
-        android:title="Grant Permission" />
+        android:title="@string/grant_permission" />
+
+    <item
+        android:id="@+id/menu_view_your_tasks"
+        app:showAsAction="never"
+        android:visible="false"
+        android:title="@string/view_your_tasks" />
+
+    <item
+        android:id="@+id/menu_view_your_deleted_tasks"
+        app:showAsAction="never"
+        android:visible="false"
+        android:title="@string/view_your_deleted_tasks" />
 
     <item
         android:id="@+id/logout"
