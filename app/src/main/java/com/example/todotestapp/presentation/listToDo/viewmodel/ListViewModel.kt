@@ -44,6 +44,7 @@ class ListViewModel @Inject constructor(toDoFetchUseCase : ListToDoUseCase
 
     fun getAllTasksPagination(role:String,id:Int,pageNo:Int,priority:String?,orderBy:String?,sort:String?)
     {
+        checkForUpdateInTotalPageNumber()
         viewModelScope.launch {
             if (pageNo <= totalPages) {
                 myToDoAllPaginationList.postLoading()
@@ -64,6 +65,12 @@ class ListViewModel @Inject constructor(toDoFetchUseCase : ListToDoUseCase
                     myToDoAllPaginationList.postSuccess(response)
                 }
             }
+        }
+    }
+
+    private fun checkForUpdateInTotalPageNumber() {
+        if(totalPages == 0){
+            totalPages =1
         }
     }
 
