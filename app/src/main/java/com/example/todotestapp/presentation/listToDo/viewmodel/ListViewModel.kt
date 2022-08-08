@@ -23,7 +23,7 @@ class ListViewModel @Inject constructor(toDoFetchUseCase : ListToDoUseCase
 
     val myToDoAllList: StateLiveData<Response<ListToDoResponse>> = StateLiveData()
     val myToDoListByStatus: StateLiveData<Response<ListToDoResponse>> = StateLiveData()
-    val myUpdateToDoInListResponse : StateLiveData<Response<UpdateToDoResponse>> = StateLiveData()
+    var myUpdateToDoInListResponse : StateLiveData<Response<UpdateToDoResponse>> = StateLiveData()
     val deleteToDoItemLiveData: StateLiveData<Response<BaseResponse>> = StateLiveData()
     var myToDoAllPaginationList: StateLiveData<Response<ListToDoPaginationResponse>> = StateLiveData()
 
@@ -135,6 +135,8 @@ class ListViewModel @Inject constructor(toDoFetchUseCase : ListToDoUseCase
 
     fun clearLiveData() {
         myToDoAllPaginationList = StateLiveData()
+        myUpdateToDoInListResponse = StateLiveData()
+
     }
 
 }

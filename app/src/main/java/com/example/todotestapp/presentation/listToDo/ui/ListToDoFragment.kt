@@ -152,6 +152,7 @@ class ListToDoFragment : DaggerFragment() {
 
     private fun observeLiveData() {
         viewModel.clearLiveData()
+        myAdapter.clearData()
         observeLiveDataPaginationList()
         observeUpdateToDoInList()
     }
@@ -355,6 +356,7 @@ class ListToDoFragment : DaggerFragment() {
                 binding?.listProgressBar?.visibility = View.GONE
                 if (updateInListResponse.data?.body() != null) {
                     Toast.makeText(context, getString(R.string.mtds), Toast.LENGTH_SHORT).show()
+                    myAdapter.clearData()
                     val order = viewModel.sortByStored.value
                     val selectedStatus = viewModel.statusStored.value
                     val selectedPriority = viewModel.priorityStored.value
@@ -446,7 +448,6 @@ class ListToDoFragment : DaggerFragment() {
                     binding?.listProgressBar?.visibility = View.GONE
                     if(allListToDoPaginationResponse.data?.body() != null)
                     {
-                        myAdapter.clearData()
                         if((allListToDoPaginationResponse.data?.body()!!.tasks?.size) == 0)
                         {
                             binding?.loginNoResultsTv?.visibility = View.VISIBLE
