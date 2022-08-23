@@ -2,7 +2,8 @@ plugins {
 //    // Other plugins
 //    apply plugin: 'kotlin' // or 'kotlin-multiplatform' for multiplatform projects
 //    apply plugin: "kotlinx-serialization"
-    id 'com.android.application'
+//    id 'com.android.application'
+    id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id "androidx.navigation.safeargs.kotlin"
     id 'kotlin-parcelize'
@@ -13,7 +14,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.example.todotestapp"
+//        applicationId "com.example.todotestapp"
         minSdk 21
         targetSdk 32
         versionCode 1
