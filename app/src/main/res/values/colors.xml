@@ -2,9 +2,21 @@
 <resources>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
+    <color name="purple_400">#FA9651F7</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="card_grey">@color/white</color>
+    <color name="lightGray">#FFD3D3D3</color>
+    <color name="mediumGray">#B6B5B5</color>
+    <color name="darkGray">#6E6B6B</color>
+    <color name="Red"> #FFFF0000</color>
+    <color name="green">#3AD318</color>
+    <color name="add_button">#FF000000</color>
+    <color name="orange">#F35B2B</color>
+    <color name="yellow">#EFA205</color>
+    <color name="blue">#2644E6</color>
+    <color name="lightblue">#09DDF8</color>
 </resources>

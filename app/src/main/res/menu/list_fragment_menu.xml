@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+    <item
+        android:id="@+id/menu_all"
+        android:title="@string/all"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/deleted_tasks"
+        android:title="@string/deleted_tasks"
+        app:showAsAction="never"/>
+
+
+    <item
+        android:id="@+id/menu_grant_permission"
+        app:showAsAction="never"
+        android:visible="false"
+        android:icon="@drawable/icon_g_per"
+        android:title="@string/grant_permission" />
+
+    <item
+        android:id="@+id/menu_view_your_tasks"
+        app:showAsAction="never"
+        android:visible="false"
+        android:title="@string/view_your_tasks" />
+
+    <item
+        android:id="@+id/menu_view_your_deleted_tasks"
+        app:showAsAction="never"
+        android:visible="false"
+        android:title="@string/view_your_deleted_tasks" />
+
+    <item
+        android:id="@+id/logout"
+        android:title="@string/logout"
+        />
+
+
+</menu>

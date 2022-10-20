@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="Red">#DA0404</color>
+    <color name="white">#FF000000</color>
+    <color name="black">#E1FFFFFF</color>
+    <color name="green">#3AD318</color>
+    <color name="card_grey">#222327</color>
+    <color name="add_button">#FF000000</color>
+    <color name="purple_500">#FA9651F7</color>
+    <color name="lightGray">#E45C5A5A</color>
+
+
+</resources>

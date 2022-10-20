@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView2"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="SORT BY"-->
+<!--        android:textStyle="bold"-->
+<!--        android:textSize="20sp"-->
+<!--        android:layout_marginTop="11dp"-->
+<!--        android:layout_marginLeft="14dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"/>-->
+
+
+
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:id = "@+id/line_sort"-->
+<!--        android:layout_height="2dp"-->
+<!--        android:background="@color/darkGray"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/textView2"-->
+<!--        android:layout_marginTop="2dp"-->
+<!--        android:layout_marginStart="10dp"-->
+<!--        android:layout_marginEnd="10dp"-->
+<!--        android:layout_marginBottom="2dp"-->
+<!--        />-->
+
+
+<!--    <RadioGroup-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:id = "@+id/sort_radio"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/textView2"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/status_bottom_sheet"-->
+<!--        android:layout_height="wrap_content">-->
+
+<!--    <RadioButton-->
+<!--        android:id="@+id/textView3"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/textView2"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:clickable="true"-->
+<!--        android:padding="8dp"-->
+<!--        android:layout_marginStart="15dp"-->
+<!--        android:textSize="14sp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="?android:attr/selectableItemBackground"-->
+<!--        android:text="Priority High To Low"-->
+<!--        android:focusable="true" />-->
+
+<!--    <RadioButton-->
+<!--        android:id="@+id/textView4"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:padding="8dp"-->
+<!--        android:layout_marginStart="15dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:background="?android:attr/selectableItemBackground"-->
+<!--        android:textSize="14sp"-->
+<!--        android:clickable="true"-->
+<!--        android:focusable="true"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/textView3"-->
+<!--        android:text="Priority Low To High" />-->
+
+<!--    </RadioGroup>-->
+
+
+    <TextView
+        android:id="@+id/status_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="STATUS"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:id = "@+id/line_status"
+        android:layout_height="2dp"
+        android:background="@color/darkGray"
+        app:layout_constraintTop_toBottomOf="@id/status_bottom_sheet"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="2dp"
+        />
+
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:id = "@+id/status_radio"
+        app:layout_constraintStart_toStartOf="@id/status_bottom_sheet"
+        app:layout_constraintTop_toBottomOf="@id/line_status"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/status_completed"
+            app:layout_constraintTop_toBottomOf="@id/status_bottom_sheet"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:clickable="true"
+            android:padding="8dp"
+            android:layout_marginStart="15dp"
+            android:textSize="14sp"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="Completed"
+            android:focusable="true" />
+
+        <RadioButton
+            android:id="@+id/status_pending"
+            android:layout_width="match_parent"
+            android:padding="8dp"
+            android:layout_marginStart="15dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:textSize="14sp"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintTop_toBottomOf="@id/status_completed"
+            android:text="Pending" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/clear_all_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="48dp"
+        android:text="Clear Selection"
+        android:textColor="@color/purple_500"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toBottomOf="@id/status_radio"
+        android:focusable="true" />
+
+    <TextView
+        android:id="@+id/priority_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PRIORITY"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_marginTop="11dp"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintTop_toBottomOf="@id/clear_all_status"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:id = "@+id/line_priority"
+        android:layout_height="2dp"
+        android:background="@color/darkGray"
+        app:layout_constraintTop_toBottomOf="@id/priority_bottom_sheet"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="2dp"
+        />
+
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:id = "@+id/priority_radio"
+        app:layout_constraintStart_toStartOf="@id/priority_bottom_sheet"
+        app:layout_constraintTop_toBottomOf="@id/line_priority"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/priority_high"
+            app:layout_constraintTop_toBottomOf="@id/priority_bottom_sheet"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:clickable="true"
+            android:padding="8dp"
+            android:layout_marginStart="15dp"
+            android:textSize="14sp"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="High Priority"
+            android:focusable="true" />
+
+        <RadioButton
+            android:id="@+id/priority_medium"
+            android:layout_width="match_parent"
+            android:padding="8dp"
+            android:layout_marginStart="15dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:textSize="14sp"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintTop_toBottomOf="@id/priority_high"
+            android:text="Medium Priority" />
+
+        <RadioButton
+            android:id="@+id/priority_low"
+            android:layout_width="match_parent"
+            android:padding="8dp"
+            android:layout_marginStart="15dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:textSize="14sp"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintTop_toBottomOf="@id/priority_medium"
+            android:text="Low Priority" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/clear_all_priority"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="48dp"
+        android:text="Clear Selection"
+        android:textColor="@color/purple_500"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toBottomOf="@id/priority_radio"
+        android:focusable="true" />
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/purple_500"
+        android:textColor="@color/white"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintTop_toBottomOf="@id/clear_all_priority"
+        android:text="Apply Filter"
+        android:id = "@+id/selected_filter_button"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

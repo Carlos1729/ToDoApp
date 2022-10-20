@@ -1,3 +1,94 @@
 <resources>
     <string name="app_name">Todotestapp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="description">Description</string>
+    <string name="title">Title</string>
+    <string name="add">add</string>
+    <string name="update">update</string>
+    <string name="update_delete">update_delete</string>
+    <string name="title1">Run</string>
+    <string name="title2">Play Badmintion</string>
+    <string name="title3">Report</string>
+    <string name="title4">long long title</string>
+    <string name="title5">Buy Vegetables</string>
+    <string name="title6">Help Friends</string>
+    <string name="title7">Read about android</string>
+    <string name="title8">Income Tax</string>
+    <string name="title9">Attend Party</string>
+
+    <string name="description1">Should Run 5km</string>
+    <string name="description2">Play with friends at 9PM</string>
+    <string name="description3">Should Report to manager by tonight</string>
+    <string name="description4">this title is too long</string>
+    <string name="description5">Buy Vegetables while returning home</string>
+    <string name="description6">Help Friends in Solving there doubts</string>
+    <string name="description7">Android AndroidAndroidAndroidAndroidAndroidAndroidAndroidAndroidAndroidAndroidAndroidAndroidAndroidAndroidAndroid</string>
+    <string name="description8">calculate the income tax deduction from salary</string>
+    <string name="description9">Attend Rahul Party at 9pm Today</string>
+    <string name="description_goes_here">Description Goes Here</string>
+    <string name="update_button">UPDATE</string>
+    <string name="add_button">ADD ToDo</string>
+    <string name="label_of_fragment">{letter}</string>
+    <string name="title_cant_be_empty">Title Can\'t be Empty</string>
+    <string name="description_cant_be_empty">Description Cant be Empty</string>
+    <string name="login">LOGIN</string>
+    <string name="don_t_have_an_account_register">Don\'t have an account register</string>
+    <string name="register">Register</string>
+    <string name="sign_up">SIGN UP</string>
+    <string name="user_login_successful">User Logged In Successfully</string>
+    <string name="please_sign_up">Please Sign Up</string>
+    <string name="invalid_email_address">Invalid Email Address</string>
+    <string name="all">All</string>
+    <string name="pending">Pending</string>
+    <string name="completed">Completed</string>
+    <string name="swrpta">Something Went Wrong Please Try Again</string>
+    <string name="todoadds">ToDo Added Successfully</string>
+    <string name="noic">No Internet Connection</string>
+    <string name="logout">Logout</string>
+    <string name="utds">ToDo Updated Successfully</string>
+    <string name="mtds">ToDo Deleted Successfully</string>
+    <string name="duplititle">Tasks with Same Title Cannot be created please try with new title</string>
+    <string name="no_todos_please_add_todos">No Todos Found</string>
+    <string name="invalid_email">Invalid Email</string>
+    <string name="invalid_username">Invalid Username</string>
+    <string name="enter_your_otp_here">Enter your OTP Here</string>
+    <string name="didn_t_receive_the_otp">Didn\'t receive the OTP?</string>
+    <string name="resend_otp">RESEND OTP</string>
+    <string name="fourdigit">Invalid OTP</string>
+    <string name="priority">Priority</string>
+    <string name="sort_by_priority_high_string">Sort by Priority High</string>
+    <string name="sort_by_priority_low_string">Sort By Priority Low</string>
+    <string name="usus">User Signed Up Successfully</string>
+    <string name="high_priority">High Priority</string>
+    <string name="medium_priority">Medium Priority</string>
+    <string name="low_priority">Low Priority</string>
+    <string name="sort_by_priority_high">Sort By Priority High</string>
+    <string name="sort_by_priority_low">Sort By Priority Low</string>
+    <string name="ntndce">Neither Title Nor Description can be empty</string>
+    <string name="psootp">Please select one of the priorities</string>
+    <string name="inve">Invalid Email</string>
+    <string name="deleted_tasks">Deleted Tasks</string>
+    <string name="completed_striked"><strike>Completed</strike></string>
+    <string name="sort">SORT</string>
+    <string name="filter">FILTER</string>
+    <string name="status">Status</string>
+    <string name="view_your_tasks">View Your Tasks</string>
+    <string name="grant_permission">Grant Permission</string>
+    <string name="view_your_deleted_tasks">View Your Deleted Tasks</string>
+    <string name="cannot_delete">Cannot delete deleted task</string>
+
+
+    <string-array name="statusoftask">
+        <item>Completed</item>
+        <item>Pending</item>
+    </string-array>
+
+    <string-array name="priorities">
+        <item>High Priority</item>
+        <item>Medium Priority</item>
+        <item>Low Priority</item>
+    </string-array>
+
+
 </resources>
